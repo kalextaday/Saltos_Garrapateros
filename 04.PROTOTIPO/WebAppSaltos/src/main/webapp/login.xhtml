@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+        </f:facet>
+
+        <link rel="shortcut icon" type="image/png" href="#{resource['paradise-layout/images/login/secure.png']}"/>
+        <title>Iniciar Sesión</title>
+        <script type='text/javascript'>
+            document.oncontextmenu = function () {
+                return false;
+            };
+        </script>
+    </h:head>
+
+    <h:body styleClass="login-body" id="hb-login">
+
+        <h:form class="border-redondeado">
+
+            <div class="login-panel ui-fluid">
+                <div class="ui-g borde-login">
+                    <div class="ui-g-12 logo-container">
+                        <p:graphicImage name="images/login/secure.png" library="paradise-layout" styleClass="avatar-login" />
+                    </div>
+                    <div class="ui-g-12 notificacion-container">
+                        <h2 class="textAlCenter"><b>Sistema de Saltos</b></h2>
+                    </div>
+                    <div class="ui-g-12">
+                        <p:messages id="messages" showDetail="true" closable="true">
+                            <p:autoUpdate />
+                        </p:messages>
+                    </div>
+
+                    <div class="ui-g-2"></div>
+                    <div class="ui-g-8">
+                        <p:outputLabel for="it-usuario" value="Usuario" />
+                        <div class="input-wrapper">
+                            <p:inputText id="it-usuario" widgetVar="wv-nombre" placeholder="Nombre de usuario" 
+                                         value="#{beanLoginUser.nombreUsuario}" styleClass="Wid80 TexAlCenter Fs18" >
+                            </p:inputText>
+                            <i class="fa fa-user" />
+                        </div>
+                    </div>
+                    <div class="ui-g-2"></div>
+                    <div class="ui-g-2"></div>
+                    <div class="ui-g-8">
+                        <p:outputLabel for="it-password" value="Clave" />
+                        <div class="input-wrapper">
+                            <p:inputText id="it-password" type="password" 
+                                         widgetVar="wv-clave" placeholder="Clave" 
+                                         value="#{beanLoginUser.claveUsuario}" styleClass="Wid80 TexAlCenter Fs18">
+                            </p:inputText>
+                            <i class="fa fa-lock" />
+                        </div>
+                    </div>
+                    <div class="ui-g-2"></div>
+                    <div class="ui-g-12"></div>
+                    <div class="ui-g-2"></div>
+                    <div class="ui-g-8 button-container">
+
+                        <p:commandButton id="btn-login" widgetVar="statusInicioSesion"
+                                         action="#{beanLoginUser.validarIngreso()}" styleClass="raised-btn"
+                                         value="INICIAR SESIÓN" update=":form-lista:som-perfiles :form-lista-entidad:som-entidades it-usuario it-password" />
+                    </div>
+                    <div class="ui-g-2"></div>
+
+                    <div class="ui-g-4"></div>
+                    <div class="ui-g-4 button-container">
+                        <p:commandLink value="¿Olvidaste tu Clave?" id="cbOlvidoContrasenia" action="#{beanDireccionamiento.direccionarRecuperacionClave()}" class="MarAuto"/>
+                    </div>
+                    <div class="ui-g-4"></div>
+                    <div class="ui-g-12"></div>
+
+                    <h:outputStylesheet name="css/layout-#{preferencias.layout}.css" library="paradise-layout" />
+                    <h:outputStylesheet name="css/custom.css" library="paradise-layout" />
+                </div>
+            </div>
+
+        </h:form>
+
+
+        <h:form id="form-lista" >
+
+            <p:dialog header="Seleccionar Perfil" modal="true" widgetVar="wv-seleccionarPerfil" 
+                      responsive="true" 
+                      hideEffect="fade" resizable="false"
+                      >
+                <div class="ui-g-12 ui-lg-4 ui-fluid contact-form">
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <h:panelGrid style="min-width:200px">
+                                <p:selectOneMenu id="som-perfiles" value="un perfil reemplazar" 
+                                                 immediate="true"
+                                                 autoWidth="false" required="true" effect="fade">
+                                    <f:selectItems value="un perfil reemplazar"
+                                                   var="lista"
+                                                   itemLabel="un perfil reemplazar"
+                                                   itemValue="un perfil reemplazar"/>  
+                                    <p:ajax update="som-perfiles"/>           
+                                </p:selectOneMenu>
+
+                            </h:panelGrid>
+                            <h:panelGrid style="min-width:200px">
+                                <p:commandButton value="Seleccionar" actionListener="#{beanLoginUser.validarPerfil()}" />
+                            </h:panelGrid>
+                        </div>
+                    </div>
+                </div>
+
+            </p:dialog>
+
+        </h:form>
+
+        <h:form id="form-lista-entidad" >
+
+            <p:dialog header="Seleccionar Entidad" modal="true" widgetVar="wv-seleccionarEntidad" 
+                      responsive="true" resizable="false"
+                      showEffect="slide" width="450" hideEffect="slide">
+                <div class="ui-g-12 ui-lg-4 ui-fluid contact-form">
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <h:panelGrid style="min-width:200px">
+                                <p:selectOneMenu id="som-entidades" value="una entidad reemplazar" 
+                                                 immediate="true"
+                                                 autoWidth="false" required="true" effect="fade">
+                                    <f:selectItems value="una entidad reemplazar"
+                                                   var="liste"
+                                                   itemLabel="una entidad reemplazar"
+                                                   itemValue="una entidad reemplazar"/>  
+                                    <p:ajax update="som-entidades"/>           
+                                </p:selectOneMenu>
+
+                            </h:panelGrid>
+                            <h:panelGrid style="min-width:200px">
+                                <p:commandButton value="Seleccionar" icon="fa fa fw fa-check-circle" actionListener="#{beanLoginUserUser.validarEntidad()}" />
+                            </h:panelGrid>
+                        </div>
+                    </div>
+                </div>
+
+            </p:dialog>
+
+        </h:form>
+
+        <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+
+        <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+            <p:panelGrid columns="2" style="border:0px none;background:none" >
+
+                <div class="reverse-spinner"></div>
+
+                <h:outputText value="Por favor espere..." style="white-space: nowrap;"/>
+            </p:panelGrid>
+        </p:dialog>
+
+    </h:body>
+    <p:idleMonitor timeout="1799000">
+        <!--<p:ajax event="idle" listener="{beanDireccionamiento.direccionVistaCaducada()}" /> -->
+    </p:idleMonitor>
+
+</html>
