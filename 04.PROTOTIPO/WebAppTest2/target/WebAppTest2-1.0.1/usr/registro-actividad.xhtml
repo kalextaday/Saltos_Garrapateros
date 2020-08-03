@@ -1,0 +1,78 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml"
+                xmlns:jsf="http://xmlns.jcp.org/jsf">
+
+    <ui:define name="title">Registro de Actividad</ui:define>
+
+    <ui:define name="content">
+
+        <h:form id="form">
+
+            <div class="ui-g dashboard">
+                <div class="ui-g-12 ui-fluid contact-form">
+                    <p:messages id="messages" showDetail="true" closable="true">
+                        <p:autoUpdate />
+                    </p:messages>
+                    <p:growl id="pg-notificacion" showDetail="true" life="3000" /> 
+                </div>
+
+                <div class="ui-g-12 ui-fluid contact-form">
+
+                    <p:panel header="Registro de Actividad">
+                        <div class="ui-g">
+                            <div class="ui-g-12">
+                                <p:dataTable var="unaBitacora" id="dt-bitacora" reflow="true"
+                                             value="#{beanRegistroActividad.bitacoras}" scrollRows="15" scrollable="true"
+                                             selectionMode="single" rowKey="#{unaBitacora.idBitacora}"
+                                             liveScroll="true" scrollHeight="400">
+
+
+                                    <p:column headerText="Fecha" sortBy="#{unaBitacora.fechaMod}">
+                                        <h:outputText value="#{unaBitacora.fechaMod}" />
+                                    </p:column>
+
+
+                                    <p:column headerText="Dirección IP" sortBy="#{unaBitacora.ip}">
+                                        <h:outputText value="#{unaBitacora.ip}" />
+                                    </p:column>
+
+                                    <p:column headerText="Módulo" sortBy="#{unaBitacora.moduloAfectado}">
+                                        <h:outputText value="#{unaBitacora.moduloAfectado}" />
+                                    </p:column>
+
+                                    <p:column headerText="Descripción" sortBy="#{unaBitacora.descripcion}">
+                                        <h:outputText value="#{unaBitacora.descripcion}" />
+                                    </p:column>
+
+                                    <p:column headerText="Estatus" sortBy="#{unaBitacora.estatus}">
+                                        <h:outputText value="#{unaBitacora.estatus}" />
+                                    </p:column>
+
+                                </p:dataTable>
+                            </div>
+
+                            <div class="ui-g-12">
+                                <div class="ui-g-9"></div>
+                                <div class="ui-g-3">
+                                    <p:commandButton actionListener="#{beanSessionUsuario.irPaginaConfiguracionCuenta()}"
+                                                     value="Regresar">
+                                    </p:commandButton>
+                                </div>
+
+                            </div>
+                        </div>
+                    </p:panel>
+                </div>
+
+            </div>
+
+        </h:form>
+
+
+    </ui:define>
+
+</ui:composition>

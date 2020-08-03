@@ -1,0 +1,166 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml"
+                xmlns:jsf="http://xmlns.jcp.org/jsf">
+
+    <ui:define name="title">Configuración Cuenta</ui:define>
+
+    <ui:define name="content">
+
+        <h:form id="form" >
+            <div class="ui-g dashboard">
+                <div class="ui-g-12 ui-fluid contact-form">
+                    <p:messages id="messages" showDetail="true" closable="true">
+                        <p:autoUpdate />
+                    </p:messages>
+                    <p:growl id="pg-notificacion" showDetail="true" life="3000" />
+                </div>
+                <div class="ui-g-12 ui-lg-12 contacts">
+                    <p:panel header="CONFIGURACIÓN GENERAL" style="min-height:360px">
+                        <ul>
+                            <li class="clearfix">
+                                <p:graphicImage name="images/gen-logo-entidad.png" library="paradise-layout" width="45"/>
+                                <div class="contact-info">
+                                    <span class="name">Logo Entidad </span>
+                                    <span class="location">Permite actualizar el logo de la Entidad.</span>
+                                </div>
+                                <div class="contact-actions">
+                                    <p:commandButton actionListener="#{beanConfigurarCuenta.actualizarLogo()}"
+                                                     value="Actualizar">
+                                    </p:commandButton>
+                                </div>
+                            </li>
+                            <li class="clearfix">
+                                <p:graphicImage name="images/avatar.png" library="paradise-layout" width="45"/>
+                                <div class="contact-info">
+                                    <span class="name">Información Usuario</span>
+                                    <span class="location">Permite verificar que la información del usuario se encuentra correcta.</span>
+                                </div>
+                                <div class="contact-actions">
+                                    <p:commandButton actionListener="#{beanSessionUsuario.irPaginaInformacionUsuario()}"
+                                                     value="Mostrar">
+                                    </p:commandButton>
+                                </div>
+                            </li>
+                            <li class="clearfix">
+                                <p:graphicImage name="images/contrasena.png" library="paradise-layout" width="45"/>
+                                <div class="contact-info">
+                                    <span class="name">Cambiar Clave</span>
+                                    <span class="location">Se recomienda usar una Clave segura que no uses para ningún otro sitio.</span>
+                                </div>
+                                <div class="contact-actions">
+                                    <p:commandButton actionListener="#{beanConfigurarCuenta.preparaActualizarClave()}"
+                                                     value="Actualizar">
+                                    </p:commandButton>
+                                </div>
+                            </li>
+                            <li class="clearfix">
+                                <p:graphicImage name="images/historial.png" library="paradise-layout" width="45"/>
+                                <div class="contact-info">
+                                    <span class="name">Registro de Actividad</span>
+                                    <span class="location">Se muestran las actividades como ingreso al sistema, realización de reportes, etc.</span>
+                                </div>
+                                <div class="contact-actions">
+                                    <p:commandButton actionListener="#{beanSessionUsuario.irPaginaRegistroActividad()}"
+                                                     value="Mostrar">
+                                    </p:commandButton>
+                                </div>
+                            </li>
+                            <li class="clearfix">
+                                <p:graphicImage name="images/logo.png" library="paradise-layout" width="45"/>
+                                <div class="contact-info">
+                                    <span class="name">Políticas de Privacidad</span>
+                                    <span class="location">Mantente informado de las políticas que mantienen tu información segura.</span>
+                                </div>
+                                <div class="contact-actions">
+                                    <p:commandButton actionListener="#{beanSessionUsuario.irPaginaTerminosPrivacidad()}"
+                                                     value="Mostrar">
+                                    </p:commandButton>
+                                </div>
+                            </li>
+                            <li class="clearfix">
+                                <p:graphicImage name="images/login/secure.png" library="paradise-layout" width="45"/>
+                                <div class="contact-info">
+                                    <span class="name">Risknadim</span>
+                                    <span class="location">Versión #{preferencias.versionApp}</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </p:panel>
+                </div>
+            </div>
+        </h:form>
+
+        <p:dialog header="Actualizar Clave" widgetVar="wv-actualizarClave" modal="true"
+                  showEffect="slide" hideEffect="slide">
+
+            <h:form id="f-actualizar-clave" enctype="multipart/form-data;charset=UTF-8">
+                <div class="ui-g-10">
+                    <p:outputLabel value="Políticas de seguridad para Claves:"/>
+                    <ul>
+                        <ui:repeat value="#{beanConfigurarCuenta.listaPoliticas}" var="unapolitica">
+                            <li>
+                                <p:outputLabel value="#{unapolitica}" />
+                            </li>
+                        </ui:repeat>
+                    </ul>
+                </div>
+                <h:panelGroup id="p-display-clave" style="border:0px none;background:none">
+                    <p:panelGrid columns="2" rendered="#{beanConfigurarCuenta.miUsuario != null}" style="border:0px none;background:none" >
+                        <p:outputLabel value="Clave actual" for="usrClaveActual" />
+                        <p:password id="usrClaveActual" value="#{beanConfigurarCuenta.claveActual}" title="Clave" required="true" requiredMessage="Clave actual Obligatoria" />
+
+                        <p:outputLabel value="Nueva Clave" for="usrClaveNueva" />
+                        <p:password id="usrClaveNueva" value="#{beanConfigurarCuenta.claveNueva}" title="Nueva Clave" required="true" requiredMessage="Nueva Clave Obligatoria" />
+
+                        <p:outputLabel value="Confirmar Nueva Clave" for="usrClaveRepite" />
+                        <p:password id="usrClaveRepite" value="#{beanConfigurarCuenta.claveNuevaRepite}" title="Nueva Clave Confirmación" required="true" requiredMessage="Confirmación de Nueva Clave Obligatoria" />
+
+                    </p:panelGrid>
+                    <div class="ui-g-12 textAlCenter">
+                        <p:commandButton actionListener="#{beanConfigurarCuenta.validarActualizarClave()}" icon="fa fa-refresh"  value="Actualizar" style="min-width:200px" update=":form:pg-notificacion" />
+                    </div>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+        <p:dialog header="Actualizar Logo" widgetVar="wv-actualizarLogo" modal="true"
+                  showEffect="slide" hideEffect="slide">
+
+            <h:form id="f-actualizar-logo" enctype="multipart/form-data;charset=UTF-8">
+                <h:panelGroup id="p-display-clave" style="border:0px none;background:none">
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <p><b>Reglas Recomendadas para la Carga del Logo</b></p>
+                            <ul>
+                                <li>Tamaño de la imagen 204 x 120</li>
+                                <li>Tipo de imagen PNG</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="ui-g-12">
+
+                        <p:fileUpload id="pf-entidadLogo" listener="#{beanConfigurarCuenta.cargarLogo}"
+                                      auto="true"
+                                      skinSimple="true"
+                                      mode="advanced" dragDropSupport="true"
+                                      label="Cargar Logo"
+                                      fileLimit="1"
+                                      fileLimitMessage="Se ha superado el número máximo de logos."
+                                      sizeLimit="1500000000"
+                                      invalidFileMessage="Sólo se permite imágenes"
+                                      allowTypes="/(\.|\/)(png)$/"
+                                      disabled="{beanAdminEntidad.permiteLogo}"
+                                      style="width:100%" />
+
+                    </div>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:define>
+
+</ui:composition>
