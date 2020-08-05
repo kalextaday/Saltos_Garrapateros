@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 04-ago-2020 1:40:54 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="ec.edu.monster.modelo.Empleado" table="empleado" catalog="monster_saltos" optimistic-lock="version">
+        <id name="idempleado" type="int">
+            <column name="IDEMPLEADO" />
+            <generator class="assigned" />
+        </id>
+        <property name="nombresemp" type="string">
+            <column name="NOMBRESEMP" length="250" />
+        </property>
+        <property name="apellidosemp" type="string">
+            <column name="APELLIDOSEMP" length="250" />
+        </property>
+        <property name="cedulaemp" type="string">
+            <column name="CEDULAEMP" length="10" />
+        </property>
+        <property name="telfemp" type="string">
+            <column name="TELFEMP" length="10" />
+        </property>
+        <property name="correoemp" type="string">
+            <column name="CORREOEMP" length="100" />
+        </property>
+        <property name="cargoemp" type="string">
+            <column name="CARGOEMP" length="50" />
+        </property>
+        <property name="fechanacimiento" type="timestamp">
+            <column name="FECHANACIMIENTO" length="19" />
+        </property>
+        <set name="usuarios" table="usuario" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="EMPLEADOID" />
+            </key>
+            <one-to-many class="ec.edu.monster.modelo.Usuario" />
+        </set>
+    </class>
+</hibernate-mapping>

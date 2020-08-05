@@ -44,7 +44,7 @@
                         <p:outputLabel for="it-usuario" value="Usuario" />
                         <div class="input-wrapper">
                             <p:inputText id="it-usuario" widgetVar="wv-nombre" placeholder="Nombre de usuario" 
-                                         value="#{beanLoginUser.nombreUsuario}" styleClass="Wid80 TexAlCenter Fs18" >
+                                         value="#{beanLoginAdmin.nombreUsuario}" styleClass="Wid80 TexAlCenter Fs18" >
                             </p:inputText>
                             <i class="fa fa-user" />
                         </div>
@@ -56,7 +56,7 @@
                         <div class="input-wrapper">
                             <p:inputText id="it-password" type="password" 
                                          widgetVar="wv-clave" placeholder="Clave" 
-                                         value="#{beanLoginUser.claveUsuario}" styleClass="Wid80 TexAlCenter Fs18">
+                                         value="#{beanLoginAdmin.claveUsuario}" styleClass="Wid80 TexAlCenter Fs18">
                             </p:inputText>
                             <i class="fa fa-lock" />
                         </div>
@@ -67,7 +67,7 @@
                     <div class="ui-g-8 button-container">
 
                         <p:commandButton id="btn-login" widgetVar="statusInicioSesion"
-                                         action="#{beanLoginUser.validarIngreso()}" styleClass="raised-btn"
+                                         action="#{beanLoginAdmin.validarIngreso()}" styleClass="raised-btn"
                                          value="INICIAR SESIÓN" update=":form-lista:som-perfiles :form-lista-entidad:som-entidades it-usuario it-password" />
                     </div>
                     <div class="ui-g-2"></div>
@@ -109,7 +109,7 @@
 
                             </h:panelGrid>
                             <h:panelGrid style="min-width:200px">
-                                <p:commandButton value="Seleccionar" actionListener="#{beanLoginUser.validarPerfil()}" />
+                                <p:commandButton value="Seleccionar" actionListener="#{beanLoginAdmin.validarPerfil()}" />
                             </h:panelGrid>
                         </div>
                     </div>
@@ -140,7 +140,7 @@
 
                             </h:panelGrid>
                             <h:panelGrid style="min-width:200px">
-                                <p:commandButton value="Seleccionar" icon="fa fa fw fa-check-circle" actionListener="#{beanLoginUserUser.validarEntidad()}" />
+                                <p:commandButton value="Seleccionar" icon="fa fa fw fa-check-circle" actionListener="#{beanLoginAdmin.validarEntidad()}" />
                             </h:panelGrid>
                         </div>
                     </div>

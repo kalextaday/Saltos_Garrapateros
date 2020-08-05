@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 04-ago-2020 1:40:54 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="ec.edu.monster.modelo.Paracaidista" table="paracaidista" catalog="monster_saltos" optimistic-lock="version">
+        <id name="idparacaidista" type="java.lang.Integer">
+            <column name="IDPARACAIDISTA" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="formacionParacaidista" class="ec.edu.monster.modelo.FormacionParacaidista" fetch="select">
+            <column name="IDFORPAR" />
+        </many-to-one>
+        <property name="nombrespar" type="string">
+            <column name="NOMBRESPAR" length="250" />
+        </property>
+        <property name="apellidospar" type="string">
+            <column name="APELLIDOSPAR" length="250" />
+        </property>
+        <property name="tipopar" type="string">
+            <column name="TIPOPAR" length="32" />
+        </property>
+        <property name="escuelaformacion" type="string">
+            <column name="ESCUELAFORMACION" length="100" />
+        </property>
+        <property name="numerosaltos" type="java.lang.Integer">
+            <column name="NUMEROSALTOS" />
+        </property>
+        <property name="fechaultimosalto" type="timestamp">
+            <column name="FECHAULTIMOSALTO" length="19" />
+        </property>
+        <property name="licencia" type="java.lang.Boolean">
+            <column name="LICENCIA" />
+        </property>
+        <property name="fechacaducidadlicencia" type="timestamp">
+            <column name="FECHACADUCIDADLICENCIA" length="19" />
+        </property>
+        <set name="pedidos" table="pedido" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="PARACAIDISTAID" />
+            </key>
+            <one-to-many class="ec.edu.monster.modelo.Pedido" />
+        </set>
+    </class>
+</hibernate-mapping>

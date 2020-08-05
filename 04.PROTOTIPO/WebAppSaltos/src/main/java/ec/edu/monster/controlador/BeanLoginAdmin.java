@@ -23,6 +23,7 @@ import ec.edu.monster.config.EstadosConfig;
 import ec.edu.monster.config.HibernateFactory;
 import ec.edu.monster.config.PaginaConfig;
 import ec.edu.monster.config.OperacionConfig;
+import ec.edu.monster.dao.DAOAeronave;
 import ec.edu.monster.utilidades.AES256;
 import ec.edu.monster.utilidades.FechaUtiles;
 import ec.edu.monster.utilidades.PrimeUtiles;
@@ -30,6 +31,7 @@ import ec.edu.monster.utilidades.SOUtiles;
 import ec.edu.monster.utilidades.Utilidades;
 import ec.edu.monster.utilidades.LogUtiles;
 import ec.edu.monster.filtro.FiltroAcceso;
+import ec.edu.monster.modelo.Aeronave;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +59,7 @@ public class BeanLoginAdmin extends FiltroAcceso implements Serializable {
     private Boolean validacionDosPasos;
 
     private final String ipIngreso;
+    private final DAOAeronave daoAeronave;
     /*
     private Entidad entidadSeleccionada;
     private List<AsignarEntidad> listaEntidadesUsuario;
@@ -74,6 +77,8 @@ public class BeanLoginAdmin extends FiltroAcceso implements Serializable {
         HttpServletRequest req = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
         String url = req.getRequestURL().toString();
         ipIngreso = SOUtiles.obtenerIP();
+        daoAeronave=new DAOAeronave();
+        Aeronave aeronave=daoAeronave.obtenerAeronavePorId(1);
         /*
         daoUsuarioAcceso = new DAOUsuarioAcceso();
 
@@ -183,12 +188,12 @@ public class BeanLoginAdmin extends FiltroAcceso implements Serializable {
         ConfigClave configDefecto = new ConfigClave(entidadSeleccionada);
         return configDefecto;
     }
-
+*/
     public void validarPerfil() throws Exception {
         PrimeUtiles.primeExecute("PF('wv-seleccionarPerfil').hide();");
-        LOG.log(Level.INFO, "Perfil selecionado: {0}", perfilSeleccionado.getPerfilNomre());
+        LOG.log(Level.INFO, "Perfil selecionado: {0}", "aqui va el nombre del perfil");
         validarUsuario();
-    }*/
+    }
 
     public void validarEntidad() throws Exception {
         PrimeUtiles.primeExecute("PF('wv-seleccionarEntidad').hide();");

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+  <session-factory>
+    <property name="hibernate.transaction.factory_class">org.hibernate.transaction.JDBCTransactionFactory</property>
+    <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
+    <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/monster_saltos?zeroDateTimeBehavior=CONVERT_TO_NULL</property>
+    <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+    <property name="hibernate.current_session_context_class">thread</property>
+    <property name="hibernate.connection.username">root</property>
+    <property name="hibernate.connection.password">root</property>
+    <property name="show_sql">true</property>
+    <property name="format_sql">true</property>
+    <property name="hbm2ddl.auto">validate</property>
+    <mapping resource="ec/edu/monster/modelo/Aeronave.hbm.xml"/>
+    <mapping resource="ec/edu/monster/modelo/Vuelo.hbm.xml"/>
+    <mapping resource="ec/edu/monster/modelo/Cliente.hbm.xml"/>
+    <mapping resource="ec/edu/monster/modelo/Paracaidista.hbm.xml"/>
+    <mapping resource="ec/edu/monster/modelo/Permiso.hbm.xml"/>
+    <mapping resource="ec/edu/monster/modelo/Perfil.hbm.xml"/>
+    <mapping resource="ec/edu/monster/modelo/Recurso.hbm.xml"/>
+    <mapping resource="ec/edu/monster/modelo/Usuario.hbm.xml"/>
+    <mapping resource="ec/edu/monster/modelo/Salto.hbm.xml"/>
+    <mapping resource="ec/edu/monster/modelo/Descuento.hbm.xml"/>
+    <mapping resource="ec/edu/monster/modelo/Piloto.hbm.xml"/>
+    <mapping resource="ec/edu/monster/modelo/ServicioAdicional.hbm.xml"/>
+    <mapping resource="ec/edu/monster/modelo/FormacionParacaidista.hbm.xml"/>
+    <mapping resource="ec/edu/monster/modelo/Responsable.hbm.xml"/>
+    <mapping resource="ec/edu/monster/modelo/Empleado.hbm.xml"/>
+    <mapping resource="ec/edu/monster/modelo/Pedido.hbm.xml"/>
+    <mapping resource="ec/edu/monster/modelo/DetalleVuelo.hbm.xml"/>
+  </session-factory>
+</hibernate-configuration>

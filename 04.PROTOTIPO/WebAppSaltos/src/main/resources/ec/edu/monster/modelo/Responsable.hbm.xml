@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 04-ago-2020 1:40:54 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="ec.edu.monster.modelo.Responsable" table="responsable" catalog="monster_saltos" optimistic-lock="version">
+        <id name="idresponsable" type="int">
+            <column name="IDRESPONSABLE" />
+            <generator class="assigned" />
+        </id>
+        <property name="nombresres" type="string">
+            <column name="NOMBRESRES" length="100" />
+        </property>
+        <property name="cedulares" type="string">
+            <column name="CEDULARES" length="10" />
+        </property>
+        <property name="emailres" type="string">
+            <column name="EMAILRES" length="100" />
+        </property>
+        <property name="telfres" type="string">
+            <column name="TELFRES" length="10" />
+        </property>
+        <set name="servicioAdicionals" table="servicio_adicional" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="RESPONSABLEID" />
+            </key>
+            <one-to-many class="ec.edu.monster.modelo.ServicioAdicional" />
+        </set>
+    </class>
+</hibernate-mapping>

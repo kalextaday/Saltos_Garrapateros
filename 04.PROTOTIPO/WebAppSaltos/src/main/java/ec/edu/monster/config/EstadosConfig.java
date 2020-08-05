@@ -15,7 +15,9 @@ public enum EstadosConfig {
     //        AMBIENTE("PRE-PRODUCCIÓN Y QA - SISTEMA DE GESTIÓN DE RIESGOS", "pre", 0),//Activar produccion - LINUX EMAGIC
     //    AMBIENTE("SISTEMA DE GESTIÓN DE RIESGOS", "pro", 0),//Activar produccion LINUX
     //    AMBIENTE("PRE-PRODUCCION Y QA - SISTEMA DE GESTION DE RIESGOS", "pro", 0),//Activar Pre-Produccion WINDOWS
-    ARCHIVO_HIBERNATE("/hibernate." + EstadosConfig.AMBIENTE.codigo + ".cfg.xml", "hibernate." + EstadosConfig.AMBIENTE.codigo + ".cfg.xml", 0),
+    //ARCHIVO_HIBERNATE("/hibernate." + EstadosConfig.AMBIENTE.codigo + ".cfg.xml", "hibernate." + EstadosConfig.AMBIENTE.codigo + ".cfg.xml", 0),
+    ARCHIVO_HIBERNATE("/hibernate.cfg.xml", "hibernate.cfg.xml", 0),
+    
     // AMBIENTES
     REPORTE("reporte/", "REPORTE", 0),
     UPLOAD("upload/", "UPLOAD", 0),
