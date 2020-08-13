@@ -98,7 +98,7 @@ public class BeanVuelo implements Serializable{
         vuelo.setPiloto(pilotoSeleccionado);
         try{
             if(daovuelo.editar(vuelo)){
-                //limpiarVuelo();
+                limpiarVuelo();
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,"Info: ","Se modifico correctamente"));
             }else{
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,"Error: ","No se modifico correctamente"));
@@ -112,7 +112,7 @@ public class BeanVuelo implements Serializable{
         DAOVuelo daovuelo=new DAOVuelo();
         try{
             if(daovuelo.eliminar(vuelo)){
-                //limpiarVuelo();
+                limpiarVuelo();
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,"Info: ","Se elimino correctamente"));
             }else{
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,"Error: ","No se elimino correctamente"));

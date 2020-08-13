@@ -71,12 +71,12 @@
         </h:form>
         
         <h:form id="formAsignar2">
-            <p:dialog header="Recursos Seleccionados" widgetVar="multiCarDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" width="220">
+            <p:dialog id="dialogoAsignar" header="Recursos Seleccionados" widgetVar="multiCarDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" width="220">
                 <p:outputPanel id="multiCarDetail" style="text-align:center;">
                     <ui:repeat value="#{beanPermiso.recursosSeleccionados}" var="recurso">
                         <h:outputText value="#{recurso.idRecurso} - #{recurso.nombrerec}" style="display:block"/>
                     </ui:repeat>
-                    <p:commandButton value="Agregar Permisos" actionListener="#{beanPermiso.asignarPermisos()}" />
+                    <p:commandButton value="Agregar Permisos" actionListener="#{beanPermiso.asignarPermisos()}" oncomplete="PF('multiCarDialog').hide();"/>
                 </p:outputPanel>
             </p:dialog>
         </h:form>

@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                template="./WEB-INF/template.xhtml"
+                template="./../WEB-INF/template.xhtml"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
@@ -56,11 +56,11 @@
                 </p:column>
 
                 <p:column headerText="Opciones" style="text-align: center">
-                    <p:commandButton icon="ui-icon-pencil" value="Modificar" oncomplete="PF('dialogoModificar').show();" update=":formModificar">
+                    <p:commandButton icon="pi pi-pencil" value="Modificar" oncomplete="PF('dialogoModificar').show();" update=":formModificar">
                         <f:setPropertyActionListener target="#{beanParacaidista.paracaidista}" value="#{paracaidista}"/>
                     </p:commandButton>
                     
-                    <p:commandButton icon="ui-icon-trash" value="Eliminar" oncomplete="PF('dialogoEliminar').show();" update=":formEliminar">
+                    <p:commandButton icon="pi pi-trash" value="Eliminar" oncomplete="PF('dialogoEliminar').show();" update=":formEliminar">
                         <f:setPropertyActionListener target="#{beanParacaidista.paracaidista}" value="#{paracaidista}"/>
                     </p:commandButton>
                 </p:column>
@@ -101,8 +101,8 @@
                     <p:outputLabel value="Fecha de caducidad de Licencia:"/>
                     <p:calendar value="#{beanParacaidista.paracaidista.fechacaducidadlicencia}"/>
                 </p:panelGrid>
-                <p:commandButton icon="ui-icon-check" value="Guardar" actionListener="#{beanParacaidista.agregarParacaidista()}" update=":formListado:tablaParacaidistas :mensaje" oncomplete="PF('dialogoAgregar').hide();"/>
-                <p:commandButton  icon="ui-icon-close" value="Cancelar" onclick="PF('dialogoAgregar').hide();"/>
+                <p:commandButton icon="pi pi-check" value="Guardar" actionListener="#{beanParacaidista.agregarParacaidista()}" update=":formListado:tablaParacaidistas :mensaje" oncomplete="PF('dialogoAgregar').hide();"/>
+                <p:commandButton  icon="pi pi-times" value="Cancelar" onclick="PF('dialogoAgregar').hide();"/>
 
             </p:dialog>
         </h:form>
@@ -141,8 +141,8 @@
                     <p:calendar value="#{beanParacaidista.paracaidista.fechacaducidadlicencia}"/>
 
                 </p:panelGrid>
-                <p:commandButton  icon="ui-icon-check" value="Guardar" actionListener="#{beanParacaidista.modificarParacaidista()}" update=":formListado:tablaParacaidistas :mensaje" oncomplete="PF('dialogoModificar').hide();"/>
-                <p:commandButton  icon="ui-icon-close" value="Cancelar" onclick="PF('dialogoModificar').hide();"/>
+                <p:commandButton  icon="pi pi-check" value="Guardar" actionListener="#{beanParacaidista.modificarParacaidista()}" update=":formListado:tablaParacaidistas :mensaje" oncomplete="PF('dialogoModificar').hide();"/>
+                <p:commandButton  icon="pi pi-times" value="Cancelar" onclick="PF('dialogoModificar').hide();"/>
             </p:dialog>
         </h:form>
 
@@ -151,9 +151,9 @@
                 <h:outputText value="Desea eliminar este registro?"/>
                 <h:outputText value="&lt;br/&gt;" escape="false" />
                 <h:outputText value="&lt;br/&gt;" escape="false" />
-                <p:commandButton  icon="ui-icon-check" value="Si" actionListener="#{beanParacaidista.eliminarParacaidista()}" update=":formListado:tablaParacaidistas :mensaje" oncomplete="PF('dialogoEliminar').hide();"/>
+                <p:commandButton  icon="pi pi-check" value="Si" actionListener="#{beanParacaidista.eliminarParacaidista()}" update=":formListado:tablaParacaidistas :mensaje" oncomplete="PF('dialogoEliminar').hide();"/>
                 &nbsp;
-                <p:commandButton  icon="ui-icon-close" value="No" onclick="PF('dialogoEliminar').hide();"/>
+                <p:commandButton  icon="pi pi-times" value="No" onclick="PF('dialogoEliminar').hide();"/>
             </p:dialog>
         </h:form>
         
