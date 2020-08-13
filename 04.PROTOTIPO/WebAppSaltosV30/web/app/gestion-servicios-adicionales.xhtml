@@ -1,0 +1,111 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./WEB-INF/template.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="title">Gestion ServicioAdicionals</ui:define>
+    
+    <ui:define name="content">
+        
+        <!--<p:messages id="mensaje" autoUpdate="false" severity="info, fatal" showSummary="true" showDetail="true"></p:messages>-->
+        <p:growl id="mensaje" severity="info, fatal" showSummary="true" showDetail="true"></p:growl>
+
+        <h:form>
+            <div class="ui-g">
+                <div class="ui-g-12">
+                    <p:commandButton value="Agregar ServicioAdicional" actionListener="#{beanServicioAdicional.limpiarServicioAdicional()}" oncomplete="PF('dialogoAgregar').show();" update=":formAgregar"/>
+                </div>
+            </div>
+        </h:form>
+
+         <h:form id="formListado">
+             <p:dataTable id="tablaServicioAdicionals" paginator="true" paginatorPosition="bottom" rows="10" var="servicioAdicional" value="#{beanServicioAdicional.listaServicioAdicionals}" emptyMessage="No existen servicioAdicionals">
+                <p:column headerText="ID ServicioAdicional">
+                    <h:outputText value="#{servicioAdicional.idServicio}" />
+                </p:column>
+                <p:column headerText="Nombre">
+                    <h:outputText value="#{servicioAdicional.nombreser}" />
+                </p:column>
+                <p:column headerText="Responsables">
+                    <h:outputText value="#{servicioAdicional.responsable}" />
+                </p:column>
+                <p:column headerText="Descripcion">
+                    <h:outputText value="#{servicioAdicional.descripcionser}" />
+                </p:column>
+                 <p:column headerText="Costo">
+                     <h:outputText value="#{servicioAdicional.costoser}" />
+                </p:column>
+
+                <p:column headerText="Opciones" style="text-align: center">
+                    <p:commandButton icon="ui-icon-pencil" value="Modificar" oncomplete="PF('dialogoModificar').show();" update=":formModificar">
+                        <f:setPropertyActionListener target="#{beanServicioAdicional.servicioAdicional}" value="#{servicioAdicional}"/>
+                    </p:commandButton>
+
+                    <p:commandButton icon="ui-icon-trash" value="Eliminar" oncomplete="PF('dialogoEliminar').show();" update=":formEliminar">
+                        <f:setPropertyActionListener target="#{beanServicioAdicional.servicioAdicional}" value="#{servicioAdicional}"/>
+                    </p:commandButton>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+
+
+        <h:form id="formAgregar">
+            <p:dialog id="dlgAgregar" header="Agregar ServicioAdicional" widgetVar="dialogoAgregar" resizable="false" showEffect="fade" hideEffect="explode" modal="true">
+                <p:panelGrid columns="2" style="margin: 0 auto;">                                
+                    <p:outputLabel value="Nombre:"/>
+                    <p:inputText value="#{beanServicioAdicional.servicioAdicional.nombreser}"/>
+
+                    <p:outputLabel value="Responsables:"/>
+                    <p:inputText value="#{beanServicioAdicional.servicioAdicional.responsable}"/>
+
+                    <p:outputLabel value="Descripcion:"/>
+                    <p:spinner value="#{beanServicioAdicional.servicioAdicional.descripcionser}"/>
+                    
+                    <p:outputLabel value="Costo:"/>
+                    <p:spinner value="#{beanServicioAdicional.servicioAdicional.costoser}"/>
+
+                </p:panelGrid>
+                <p:commandButton icon="ui-icon-check" value="Guardar" actionListener="#{beanServicioAdicional.agregarServicioAdicional()}" update=":formListado:tablaServicioAdicionals :mensaje" oncomplete="PF('dialogoAgregar').hide();"/>
+                <p:commandButton  icon="ui-icon-close" value="Cancelar" onclick="PF('dialogoAgregar').hide();"/>
+
+            </p:dialog>
+        </h:form>
+
+        <h:form id="formModificar">
+            <p:dialog id="dlgModificar" header="Modificar ServicioAdicional" widgetVar="dialogoModificar" resizable="false" showEffect="fade" hideEffect="explode" modal="true">
+                <p:panelGrid columns="2" style="margin: 0 auto;">                                
+                    <p:outputLabel value="Nombre:"/>
+                    <p:inputText value="#{beanServicioAdicional.servicioAdicional.nombreser}"/>
+
+                    <p:outputLabel value="Responsables:"/>
+                    <p:inputText value="#{beanServicioAdicional.servicioAdicional.responsable}"/>
+
+                    <p:outputLabel value="Descripcion:"/>
+                    <p:spinner value="#{beanServicioAdicional.servicioAdicional.descripcionser}"/>
+                    
+                    <p:outputLabel value="Costo:"/>
+                    <p:spinner value="#{beanServicioAdicional.servicioAdicional.costoser}"/>
+
+                </p:panelGrid>
+                <p:commandButton  icon="ui-icon-check" value="Guardar" actionListener="#{beanServicioAdicional.modificarServicioAdicional()}" update=":formListado:tablaServicioAdicionals :mensaje" oncomplete="PF('dialogoModificar').hide();"/>
+                <p:commandButton  icon="ui-icon-close" value="Cancelar" onclick="PF('dialogoModificar').hide();"/>
+            </p:dialog>
+        </h:form>
+
+        <h:form id="formEliminar">
+            <p:dialog id="dlgEliminar" header="Eliminar ServicioAdicional" widgetVar="dialogoEliminar" resizable="false" showEffect="fade" hideEffect="explode" modal="true">
+                <h:outputText value="Desea eliminar este registro?"/>
+                <h:outputText value="&lt;br/&gt;" escape="false" />
+                <h:outputText value="&lt;br/&gt;" escape="false" />
+                <p:commandButton  icon="ui-icon-check" value="Si" actionListener="#{beanServicioAdicional.eliminarServicioAdicional()}" update=":formListado:tablaServicioAdicionals :mensaje" oncomplete="PF('dialogoEliminar').hide();"/>
+                &nbsp;
+                <p:commandButton  icon="ui-icon-close" value="No" onclick="PF('dialogoEliminar').hide();"/>
+            </p:dialog>
+        </h:form>
+        
+    </ui:define>
+
+</ui:composition>

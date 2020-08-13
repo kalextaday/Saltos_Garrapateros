@@ -1,0 +1,116 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./WEB-INF/template.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="title">Gestion Pedidos</ui:define>
+    
+    <ui:define name="content">
+        
+        <!--<p:messages id="mensaje" autoUpdate="false" severity="info, fatal" showSummary="true" showDetail="true"></p:messages>-->
+        <p:growl id="mensaje" severity="info, fatal" showSummary="true" showDetail="true"></p:growl>
+
+        <h:form>
+            <div class="ui-g">
+                <div class="ui-g-12">
+                    <p:commandButton value="Agregar Pedido" actionListener="#{beanPedido.limpiarPedido()}" oncomplete="PF('dialogoAgregar').show();" update=":formAgregar"/>
+                </div>
+            </div>
+        </h:form>
+
+         <h:form id="formListado">
+             <p:dataTable id="tablaPedidos" paginator="true" paginatorPosition="bottom" rows="10" var="pedido" value="#{beanPedido.listaPedidos}" emptyMessage="No existen pedidos">
+                <p:column headerText="ID Pedido">
+                    <h:outputText value="#{pedido.idPedido}" />
+                </p:column>
+                <p:column headerText="Cliente">
+                    <h:outputText value="#{pedido.cliente.idCliente}" />
+                </p:column>
+                <p:column headerText="Salto">
+                    <h:outputText value="#{pedido.salto.idSalto}" />
+                </p:column>
+                <p:column headerText="Paracaidista">
+                    <h:outputText value="#{pedido.paracaidista.idParacaidista}" />
+                </p:column>
+                 <p:column headerText="Descuento">
+                     <h:outputText value="#{pedido.descuento.idDescuento}" />
+                </p:column>
+                 <p:column headerText="Servicio">
+                     <h:outputText value="#{pedido.servicioAdicional.idServicio}" />
+                </p:column>
+                 <p:column headerText="Fecha de Pedido">
+                     <h:outputText value="#{pedido.fechaped}" />
+                </p:column>
+                <p:column headerText="Costo del Salto">
+                    <h:outputText value="#{pedido.costosalto}" />
+                </p:column>
+                 <p:column headerText="Costo Total">
+                     <h:outputText value="#{pedido.costototalped}" />
+                </p:column>
+
+                <p:column headerText="Opciones" style="text-align: center">
+                    <p:commandButton icon="ui-icon-pencil" value="Editar" oncomplete="PF('dialogoModificar').show();" update=":formModificar">
+                        <f:setPropertyActionListener target="#{beanPedido.pedido}" value="#{pedido}"/>
+                    </p:commandButton>
+
+                    <p:commandButton icon="ui-icon-trash" value="Eliminar" oncomplete="PF('dialogoEliminar').show();" update=":formEliminar">
+                        <f:setPropertyActionListener target="#{beanPedido.pedido}" value="#{pedido}"/>
+                    </p:commandButton>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+
+
+        <h:form id="formAgregar">
+            <p:dialog id="dlgAgregar" header="Agregar Pedido" widgetVar="dialogoAgregar" resizable="false" showEffect="fade" hideEffect="explode" modal="true">
+                <p:panelGrid columns="2" style="margin: 0 auto;">                                
+                    <p:outputLabel value="Nombre:"/>
+                    <p:inputText value="#{beanPedido.pedido.nombreaer}"/>
+
+                    <p:outputLabel value="Modelo:"/>
+                    <p:inputText value="#{beanPedido.pedido.modeloaer}"/>
+
+                    <p:outputLabel value="Capacidad:"/>
+                    <p:spinner value="#{beanPedido.pedido.capacidadtotalaer}"/>
+                </p:panelGrid>
+                <p:commandButton icon="ui-icon-check" value="Guardar" actionListener="#{beanPedido.agregarPedido()}" update=":formListado:tablaPedidos :mensaje" oncomplete="PF('dialogoAgregar').hide();"/>
+                <p:commandButton  icon="ui-icon-close" value="Cancelar" onclick="PF('dialogoAgregar').hide();"/>
+
+            </p:dialog>
+        </h:form>
+
+        <h:form id="formModificar">
+            <p:dialog id="dlgModificar" header="Modificar Pedido" widgetVar="dialogoModificar" resizable="false" showEffect="fade" hideEffect="explode" modal="true">
+                <p:panelGrid columns="2" style="margin: 0 auto;">                                
+                    <p:outputLabel value="Nombre:"/>
+                    <p:inputText value="#{beanPedido.pedido.nombreaer}"/>
+
+                    <p:outputLabel value="Modelo:"/>
+                    <p:inputText value="#{beanPedido.pedido.modeloaer}"/>
+
+                    <p:outputLabel value="Capacidad:"/>
+                    <p:spinner value="#{beanPedido.pedido.capacidadtotalaer}"/>
+
+                </p:panelGrid>
+                <p:commandButton  icon="ui-icon-check" value="Guardar" actionListener="#{beanPedido.modificarPedido()}" update=":formListado:tablaPedidos :mensaje" oncomplete="PF('dialogoModificar').hide();"/>
+                <p:commandButton  icon="ui-icon-close" value="Cancelar" onclick="PF('dialogoModificar').hide();"/>
+            </p:dialog>
+        </h:form>
+
+        <h:form id="formEliminar">
+            <p:dialog id="dlgEliminar" header="Eliminar Pedido" widgetVar="dialogoEliminar" resizable="false" showEffect="fade" hideEffect="explode" modal="true">
+                <h:outputText value="Desea eliminar este registro?"/>
+                <h:outputText value="&lt;br/&gt;" escape="false" />
+                <h:outputText value="&lt;br/&gt;" escape="false" />
+                <p:commandButton  icon="ui-icon-check" value="Si" actionListener="#{beanPedido.eliminarPedido()}" update=":formListado:tablaPedidos :mensaje" oncomplete="PF('dialogoEliminar').hide();"/>
+                &nbsp;
+                <p:commandButton  icon="ui-icon-close" value="No" onclick="PF('dialogoEliminar').hide();"/>
+            </p:dialog>
+        </h:form>
+        
+    </ui:define>
+
+</ui:composition>

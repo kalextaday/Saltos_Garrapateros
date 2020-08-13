@@ -43,7 +43,7 @@ drop table if exists VUELO;
 /*==============================================================*/
 create table AERONAVE
 (
-   IDAERONAVE           int not null,
+   IDAERONAVE           int AUTO_INCREMENT,
    NOMBREAER            varchar(100),
    MODELOAER            varchar(14),
    CAPACIDADTOTALAER    int,

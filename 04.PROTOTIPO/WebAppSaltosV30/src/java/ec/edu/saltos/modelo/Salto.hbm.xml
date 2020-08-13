@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 12-ago-2020 14:57:42 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="ec.edu.saltos.modelo.Salto" table="salto" catalog="monster_saltos" optimistic-lock="version">
+        <id name="idSalto" type="int">
+            <column name="ID_SALTO" />
+            <generator class="assigned" />
+        </id>
+        <property name="tiposalto" type="string">
+            <column name="TIPOSALTO" length="50" />
+        </property>
+        <set name="pedidos" table="pedido" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="SALTO_ID" />
+            </key>
+            <one-to-many class="ec.edu.saltos.modelo.Pedido" />
+        </set>
+    </class>
+</hibernate-mapping>

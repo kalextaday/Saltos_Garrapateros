@@ -1,0 +1,149 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../WEB-INF/template.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    
+    <ui:define name="title">Gestion Vuelos</ui:define>
+    
+    <ui:define name="content">
+        
+        <!--<p:messages id="mensaje" autoUpdate="false" severity="info, fatal" showSummary="true" showDetail="true"></p:messages>-->
+        <p:growl id="mensaje" severity="info, fatal" showSummary="true" showDetail="true"></p:growl>
+
+        <h:form>
+            <div class="ui-g">
+                <div class="ui-g-12">
+                    <p:commandButton styleClass="ui-priority-primary" value="Agregar Vuelo" actionListener="#{beanVuelo.limpiarVuelo()}" oncomplete="PF('dialogoAgregar').show();" update=":formAgregar"/>
+                </div>
+            </div>
+        </h:form>
+
+         <h:form id="formListado">
+             <p:dataTable id="tablaVuelos" paginator="true" paginatorPosition="bottom" var="vuelo" 
+                          widgetVar="tablaVuelos2" filteredValue="#{beanVuelo.listaVuelos}" 
+                          
+                          value="#{beanVuelo.listaVuelos}" emptyMessage="No existen vuelos" 
+                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                          currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords} registros"
+                          rows="5" reflow="true" rowsPerPageTemplate="5,10,15">
+                
+                <f:facet name="header">
+                    Lista de Vuelos
+                    <p:commandButton id="toggler" type="button" value="Columnas" style="float:right" icon="pi pi-align-justify" />
+                    <p:columnToggler datasource="tablaVuelos" trigger="toggler" />
+                </f:facet>
+                 
+                <p:column headerText="ID Vuelo" sortBy="#{vuelo.idVuelo}">
+                    <h:outputText value="#{vuelo.idVuelo}" />
+                </p:column>
+                <p:column headerText="Aeronave">
+                    <h:outputText value="#{vuelo.aeronave.idAeronave}" />
+                </p:column>
+                <p:column headerText="Piloto">
+                    <h:outputText value="#{vuelo.piloto.idPiloto}" />
+                </p:column>
+                <p:column headerText="Hora de Salida">
+                    <h:outputText value="#{vuelo.horasalida}" />
+                </p:column>
+                <p:column headerText="Hora de Llegada">
+                    <h:outputText value="#{vuelo.horallegada}" />
+                </p:column>
+                <p:column headerText="Total de Personas">
+                    <h:outputText value="#{vuelo.capacidadpersonas}" />
+                </p:column>
+
+                <p:column headerText="Opciones" style="text-align: center">
+                    <p:commandButton icon="pi pi-pencil" value="Editar" oncomplete="PF('dialogoModificar').show();" update=":formModificar">
+                        <f:setPropertyActionListener target="#{beanVuelo.vuelo}" value="#{vuelo}"/>
+                    </p:commandButton>
+                    
+                    <h:outputText value="&lt;br/&gt;" escape="false" />
+                    <h:outputText value="&lt;br/&gt;" escape="false" />
+                    
+                    <p:commandButton icon="pi pi-trash" value=" Eliminar" oncomplete="PF('dialogoEliminar').show();" update=":formEliminar">
+                        <f:setPropertyActionListener target="#{beanVuelo.vuelo}" value="#{vuelo}"/>
+                    </p:commandButton>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+
+
+        <h:form id="formAgregar">
+            <p:dialog id="dlgAgregar" header="Agregar Vuelo" widgetVar="dialogoAgregar" resizable="false" showEffect="fade" hideEffect="explode" modal="true">
+                <p:panelGrid columns="2" style="margin: 0 auto;">                                
+                    <p:outputLabel value="Aeronave:"/>
+                    <p:inputText value="#{beanVuelo.vuelo.aeronave.idAeronave}"/>
+
+                    <p:outputLabel value="Piloto:"/>
+                    <p:inputText value="#{beanVuelo.vuelo.piloto.idPiloto}"/>
+
+                    <p:outputLabel value="Hora de Salida:"/>
+                    <p:calendar value="#{beanVuelo.vuelo.horasalida}"/>
+                    
+                    <p:outputLabel value="Hora de Llegada"/>
+                    <p:calendar value="#{beanVuelo.vuelo.horallegada}"/>
+                    
+                    <p:outputLabel value="Total de Personas:"/>
+                    <p:spinner value="#{beanVuelo.vuelo.capacidadpersonas}"/>
+                </p:panelGrid>
+                
+                <h:outputText value="&lt;br/&gt;" escape="false" />
+                <h:outputText value="&lt;br/&gt;" escape="false" />
+                
+                <p:commandButton icon="pi pi-check" value="Guardar" actionListener="#{beanVuelo.agregarVuelo()}" update=":formListado:tablaVuelos :mensaje" oncomplete="PF('dialogoAgregar').hide();"/>
+                &nbsp;
+                <p:commandButton icon="pi pi-times" value="Cancelar" onclick="PF('dialogoAgregar').hide();"/>
+
+            </p:dialog>
+        </h:form>
+
+        <h:form id="formModificar">
+            <p:dialog id="dlgModificar" header="Modificar Vuelo" widgetVar="dialogoModificar" resizable="false" showEffect="fade" hideEffect="explode" modal="true">
+                <p:panelGrid columns="2" style="margin: 0 auto;">                                
+                    <p:outputLabel value="Aeronave:"/>
+                    <p:inputText value="#{beanVuelo.vuelo.aeronave.idAeronave}"/>
+
+                    <p:outputLabel value="Piloto:"/>
+                    <p:inputText value="#{beanVuelo.vuelo.piloto.idPiloto}"/>
+
+                    <p:outputLabel value="Hora de Salida:"/>
+                    <p:calendar value="#{beanVuelo.vuelo.horasalida}"/>
+                    
+                    <p:outputLabel value="Hora de Llegada"/>
+                    <p:calendar value="#{beanVuelo.vuelo.horallegada}"/>
+                    
+                    <p:outputLabel value="Total de Personas:"/>
+                    <p:spinner value="#{beanVuelo.vuelo.capacidadpersonas}"/>
+
+                </p:panelGrid>
+                
+                <h:outputText value="&lt;br/&gt;" escape="false" />
+                <h:outputText value="&lt;br/&gt;" escape="false" />
+                
+                <p:commandButton  icon="pi pi-check" value="Guardar" actionListener="#{beanVuelo.modificarVuelo()}" update=":formListado:tablaVuelos :mensaje" oncomplete="PF('dialogoModificar').hide();"/>
+                &nbsp;
+                <p:commandButton  icon="pi pi-times" value="Cancelar" onclick="PF('dialogoModificar').hide();"/>
+            </p:dialog>
+        </h:form>
+
+        <h:form id="formEliminar">
+            <p:dialog id="dlgEliminar" header="Eliminar Vuelo" widgetVar="dialogoEliminar" resizable="false" showEffect="fade" hideEffect="explode" modal="true">
+                <h:outputText value="Desea eliminar este registro?"/>
+                
+                <h:outputText value="&lt;br/&gt;" escape="false" />
+                <h:outputText value="&lt;br/&gt;" escape="false" />
+                
+                <p:commandButton  icon="pi pi-check" value="Si" actionListener="#{beanVuelo.eliminarVuelo()}" update=":formListado:tablaVuelos :mensaje" oncomplete="PF('dialogoEliminar').hide();"/>
+                &nbsp;
+                <p:commandButton  icon="pi pi-times" value="No" onclick="PF('dialogoEliminar').hide();"/>
+            </p:dialog>
+        </h:form>
+        
+    </ui:define>
+
+    
+</ui:composition>

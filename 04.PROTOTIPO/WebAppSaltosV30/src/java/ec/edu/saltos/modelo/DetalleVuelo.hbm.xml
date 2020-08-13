@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 12-ago-2020 14:57:42 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="ec.edu.saltos.modelo.DetalleVuelo" table="detalle_vuelo" catalog="monster_saltos" optimistic-lock="version">
+        <id name="idDetvuelo" type="java.lang.Integer">
+            <column name="ID_DETVUELO" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="pedido" class="ec.edu.saltos.modelo.Pedido" fetch="select">
+            <column name="PEDIDO_ID" />
+        </many-to-one>
+        <many-to-one name="vuelo" class="ec.edu.saltos.modelo.Vuelo" fetch="select">
+            <column name="VUELO_ID" />
+        </many-to-one>
+        <property name="costototal" type="big_decimal">
+            <column name="COSTOTOTAL" precision="6" />
+        </property>
+    </class>
+</hibernate-mapping>

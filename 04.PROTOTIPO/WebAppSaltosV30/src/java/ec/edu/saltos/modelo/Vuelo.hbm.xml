@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 12-ago-2020 14:57:42 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="ec.edu.saltos.modelo.Vuelo" table="vuelo" catalog="monster_saltos" optimistic-lock="version">
+        <id name="idVuelo" type="java.lang.Integer">
+            <column name="ID_VUELO" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="aeronave" class="ec.edu.saltos.modelo.Aeronave" fetch="select">
+            <column name="AERONAVE_ID" />
+        </many-to-one>
+        <many-to-one name="piloto" class="ec.edu.saltos.modelo.Piloto" fetch="select">
+            <column name="PILOTO_ID" />
+        </many-to-one>
+        <property name="horasalida" type="timestamp">
+            <column name="HORASALIDA" length="19" />
+        </property>
+        <property name="horallegada" type="timestamp">
+            <column name="HORALLEGADA" length="19" />
+        </property>
+        <property name="capacidadpersonas" type="java.lang.Integer">
+            <column name="CAPACIDADPERSONAS" />
+        </property>
+        <set name="detalleVuelos" table="detalle_vuelo" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="VUELO_ID" />
+            </key>
+            <one-to-many class="ec.edu.saltos.modelo.DetalleVuelo" />
+        </set>
+    </class>
+</hibernate-mapping>

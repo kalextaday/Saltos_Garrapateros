@@ -1,0 +1,108 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../WEB-INF/template.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="title">Gestion Saltos</ui:define>
+    
+    <ui:define name="content">
+        
+        <!--<p:messages id="mensaje" autoUpdate="false" severity="info, fatal" showSummary="true" showDetail="true"></p:messages>-->
+        <p:growl id="mensaje" severity="info, fatal" showSummary="true" showDetail="true"></p:growl>
+        
+        <h:form>
+            <div class="ui-g">
+                <div class="ui-g-12">
+                    <p:commandButton value="Agregar Salto" actionListener="#{beanSalto.limpiarSalto()}" oncomplete="PF('dialogoAgregar').show();" update=":formAgregar"/>
+                </div>
+            </div>
+        </h:form>
+
+         <h:form id="formListado">
+             <p:dataTable id="tablaSaltos" paginator="true" paginatorPosition="bottom" var="salto" 
+                          widgetVar="tablaSaltos2" filteredValue="#{beanSalto.listaSaltos}" 
+                          
+                          value="#{beanSalto.listaSaltos}" emptyMessage="No existen saltos"
+                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                          currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords} registros"
+                          rows="5" reflow="true" rowsPerPageTemplate="5,10,15">
+                
+                 <f:facet name="header">
+                    Lista de Saltos
+                    <p:commandButton id="toggler" type="button" value="Columnas" style="float:right" icon="pi pi-align-justify" />
+                    <p:columnToggler datasource="tablaSaltos" trigger="toggler" />
+                </f:facet>
+                 <p:column headerText="ID Salto">
+                    <h:outputText value="#{salto.idSalto}" />
+                </p:column>
+                <p:column headerText="Tipo de salto">
+                    <h:outputText value="#{salto.tiposalto}" />
+                </p:column>
+
+                <p:column headerText="Opciones" style="text-align: center">
+                    <p:commandButton icon="pi pi-pencil" value="Editar" oncomplete="PF('dialogoModificar').show();" update=":formModificar">
+                        <f:setPropertyActionListener target="#{beanSalto.salto}" value="#{salto}"/>
+                    </p:commandButton>
+                    &nbsp;
+                    <p:commandButton icon="pi pi-trash" value="Eliminar" oncomplete="PF('dialogoEliminar').show();" update=":formEliminar">
+                        <f:setPropertyActionListener target="#{beanSalto.salto}" value="#{salto}"/>
+                    </p:commandButton>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+
+
+        <h:form id="formAgregar">
+            <p:dialog id="dlgAgregar" header="Agregar Salto" widgetVar="dialogoAgregar" resizable="false" showEffect="fade" hideEffect="explode" modal="true">
+                <p:panelGrid columns="2" style="margin: 0 auto;">                                
+                    <p:outputLabel value="Tipo:"/>
+                    <p:inputText value="#{beanSalto.salto.tiposalto}"/>
+                    
+                </p:panelGrid>
+                
+                <h:outputText value="&lt;br/&gt;" escape="false" />
+                <h:outputText value="&lt;br/&gt;" escape="false" />
+                
+                <p:commandButton icon="pi pi-check" value="Guardar" actionListener="#{beanSalto.agregarSalto()}" update=":formListado:tablaSaltos :mensaje" oncomplete="PF('dialogoAgregar').hide();"/>
+                &nbsp;
+                <p:commandButton  icon="pi pi-times" value="Cancelar" onclick="PF('dialogoAgregar').hide();"/>
+
+            </p:dialog>
+        </h:form>
+
+        <h:form id="formModificar">
+            <p:dialog id="dlgModificar" header="Modificar Salto" widgetVar="dialogoModificar" resizable="false" showEffect="fade" hideEffect="explode" modal="true">
+                <p:panelGrid columns="2" style="margin: 0 auto;">                                
+                    <p:outputLabel value="Tipo:"/>
+                    <p:inputText value="#{beanSalto.salto.tiposalto}"/>
+
+                </p:panelGrid>
+                
+                <h:outputText value="&lt;br/&gt;" escape="false" />
+                <h:outputText value="&lt;br/&gt;" escape="false" />
+                
+                <p:commandButton  icon="pi pi-check" value="Guardar" actionListener="#{beanSalto.modificarSalto()}" update=":formListado:tablaSaltos :mensaje" oncomplete="PF('dialogoModificar').hide();"/>
+                &nbsp;
+                <p:commandButton  icon="pi pi-times" value="Cancelar" onclick="PF('dialogoModificar').hide();"/>
+            </p:dialog>
+        </h:form>
+
+        <h:form id="formEliminar">
+            <p:dialog id="dlgEliminar" header="Eliminar Salto" widgetVar="dialogoEliminar" resizable="false" showEffect="fade" hideEffect="explode" modal="true">
+                <h:outputText value="Desea eliminar este registro?"/>
+                
+                <h:outputText value="&lt;br/&gt;" escape="false" />
+                <h:outputText value="&lt;br/&gt;" escape="false" />
+                
+                <p:commandButton  icon="pi pi-check" value="Si" actionListener="#{beanSalto.eliminarSalto()}" update=":formListado:tablaSaltos :mensaje" oncomplete="PF('dialogoEliminar').hide();"/>
+                &nbsp;
+                <p:commandButton  icon="pi pi-times" value="No" onclick="PF('dialogoEliminar').hide();"/>
+            </p:dialog>
+        </h:form>
+        
+    </ui:define>
+
+</ui:composition>

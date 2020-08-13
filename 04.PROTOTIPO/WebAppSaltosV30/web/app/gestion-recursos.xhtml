@@ -1,0 +1,132 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../WEB-INF/template.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="title">Gestion Recursos</ui:define>
+    
+    <ui:define name="content">
+        
+        <!--<p:messages id="mensaje" autoUpdate="false" severity="info, fatal" showSummary="true" showDetail="true"></p:messages>-->
+        <p:growl id="mensaje" severity="info, fatal" showSummary="true" showDetail="true"></p:growl>
+
+        
+        <h:form>
+            <div class="ui-g">
+                <div class="ui-g-12">
+                    <p:commandButton value="Agregar Recurso" actionListener="#{beanRecurso.limpiarRecurso()}" oncomplete="PF('dialogoAgregar').show();" update=":formAgregar"/>
+                </div>
+            </div>
+        </h:form>
+
+         <h:form id="formListado">
+             <p:dataTable id="tablaRecursos" paginator="true" paginatorPosition="bottom" var="recurso" 
+                          widgetVar="tablaRecursos2" filteredValue="#{beanRecurso.listaRecursos}" 
+
+                          
+                          value="#{beanRecurso.listaRecursos}" emptyMessage="No existen recursos"
+                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                          currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords} registros"
+                          rows="5" reflow="true" rowsPerPageTemplate="5,10,15">
+                
+                 <f:facet name="header">
+                    Lista de Recursos
+                    <p:commandButton id="toggler" type="button" value="Columnas" style="float:right" icon="pi pi-align-justify" />
+                    <p:columnToggler datasource="tablaRecursos" trigger="toggler" />
+                </f:facet>
+                 
+                <p:column headerText="ID Recurso" sortBy="#{recurso.idRecurso}">
+                    <h:outputText value="#{recurso.idRecurso}" />
+                </p:column>
+                <p:column headerText="Nombre">
+                    <h:outputText value="#{recurso.nombrerec}" />
+                </p:column>
+                <p:column headerText="Orden" sortBy="#{recurso.indicerec}">
+                    <h:outputText value="#{recurso.indicerec}" />
+                </p:column>
+                <p:column headerText="Estado">
+                    <h:outputText value="#{recurso.estadorec}" />
+                </p:column>
+
+                <p:column headerText="Opciones" style="text-align: center">
+                    <p:commandButton icon="pi pi-pencil" value="Editar" oncomplete="PF('dialogoModificar').show();" update=":formModificar">
+                        <f:setPropertyActionListener target="#{beanRecurso.recurso}" value="#{recurso}"/>
+                    </p:commandButton>
+                    
+                    <p:commandButton icon="pi pi-trash" value="Eliminar" oncomplete="PF('dialogoEliminar').show();" update=":formEliminar">
+                        <f:setPropertyActionListener target="#{beanRecurso.recurso}" value="#{recurso}"/>
+                    </p:commandButton>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+
+
+        <h:form id="formAgregar">
+            <p:dialog id="dlgAgregar" header="Agregar Recurso" widgetVar="dialogoAgregar" resizable="false" showEffect="fade" hideEffect="explode" modal="true">
+                <p:panelGrid columns="2" style="margin: 0 auto;">                                
+                    <p:outputLabel value="Nombre:"/>
+                    <p:inputText value="#{beanRecurso.recurso.nombrerec}"/>
+                    
+                    <p:outputLabel value="URL:"/>
+                    <p:inputText value="#{beanRecurso.recurso.paginarec}"/>
+
+                    <p:outputLabel value="Orden:"/>
+                    <p:spinner value="#{beanRecurso.recurso.indicerec}" style="width: 50%;"/>
+
+                    <p:outputLabel value="Estado:"/>
+                    <p:inputText value="#{beanRecurso.recurso.estadorec}"/>
+                </p:panelGrid>
+                
+                <h:outputText value="&lt;br/&gt;" escape="false" />
+                <h:outputText value="&lt;br/&gt;" escape="false" />
+                
+                <p:commandButton icon="pi pi-check" value="Guardar" actionListener="#{beanRecurso.agregarRecurso()}" update=":formListado:tablaRecursos :mensaje" oncomplete="PF('dialogoAgregar').hide();"/>
+                &nbsp;
+                <p:commandButton  icon="pi pi-times" value="Cancelar" onclick="PF('dialogoAgregar').hide();"/>
+
+            </p:dialog>
+        </h:form>
+
+        <h:form id="formModificar">
+            <p:dialog id="dlgModificar" header="Modificar Recurso" widgetVar="dialogoModificar" resizable="false" showEffect="fade" hideEffect="explode" modal="true">
+                <p:panelGrid columns="2" style="margin: 0 auto;">                                
+                    <p:outputLabel value="Nombre:"/>
+                    <p:inputText value="#{beanRecurso.recurso.nombrerec}"/>
+
+                    <p:outputLabel value="URL:"/>
+                    <p:inputText value="#{beanRecurso.recurso.paginarec}"/>
+                    
+                    <p:outputLabel value="Orden:" />
+                    <p:spinner value="#{beanRecurso.recurso.indicerec}" style="width: 50%;"/>
+
+                    <p:outputLabel value="Estado:"/>
+                    <p:inputText value="#{beanRecurso.recurso.estadorec}"/>
+
+                </p:panelGrid>
+                
+                <h:outputText value="&lt;br/&gt;" escape="false" />
+                <h:outputText value="&lt;br/&gt;" escape="false" />
+                
+                <p:commandButton  icon="pi pi-check" value="Guardar" actionListener="#{beanRecurso.modificarRecurso()}" update=":formListado:tablaRecursos :mensaje" oncomplete="PF('dialogoModificar').hide();"/>
+                &nbsp;
+                <p:commandButton  icon="pi pi-times" value="Cancelar" onclick="PF('dialogoModificar').hide();"/>
+            </p:dialog>
+        </h:form>
+
+        <h:form id="formEliminar">
+            <p:dialog id="dlgEliminar" header="Eliminar Recurso" widgetVar="dialogoEliminar" resizable="false" showEffect="fade" hideEffect="explode" modal="true">
+                <h:outputText value="Desea eliminar este registro?"/>
+                <h:outputText value="&lt;br/&gt;" escape="false" />
+                <h:outputText value="&lt;br/&gt;" escape="false" />
+                <p:commandButton  icon="pi pi-check" value="Si" actionListener="#{beanRecurso.eliminarRecurso()}" update=":formListado:tablaRecursos :mensaje" oncomplete="PF('dialogoEliminar').hide();"/>
+                &nbsp;
+                <p:commandButton  icon="pi pi-times" value="No" onclick="PF('dialogoEliminar').hide();"/>
+            </p:dialog>
+        </h:form>
+        
+    </ui:define>
+
+</ui:composition>

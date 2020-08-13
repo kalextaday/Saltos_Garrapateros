@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 12-ago-2020 14:57:42 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="ec.edu.saltos.modelo.Permiso" table="permiso" catalog="monster_saltos" optimistic-lock="version">
+        <id name="idPermiso" type="java.lang.Integer">
+            <column name="ID_PERMISO" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="perfil" class="ec.edu.saltos.modelo.Perfil" fetch="select">
+            <column name="PERFIL_ID" />
+        </many-to-one>
+        <many-to-one name="recurso" class="ec.edu.saltos.modelo.Recurso" fetch="select">
+            <column name="RECURSO_ID" />
+        </many-to-one>
+        <property name="nombreper" type="string">
+            <column name="NOMBREPER" length="50" />
+        </property>
+        <property name="estadoper" type="string">
+            <column name="ESTADOPER" length="3" />
+        </property>
+    </class>
+</hibernate-mapping>

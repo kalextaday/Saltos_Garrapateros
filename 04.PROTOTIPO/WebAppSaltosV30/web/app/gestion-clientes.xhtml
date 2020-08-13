@@ -1,0 +1,129 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../WEB-INF/template.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="title">Gestion Clientes</ui:define>
+    
+    <ui:define name="content">
+        
+        <!--<p:messages id="mensaje" autoUpdate="false" severity="info, fatal" showSummary="true" showDetail="true"></p:messages>-->
+        <p:growl id="mensaje" severity="info, fatal" showSummary="true" showDetail="true"></p:growl>
+
+        <h:form>
+            <div class="ui-g">
+                <div class="ui-g-12">
+                    <p:commandButton value="Agregar Cliente" actionListener="#{beanCliente.limpiarCliente()}" oncomplete="PF('dialogoAgregar').show();" update=":formAgregar"/>
+                </div>
+            </div>
+        </h:form>
+
+
+         <h:form id="formListado">
+             <p:dataTable id="tablaClientes" paginator="true" paginatorPosition="bottom" rows="10" var="cliente" value="#{beanCliente.listaClientes}" emptyMessage="No existen clientes">
+                <p:column headerText="ID Cliente">
+                    <h:outputText value="#{cliente.idCliente}" />
+                </p:column>
+                <p:column headerText="Nombre">
+                    <h:outputText value="#{cliente.nombrescli}" />
+                </p:column>
+                <p:column headerText="Apellidos">
+                    <h:outputText value="#{cliente.apellidoscli}" />
+                </p:column>
+                <p:column headerText="Cedula">
+                    <h:outputText value="#{cliente.cedulacli}" />
+                </p:column>
+                <p:column headerText="Fecha de Nacimiento">
+                    <h:outputText value="#{cliente.fechanacimientocli}" />
+                </p:column>
+                <p:column headerText="Correo">
+                    <h:outputText value="#{cliente.correocli}" />
+                </p:column>
+                <p:column headerText="Telefono">
+                    <h:outputText value="#{cliente.telfcli}" />
+                </p:column>
+
+                <p:column headerText="Opciones" style="text-align: center">
+                    <p:commandButton icon="ui-icon-pencil" value="Modificar" oncomplete="PF('dialogoModificar').show();" update=":formModificar">
+                        <f:setPropertyActionListener target="#{beanCliente.cliente}" value="#{cliente}"/>
+                    </p:commandButton>
+
+                    <p:commandButton icon="ui-icon-trash" value="Eliminar" oncomplete="PF('dialogoEliminar').show();" update=":formEliminar">
+                        <f:setPropertyActionListener target="#{beanCliente.cliente}" value="#{cliente}"/>
+                    </p:commandButton>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+
+
+        <h:form id="formAgregar">
+            <p:dialog id="dlgAgregar" header="Agregar Cliente" widgetVar="dialogoAgregar" resizable="false" showEffect="fade" hideEffect="explode" modal="true">
+                <p:panelGrid columns="2" style="margin: 0 auto;">                                
+                    <p:outputLabel value="Nombre:"/>
+                    <p:inputText value="#{beanCliente.cliente.nombrescli}"/>
+
+                    <p:outputLabel value="Apellidos:"/>
+                    <p:inputText value="#{beanCliente.cliente.apellidoscli}"/>
+
+                    <p:outputLabel value="Cedula:"/>
+                    <p:inputText value="#{beanCliente.cliente.cedulacli}"/>
+                    
+                    <p:outputLabel value="Fecha de Nacimiento:"/>
+                    <p:calendar value="#{beanCliente.cliente.fechanacimientocli}"/>
+                    
+                    <p:outputLabel value="Correo:"/>
+                    <p:inputText value="#{beanCliente.cliente.correocli}"/>
+                    
+                    <p:outputLabel value="Telefono:"/>
+                    <p:inputText value="#{beanCliente.cliente.telfcli}"/>
+                </p:panelGrid>
+                <p:commandButton icon="ui-icon-check" value="Guardar" actionListener="#{beanCliente.agregarCliente()}" update=":formListado:tablaClientes :mensaje" oncomplete="PF('dialogoAgregar').hide();"/>
+                <p:commandButton  icon="ui-icon-close" value="Cancelar" onclick="PF('dialogoAgregar').hide();"/>
+
+            </p:dialog>
+        </h:form>
+
+        <h:form id="formModificar">
+            <p:dialog id="dlgModificar" header="Modificar Cliente" widgetVar="dialogoModificar" resizable="false" showEffect="fade" hideEffect="explode" modal="true">
+                <p:panelGrid columns="2" style="margin: 0 auto;">                                
+                    <p:outputLabel value="Nombre:"/>
+                    <p:inputText value="#{beanCliente.cliente.nombrescli}"/>
+
+                    <p:outputLabel value="Apellidos:"/>
+                    <p:inputText value="#{beanCliente.cliente.apellidoscli}"/>
+
+                    <p:outputLabel value="Cedula:"/>
+                    <p:inputText value="#{beanCliente.cliente.cedulacli}"/>
+                    
+                    <p:outputLabel value="Fecha de Nacimiento:"/>
+                    <p:calendar value="#{beanCliente.cliente.fechanacimientocli}"/>
+                    
+                    <p:outputLabel value="Correo:"/>
+                    <p:inputText value="#{beanCliente.cliente.correocli}"/>
+                    
+                    <p:outputLabel value="Telefono:"/>
+                    <p:inputText value="#{beanCliente.cliente.telfcli}"/>
+
+                </p:panelGrid>
+                <p:commandButton  icon="ui-icon-check" value="Guardar" actionListener="#{beanCliente.modificarCliente()}" update=":formListado:tablaClientes :mensaje" oncomplete="PF('dialogoModificar').hide();"/>
+                <p:commandButton  icon="ui-icon-close" value="Cancelar" onclick="PF('dialogoModificar').hide();"/>
+            </p:dialog>
+        </h:form>
+
+        <h:form id="formEliminar">
+            <p:dialog id="dlgEliminar" header="Eliminar Cliente" widgetVar="dialogoEliminar" resizable="false" showEffect="fade" hideEffect="explode" modal="true">
+                <h:outputText value="Desea eliminar este registro?"/>
+                <h:outputText value="&lt;br/&gt;" escape="false" />
+                <h:outputText value="&lt;br/&gt;" escape="false" />
+                <p:commandButton  icon="ui-icon-check" value="Si" actionListener="#{beanCliente.eliminarCliente()}" update=":formListado:tablaClientes :mensaje" oncomplete="PF('dialogoEliminar').hide();"/>
+                &nbsp;
+                <p:commandButton  icon="ui-icon-close" value="No" onclick="PF('dialogoEliminar').hide();"/>
+            </p:dialog>
+        </h:form>
+        
+    </ui:define>
+
+</ui:composition>

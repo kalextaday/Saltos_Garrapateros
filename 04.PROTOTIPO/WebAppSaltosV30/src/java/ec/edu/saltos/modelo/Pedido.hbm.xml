@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 12-ago-2020 14:57:42 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="ec.edu.saltos.modelo.Pedido" table="pedido" catalog="monster_saltos" optimistic-lock="version">
+        <id name="idPedido" type="java.lang.Integer">
+            <column name="ID_PEDIDO" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="cliente" class="ec.edu.saltos.modelo.Cliente" fetch="select">
+            <column name="CLIENTE_ID" />
+        </many-to-one>
+        <many-to-one name="descuento" class="ec.edu.saltos.modelo.Descuento" fetch="select">
+            <column name="DESCUENTO_ID" />
+        </many-to-one>
+        <many-to-one name="paracaidista" class="ec.edu.saltos.modelo.Paracaidista" fetch="select">
+            <column name="PARACAIDISTA_ID" />
+        </many-to-one>
+        <many-to-one name="salto" class="ec.edu.saltos.modelo.Salto" fetch="select">
+            <column name="SALTO_ID" />
+        </many-to-one>
+        <many-to-one name="servicioAdicional" class="ec.edu.saltos.modelo.ServicioAdicional" fetch="select">
+            <column name="SERVICIO_ID" />
+        </many-to-one>
+        <property name="fechaped" type="timestamp">
+            <column name="FECHAPED" length="19" />
+        </property>
+        <property name="costosalto" type="big_decimal">
+            <column name="COSTOSALTO" precision="6" />
+        </property>
+        <property name="costototalped" type="big_decimal">
+            <column name="COSTOTOTALPED" precision="6" />
+        </property>
+        <set name="detalleVuelos" table="detalle_vuelo" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="PEDIDO_ID" />
+            </key>
+            <one-to-many class="ec.edu.saltos.modelo.DetalleVuelo" />
+        </set>
+    </class>
+</hibernate-mapping>

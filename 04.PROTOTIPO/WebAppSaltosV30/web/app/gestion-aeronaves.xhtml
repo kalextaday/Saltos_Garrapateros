@@ -1,0 +1,131 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../WEB-INF/template.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    
+    <ui:define name="title">Gestion Aeronaves</ui:define>
+    
+    <ui:define name="content">
+        
+        <!--<p:messages id="mensaje" autoUpdate="false" severity="info, fatal" showSummary="true" showDetail="true"></p:messages>-->
+        <p:growl id="mensaje" severity="info, fatal" showSummary="true" showDetail="true"></p:growl>
+
+        <h:form>
+            <div class="ui-g">
+                <div class="ui-g-12">
+                    <p:commandButton styleClass="ui-priority-primary" value="Agregar Aeronave" actionListener="#{beanAeronave.limpiarAeronave()}" oncomplete="PF('dialogoAgregar').show();" update=":formAgregar"/>
+                </div>
+            </div>
+        </h:form>
+
+         <h:form id="formListado">
+             <p:dataTable id="tablaAeronaves" paginator="true" paginatorPosition="bottom" var="aeronave" 
+                          widgetVar="tablaAeronaves2" filteredValue="#{beanAeronave.listaAeronaves}" 
+                          
+                          value="#{beanAeronave.listaAeronaves}" emptyMessage="No existen aeronaves" 
+                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                          currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords} registros"
+                          rows="5" reflow="true" rowsPerPageTemplate="5,10,15">
+                
+                <f:facet name="header">
+                    Lista de Aeronaves
+                    <p:commandButton id="toggler" type="button" value="Columnas" style="float:right" icon="pi pi-align-justify" />
+                    <p:columnToggler datasource="tablaAeronaves" trigger="toggler" />
+                </f:facet>
+                 
+                <p:column headerText="ID Aeronave" sortBy="#{aeronave.idAeronave}">
+                    <h:outputText value="#{aeronave.idAeronave}" />
+                </p:column>
+                <p:column headerText="Nombre">
+                    <h:outputText value="#{aeronave.nombreaer}" />
+                </p:column>
+                <p:column headerText="Modelo">
+                    <h:outputText value="#{aeronave.modeloaer}" />
+                </p:column>
+                <p:column headerText="Capacidad">
+                    <h:outputText value="#{aeronave.capacidadtotalaer}" />
+                </p:column>
+
+                <p:column headerText="Opciones" style="text-align: center">
+                    <p:commandButton icon="pi pi-pencil" value="Editar" oncomplete="PF('dialogoModificar').show();" update=":formModificar">
+                        <f:setPropertyActionListener target="#{beanAeronave.aeronave}" value="#{aeronave}"/>
+                    </p:commandButton>
+                    
+                    <h:outputText value="&lt;br/&gt;" escape="false" />
+                    <h:outputText value="&lt;br/&gt;" escape="false" />
+                    
+                    <p:commandButton icon="pi pi-trash" value=" Eliminar" oncomplete="PF('dialogoEliminar').show();" update=":formEliminar">
+                        <f:setPropertyActionListener target="#{beanAeronave.aeronave}" value="#{aeronave}"/>
+                    </p:commandButton>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+
+
+        <h:form id="formAgregar">
+            <p:dialog id="dlgAgregar" header="Agregar Aeronave" widgetVar="dialogoAgregar" resizable="false" showEffect="fade" hideEffect="explode" modal="true">
+                <p:panelGrid columns="2" style="margin: 0 auto;">                                
+                    <p:outputLabel value="Nombre:"/>
+                    <p:inputText value="#{beanAeronave.aeronave.nombreaer}"/>
+
+                    <p:outputLabel value="Modelo:"/>
+                    <p:inputText value="#{beanAeronave.aeronave.modeloaer}"/>
+
+                    <p:outputLabel value="Capacidad:"/>
+                    <p:spinner value="#{beanAeronave.aeronave.capacidadtotalaer}"/>
+                </p:panelGrid>
+                
+                <h:outputText value="&lt;br/&gt;" escape="false" />
+                <h:outputText value="&lt;br/&gt;" escape="false" />
+                
+                <p:commandButton icon="pi pi-check" value="Guardar" actionListener="#{beanAeronave.agregarAeronave()}" update=":formListado:tablaAeronaves :mensaje" oncomplete="PF('dialogoAgregar').hide();"/>
+                &nbsp;
+                <p:commandButton icon="pi pi-times" value="Cancelar" onclick="PF('dialogoAgregar').hide();"/>
+
+            </p:dialog>
+        </h:form>
+
+        <h:form id="formModificar">
+            <p:dialog id="dlgModificar" header="Modificar Aeronave" widgetVar="dialogoModificar" resizable="false" showEffect="fade" hideEffect="explode" modal="true">
+                <p:panelGrid columns="2" style="margin: 0 auto;">                                
+                    <p:outputLabel value="Nombre:"/>
+                    <p:inputText value="#{beanAeronave.aeronave.nombreaer}"/>
+
+                    <p:outputLabel value="Modelo:"/>
+                    <p:inputText value="#{beanAeronave.aeronave.modeloaer}"/>
+
+                    <p:outputLabel value="Capacidad:"/>
+                    <p:spinner value="#{beanAeronave.aeronave.capacidadtotalaer}"/>
+
+                </p:panelGrid>
+                
+                <h:outputText value="&lt;br/&gt;" escape="false" />
+                <h:outputText value="&lt;br/&gt;" escape="false" />
+                
+                <p:commandButton  icon="pi pi-check" value="Guardar" actionListener="#{beanAeronave.modificarAeronave()}" update=":formListado:tablaAeronaves :mensaje" oncomplete="PF('dialogoModificar').hide();"/>
+                &nbsp;
+                <p:commandButton  icon="pi pi-times" value="Cancelar" onclick="PF('dialogoModificar').hide();"/>
+            </p:dialog>
+        </h:form>
+
+        <h:form id="formEliminar">
+            <p:dialog id="dlgEliminar" header="Eliminar Aeronave" widgetVar="dialogoEliminar" resizable="false" showEffect="fade" hideEffect="explode" modal="true">
+                <h:outputText value="Desea eliminar este registro?"/>
+                
+                <h:outputText value="&lt;br/&gt;" escape="false" />
+                <h:outputText value="&lt;br/&gt;" escape="false" />
+                
+                <p:commandButton  icon="pi pi-check" value="Si" actionListener="#{beanAeronave.eliminarAeronave()}" update=":formListado:tablaAeronaves :mensaje" oncomplete="PF('dialogoEliminar').hide();"/>
+                &nbsp;
+                <p:commandButton  icon="pi pi-times" value="No" onclick="PF('dialogoEliminar').hide();"/>
+            </p:dialog>
+        </h:form>
+        
+    </ui:define>
+
+    
+</ui:composition>

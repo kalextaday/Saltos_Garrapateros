@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 12-ago-2020 14:57:42 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="ec.edu.saltos.modelo.Recurso" table="recurso" catalog="monster_saltos" optimistic-lock="version">
+        <id name="idRecurso" type="int">
+            <column name="ID_RECURSO" />
+            <generator class="assigned" />
+        </id>
+        <property name="nombrerec" type="string">
+            <column name="NOMBREREC" length="128" />
+        </property>
+        <property name="paginarec" type="string">
+            <column name="PAGINAREC" length="250" />
+        </property>
+        <property name="iconorec" type="string">
+            <column name="ICONOREC" length="32" />
+        </property>
+        <property name="indicerec" type="java.lang.Integer">
+            <column name="INDICEREC" />
+        </property>
+        <property name="estadorec" type="string">
+            <column name="ESTADOREC" length="3" />
+        </property>
+        <set name="permisos" table="permiso" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="RECURSO_ID" />
+            </key>
+            <one-to-many class="ec.edu.saltos.modelo.Permiso" />
+        </set>
+    </class>
+</hibernate-mapping>

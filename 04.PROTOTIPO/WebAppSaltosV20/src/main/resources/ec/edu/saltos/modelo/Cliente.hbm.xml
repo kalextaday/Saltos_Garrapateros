@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 09-ago-2020 23:23:28 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="ec.edu.saltos.modelo.Cliente" table="cliente" catalog="monster_saltos" optimistic-lock="version">
+        <id name="idcliente" type="int">
+            <column name="IDCLIENTE" />
+            <generator class="assigned" />
+        </id>
+        <property name="nombrescli" type="string">
+            <column name="NOMBRESCLI" length="250" />
+        </property>
+        <property name="apellidoscli" type="string">
+            <column name="APELLIDOSCLI" length="250" />
+        </property>
+        <property name="cedulacli" type="string">
+            <column name="CEDULACLI" length="10" />
+        </property>
+        <property name="fechanacimientocli" type="timestamp">
+            <column name="FECHANACIMIENTOCLI" length="26" />
+        </property>
+        <property name="correocli" type="string">
+            <column name="CORREOCLI" length="100" />
+        </property>
+        <property name="telfcli" type="string">
+            <column name="TELFCLI" length="10" />
+        </property>
+        <set name="pedidos" table="pedido" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="CLIENTEID" />
+            </key>
+            <one-to-many class="ec.edu.saltos.modelo.Pedido" />
+        </set>
+    </class>
+</hibernate-mapping>

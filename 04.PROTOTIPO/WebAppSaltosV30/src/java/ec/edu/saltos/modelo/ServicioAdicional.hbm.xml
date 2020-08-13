@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 12-ago-2020 14:57:42 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="ec.edu.saltos.modelo.ServicioAdicional" table="servicio_adicional" catalog="monster_saltos" optimistic-lock="version">
+        <id name="idServicio" type="java.lang.Integer">
+            <column name="ID_SERVICIO" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="responsable" class="ec.edu.saltos.modelo.Responsable" fetch="select">
+            <column name="RESPONSABLE_ID" />
+        </many-to-one>
+        <property name="nombreser" type="string">
+            <column name="NOMBRESER" length="100" />
+        </property>
+        <property name="descripcionser" type="string">
+            <column name="DESCRIPCIONSER" length="250" />
+        </property>
+        <property name="costoser" type="big_decimal">
+            <column name="COSTOSER" precision="6" />
+        </property>
+        <set name="pedidos" table="pedido" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="SERVICIO_ID" />
+            </key>
+            <one-to-many class="ec.edu.saltos.modelo.Pedido" />
+        </set>
+    </class>
+</hibernate-mapping>

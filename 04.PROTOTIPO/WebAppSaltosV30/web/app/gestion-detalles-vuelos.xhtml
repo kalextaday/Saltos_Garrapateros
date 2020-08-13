@@ -1,0 +1,93 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./WEB-INF/template.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="title">Gestion DetalleVuelos</ui:define>
+    
+    <ui:define name="content">
+        
+        <!--<p:messages id="mensaje" autoUpdate="false" severity="info, fatal" showSummary="true" showDetail="true"></p:messages>-->
+        <p:growl id="mensaje" autoUpdate="false" severity="info, fatal" showSummary="true" showDetail="true"></p:growl>
+
+        <h:form>
+            <p:commandButton value="Agregar DetalleVuelo" actionListener="#{beanDetalleVuelo.limpiarDetalleVuelo()}" oncomplete="PF('dialogoAgregar').show();" update=":formAgregar"/>
+            <p:separator/>
+        </h:form>
+
+         <h:form id="formListado">
+             <p:dataTable id="tablaDetalleVuelos" paginator="true" paginatorPosition="bottom" rows="10" var="detalleVuelo" value="#{beanDetalleVuelo.listaDetalleVuelos}" emptyMessage="No existen detalleVuelos">
+                <p:column headerText="ID DetalleVuelo">
+                    <h:outputText value="#{detalleVuelo.idDetvuelo}" />
+                </p:column>
+                <p:column headerText="Costo Total">
+                    <h:outputText value="#{detalleVuelo.costototal}" />
+                </p:column>
+
+                <p:column headerText="MODIFICAR" style="text-align: center">
+                    <p:commandButton icon="ui-icon-pencil" title="Modificar" oncomplete="PF('dialogoModificar').show();" update=":formModificar">
+                        <f:setPropertyActionListener target="#{beanDetalleVuelo.detalleVuelo}" value="#{detalleVuelo}"/>
+                    </p:commandButton>
+                </p:column>
+                <p:column headerText="ELIMINAR" style="text-align: center">
+                    <p:commandButton icon="ui-icon-trash" title="Eliminar" oncomplete="PF('dialogoEliminar').show();" update=":formEliminar">
+                        <f:setPropertyActionListener target="#{beanDetalleVuelo.detalleVuelo}" value="#{detalleVuelo}"/>
+                    </p:commandButton>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+
+
+        <h:form id="formAgregar">
+            <p:dialog id="dlgAgregar" header="Agregar DetalleVuelo" widgetVar="dialogoAgregar" resizable="false" showEffect="fade" hideEffect="explode" modal="true">
+                <p:panelGrid columns="2" style="margin: 0 auto;">                                
+                    <p:outputLabel value="Nombre:"/>
+                    <p:inputText value="#{beanDetalleVuelo.detalleVuelo.nombreaer}"/>
+
+                    <p:outputLabel value="Modelo:"/>
+                    <p:inputText value="#{beanDetalleVuelo.detalleVuelo.modeloaer}"/>
+
+                    <p:outputLabel value="Capacidad:"/>
+                    <p:spinner value="#{beanDetalleVuelo.detalleVuelo.capacidadtotalaer}"/>
+                </p:panelGrid>
+                <p:commandButton icon="ui-icon-check" value="Guardar" actionListener="#{beanDetalleVuelo.agregarDetalleVuelo()}" update=":formListado:tablaDetalleVuelos :mensaje" oncomplete="PF('dialogoAgregar').hide();"/>
+                <p:commandButton  icon="ui-icon-close" value="Cancelar" onclick="PF('dialogoAgregar').hide();"/>
+
+            </p:dialog>
+        </h:form>
+
+        <h:form id="formModificar">
+            <p:dialog id="dlgModificar" header="Modificar DetalleVuelo" widgetVar="dialogoModificar" resizable="false" showEffect="fade" hideEffect="explode" modal="true">
+                <p:panelGrid columns="2" style="margin: 0 auto;">                                
+                    <p:outputLabel value="Nombre:"/>
+                    <p:inputText value="#{beanDetalleVuelo.detalleVuelo.nombreaer}"/>
+
+                    <p:outputLabel value="Modelo:"/>
+                    <p:inputText value="#{beanDetalleVuelo.detalleVuelo.modeloaer}"/>
+
+                    <p:outputLabel value="Capacidad:"/>
+                    <p:spinner value="#{beanDetalleVuelo.detalleVuelo.capacidadtotalaer}"/>
+
+                </p:panelGrid>
+                <p:commandButton  icon="ui-icon-check" value="Guardar" actionListener="#{beanDetalleVuelo.modificarDetalleVuelo()}" update=":formListado:tablaDetalleVuelos :mensaje" oncomplete="PF('dialogoModificar').hide();"/>
+                <p:commandButton  icon="ui-icon-close" value="Cancelar" onclick="PF('dialogoModificar').hide();"/>
+            </p:dialog>
+        </h:form>
+
+        <h:form id="formEliminar">
+            <p:dialog id="dlgEliminar" header="Eliminar DetalleVuelo" widgetVar="dialogoEliminar" resizable="false" showEffect="fade" hideEffect="explode" modal="true">
+                <h:outputText value="Desea eliminar este registro?"/>
+                <h:outputText value="&lt;br/&gt;" escape="false" />
+                <h:outputText value="&lt;br/&gt;" escape="false" />
+                <p:commandButton  icon="ui-icon-check" value="Si" actionListener="#{beanDetalleVuelo.eliminarDetalleVuelo()}" update=":formListado:tablaDetalleVuelos :mensaje" oncomplete="PF('dialogoEliminar').hide();"/>
+                &nbsp;
+                <p:commandButton  icon="ui-icon-close" value="No" onclick="PF('dialogoEliminar').hide();"/>
+            </p:dialog>
+        </h:form>
+        
+    </ui:define>
+
+</ui:composition>
