@@ -23,7 +23,7 @@
         <property name="estadorec" type="string">
             <column name="ESTADOREC" length="3" />
         </property>
-        <set name="permisos" table="permiso" inverse="true" lazy="true" fetch="select">
+        <set name="permisos" table="permiso" inverse="true" lazy="true" fetch="select" >
             <key>
                 <column name="RECURSO_ID" />
             </key>

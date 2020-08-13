@@ -4,6 +4,7 @@ package ec.edu.saltos.modelo;
 
 import java.math.BigDecimal;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -71,6 +72,31 @@ public class ServicioAdicional  implements java.io.Serializable {
     
     public void setPedidos(Set<Pedido> pedidos) {
         this.pedidos = pedidos;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 29 * hash + Objects.hashCode(this.idServicio);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final ServicioAdicional other = (ServicioAdicional) obj;
+        if (!Objects.equals(this.idServicio, other.idServicio)) {
+            return false;
+        }
+        return true;
     }
 
 

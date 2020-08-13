@@ -96,6 +96,31 @@ public class Cliente  implements java.io.Serializable {
         this.pedidos = pedidos;
     }
 
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 71 * hash + this.idCliente;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Cliente other = (Cliente) obj;
+        if (this.idCliente != other.idCliente) {
+            return false;
+        }
+        return true;
+    }
+
 
 
 

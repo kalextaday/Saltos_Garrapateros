@@ -86,6 +86,31 @@ public class Recurso  implements java.io.Serializable {
         this.permisos = permisos;
     }
 
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 97 * hash + this.idRecurso;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Recurso other = (Recurso) obj;
+        if (this.idRecurso != other.idRecurso) {
+            return false;
+        }
+        return true;
+    }
+
 
 
 

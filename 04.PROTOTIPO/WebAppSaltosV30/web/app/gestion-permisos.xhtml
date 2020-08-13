@@ -21,7 +21,7 @@
             </div>
         </h:form>
 
-         <h:form id="formListado">
+        <h:form id="formListado">
              <p:dataTable id="tablaPermisos" paginator="true" paginatorPosition="bottom" var="permiso" 
                           widgetVar="tablaPermisos2" filteredValue="#{beanPermiso.listaPermisos}" 
                           
@@ -67,6 +67,23 @@
                 <p:panelGrid columns="2" style="margin: 0 auto;">                                
                     <p:outputLabel value="Nombre:"/>
                     <p:inputText value="#{beanPermiso.permiso.nombreper}"/>
+                    
+                    <p:outputLabel value="Perfil:" for="som-perfils"/>
+                    <p:selectOneMenu id="som-perfils" value="#{beanPermiso.aeronaveSeleccionada}"
+                                                 converter="aeronaveConverter" immediate="true"
+                                                 autoWidth="false" required="true" effect="fade">
+                        <f:selectItems value="#{beanPermiso.listaAeronaves}" var="aeronave"
+                                       itemLabel="#{aeronave.nombreaer}" itemValue="#{aeronave}"/>
+                        
+                    </p:selectOneMenu>
+                    
+                    <p:outputLabel value="Recurso: " for="som-recursos"/>
+                    <p:selectOneMenu id="som-recursos" value="#{beanPermiso.pilotoSeleccionado}"
+                                                 converter="pilotoConverter" immediate="true"
+                                                 autoWidth="false" required="true" effect="fade">
+                        <f:selectItems value="#{beanPermiso.listaPilotos}" var="piloto"
+                                       itemLabel="#{piloto.nombrespil}" itemValue="#{piloto}"/>
+                    </p:selectOneMenu>
 
                     <p:outputLabel value="Estado:"/>
                     <p:inputText value="#{beanPermiso.permiso.estadoper}"/>

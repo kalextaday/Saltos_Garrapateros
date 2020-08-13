@@ -8,7 +8,7 @@
             <column name="ID_PARACAIDISTA" />
             <generator class="identity" />
         </id>
-        <many-to-one name="formacionParacaidista" class="ec.edu.saltos.modelo.FormacionParacaidista" fetch="select">
+        <many-to-one name="formacionParacaidista" class="ec.edu.saltos.modelo.FormacionParacaidista" fetch="select" lazy="false">
             <column name="FORPAR_ID" />
         </many-to-one>
         <property name="nombrespar" type="string">

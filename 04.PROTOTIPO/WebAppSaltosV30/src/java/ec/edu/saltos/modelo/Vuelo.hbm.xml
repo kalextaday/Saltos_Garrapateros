@@ -8,10 +8,10 @@
             <column name="ID_VUELO" />
             <generator class="identity" />
         </id>
-        <many-to-one name="aeronave" class="ec.edu.saltos.modelo.Aeronave" fetch="select">
+        <many-to-one name="aeronave" class="ec.edu.saltos.modelo.Aeronave" fetch="select" lazy="false">
             <column name="AERONAVE_ID" />
         </many-to-one>
-        <many-to-one name="piloto" class="ec.edu.saltos.modelo.Piloto" fetch="select">
+        <many-to-one name="piloto" class="ec.edu.saltos.modelo.Piloto" fetch="select" lazy="false">
             <column name="PILOTO_ID" />
         </many-to-one>
         <property name="horasalida" type="timestamp">

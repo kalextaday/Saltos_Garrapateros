@@ -69,6 +69,31 @@ public class Descuento  implements java.io.Serializable {
         this.pedidos = pedidos;
     }
 
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 47 * hash + this.idDescuento;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Descuento other = (Descuento) obj;
+        if (this.idDescuento != other.idDescuento) {
+            return false;
+        }
+        return true;
+    }
+
 
 
 

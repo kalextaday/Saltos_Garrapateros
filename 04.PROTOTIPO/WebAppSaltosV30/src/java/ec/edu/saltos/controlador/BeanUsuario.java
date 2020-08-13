@@ -86,6 +86,8 @@ public class BeanUsuario implements Serializable{
 
     public void modificarUsuario() {
         DAOUsuario daousuario=new DAOUsuario();
+        usuario.setEmpleado(empleado);
+        usuario.setPerfil(perfil);
         try{
             if(daousuario.editar(usuario)){
                 //limpiarUsuario();

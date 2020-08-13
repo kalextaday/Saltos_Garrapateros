@@ -50,6 +50,31 @@ public class Salto  implements java.io.Serializable {
         this.pedidos = pedidos;
     }
 
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 23 * hash + this.idSalto;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Salto other = (Salto) obj;
+        if (this.idSalto != other.idSalto) {
+            return false;
+        }
+        return true;
+    }
+
 
 
 

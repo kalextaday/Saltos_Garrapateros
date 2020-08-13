@@ -1,6 +1,9 @@
 package ec.edu.saltos.modelo;
 // Generated 12-ago-2020 14:57:41 by Hibernate Tools 4.3.1
 
+import java.util.Objects;
+
+
 
 
 /**
@@ -59,6 +62,31 @@ public class Usuario  implements java.io.Serializable {
     
     public void setClaveusu(String claveusu) {
         this.claveusu = claveusu;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 23 * hash + Objects.hashCode(this.idUsuario);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Usuario other = (Usuario) obj;
+        if (!Objects.equals(this.idUsuario, other.idUsuario)) {
+            return false;
+        }
+        return true;
     }
 
 

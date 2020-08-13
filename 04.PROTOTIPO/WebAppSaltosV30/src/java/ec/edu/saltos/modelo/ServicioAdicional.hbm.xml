@@ -8,7 +8,7 @@
             <column name="ID_SERVICIO" />
             <generator class="identity" />
         </id>
-        <many-to-one name="responsable" class="ec.edu.saltos.modelo.Responsable" fetch="select">
+        <many-to-one name="responsable" class="ec.edu.saltos.modelo.Responsable" fetch="select" lazy="false">
             <column name="RESPONSABLE_ID" />
         </many-to-one>
         <property name="nombreser" type="string">

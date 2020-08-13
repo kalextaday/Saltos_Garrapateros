@@ -1,6 +1,9 @@
 package ec.edu.saltos.modelo;
 // Generated 12-ago-2020 14:57:41 by Hibernate Tools 4.3.1
 
+import java.util.Objects;
+
+
 
 
 /**
@@ -59,6 +62,31 @@ public class Permiso  implements java.io.Serializable {
     
     public void setEstadoper(String estadoper) {
         this.estadoper = estadoper;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 13 * hash + Objects.hashCode(this.idPermiso);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Permiso other = (Permiso) obj;
+        if (!Objects.equals(this.idPermiso, other.idPermiso)) {
+            return false;
+        }
+        return true;
     }
 
 

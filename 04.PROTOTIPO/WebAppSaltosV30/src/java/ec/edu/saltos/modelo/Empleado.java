@@ -105,6 +105,31 @@ public class Empleado  implements java.io.Serializable {
         this.usuarios = usuarios;
     }
 
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 37 * hash + this.idEmpleado;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Empleado other = (Empleado) obj;
+        if (this.idEmpleado != other.idEmpleado) {
+            return false;
+        }
+        return true;
+    }
+
 
 
 

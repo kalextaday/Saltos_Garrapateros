@@ -43,10 +43,10 @@
                     <h:outputText value="#{usuario.nombreusuario}" />
                 </p:column>
                 <p:column headerText="Perfil">
-                    <h:outputText value="#{usuario.perfil.idPerfil}" />
+                    <h:outputText value="#{usuario.perfil.nombreper}" />
                 </p:column>
                 <p:column headerText="Empleado">
-                    <h:outputText value="#{usuario.empleado.idEmpleado}" />
+                    <h:outputText value="#{usuario.empleado.nombresemp} #{usuario.empleado.apellidosemp}" />
                 </p:column>
 
                 <p:column headerText="Opciones" style="text-align: center">
@@ -68,31 +68,27 @@
                     <p:outputLabel value="Nombre de usuario:" for="nombreUsr"/>
                     <p:inputText id="nombreUsr" value="#{beanUsuario.usuario.nombreusuario}"/>
                     
-                    
-                    <p:outputLabel value="Perfil:" for="perfilId"/>
-                    <p:inputText id="perfilId" value="#{beanUsuario.usuario.perfil.idPerfil}"/>
-                    
-                    <p:outputLabel value="Empleado:" for="empleadoId"/>
-                    <p:inputText id="empleadoId" value="#{beanUsuario.usuario.empleado.idEmpleado}"/>
-                    
-                    <!--
-                    <p:outputLabel value="Perfil:" for="tipoPerfil"/>
-                    <p:selectOneMenu id="tipoPerfil" value="{beanUsuario.perfil}" style="width:100%">
-                        <f:selectItems value="{beanUsuario.listaPerfiles}" var="perfil"
-                                       itemLabel="{perfil.nombreper}" itemValue="{perfil.idPerfil}"/>
+                    <p:outputLabel value="Nombre de Empleado:" for="som-empleados"/>
+                    <p:selectOneMenu id="som-empleados" value="#{beanUsuario.empleado}"
+                                                 converter="empleadoConverter" immediate="true"
+                                                 autoWidth="false" required="true" effect="fade">
+                        <f:selectItems value="#{beanUsuario.listaEmpleados}" var="empleado"
+                                       itemLabel="#{empleado.nombresemp}" itemValue="#{empleado}"/>
+                        
                     </p:selectOneMenu>
                     
-                    <p:outputLabel value="Empleado: " for="empleadoSe"/>
-                    <p:selectOneMenu id="empleadoSe" value="{beanUsuario.empleado}" style="width:100%" >
-                        <f:selectItems value="{beanUsuario.listaEmpleados}" var="empleado"
-                                       itemLabel="{empleado.nombresemp}" itemValue="{empleado.idEmpleado}"/>
+                    <p:outputLabel value="Perfil:" for="som-perfiles"/>
+                    <p:selectOneMenu id="som-perfiles" value="#{beanUsuario.perfil}"
+                                                 converter="perfilConverter" immediate="true"
+                                                 autoWidth="false" required="true" effect="fade">
+                        <f:selectItems value="#{beanUsuario.listaPerfiles}" var="perfil"
+                                       itemLabel="#{perfil.nombreper}" itemValue="#{perfil}"/>
                     </p:selectOneMenu>
-                    -->
                     
                     
                 </p:panelGrid>
-                <p:commandButton icon="ui-icon-check" value="Guardar" actionListener="#{beanUsuario.agregarUsuario()}" update=":formListado:tablaUsuarios :mensaje" oncomplete="PF('dialogoAgregar').hide();"/>
-                <p:commandButton  icon="ui-icon-close" value="Cancelar" onclick="PF('dialogoAgregar').hide();"/>
+                <p:commandButton icon="pi pi-check" value="Guardar" actionListener="#{beanUsuario.agregarUsuario()}" update=":formListado:tablaUsuarios :mensaje" oncomplete="PF('dialogoAgregar').hide();"/>
+                <p:commandButton  icon="pi pi-times" value="Cancelar" onclick="PF('dialogoAgregar').hide();"/>
                 <h:outputText value="&lt;br/&gt;" escape="false" />
                 <h:outputText value="&lt;br/&gt;" escape="false" />
                 
@@ -106,23 +102,30 @@
                     <p:outputLabel value="Nombre de usuario:" for="nombreUsr"/>
                     <p:inputText id="nombreUsr" value="#{beanUsuario.usuario.nombreusuario}"/>
                     
-                    <p:outputLabel value="Perfil:" for="tipoPerfil"/>
-                    <p:selectOneMenu id="tipoPerfil" value="#{beanUsuario.perfil}" style="width:100%">
-                        <f:selectItems value="#{beanUsuario.listaPerfiles}" var="perfil"
-                                       itemLabel="#{perfil.nombreper}" itemValue="#{perfil.idPerfil}"/>
+                    
+                    <p:outputLabel value="Nombre de Empleado:" for="som-empleados"/>
+                    <p:selectOneMenu id="som-empleados" value="#{beanUsuario.empleado}"
+                                                 converter="empleadoConverter" immediate="true"
+                                                 autoWidth="false" required="true" effect="fade">
+                        <f:selectItems value="#{beanUsuario.listaEmpleados}" var="empleado"
+                                       itemLabel="#{empleado.nombresemp}" itemValue="#{empleado}"/>
+                        
                     </p:selectOneMenu>
                     
-                    <p:outputLabel value="Empleado: " for="empleadoSe"/>
-                    <p:selectOneMenu id="empleadoSe" value="#{beanUsuario.empleado}" style="width:100%" >
-                        <f:selectItems value="#{beanUsuario.listaEmpleados}" var="empleado"
-                                       itemLabel="#{empleado.nombresemp}" itemValue="#{empleado.idEmpleado}"/>
+                    
+                    <p:outputLabel value="Perfil:" for="som-perfiles"/>
+                    <p:selectOneMenu id="som-perfiles" value="#{beanUsuario.perfil}"
+                                                 converter="perfilConverter" immediate="true"
+                                                 autoWidth="false" required="true" effect="fade">
+                        <f:selectItems value="#{beanUsuario.listaPerfiles}" var="perfil"
+                                       itemLabel="#{perfil.nombreper}" itemValue="#{perfil}"/>
                     </p:selectOneMenu>
 
                 </p:panelGrid>
                 <h:outputText value="&lt;br/&gt;" escape="false" />
                 <h:outputText value="&lt;br/&gt;" escape="false" />
-                <p:commandButton  icon="ui-icon-check" value="Guardar" actionListener="#{beanUsuario.modificarUsuario()}" update=":formListado:tablaUsuarios :mensaje" oncomplete="PF('dialogoModificar').hide();"/>
-                <p:commandButton  icon="ui-icon-close" value="Cancelar" onclick="PF('dialogoModificar').hide();"/>
+                <p:commandButton  icon="pi pi-check" value="Guardar" actionListener="#{beanUsuario.modificarUsuario()}" update=":formListado:tablaUsuarios :mensaje" oncomplete="PF('dialogoModificar').hide();"/>
+                <p:commandButton  icon="pi pi-times" value="Cancelar" onclick="PF('dialogoModificar').hide();"/>
             </p:dialog>
         </h:form>
 
@@ -131,9 +134,9 @@
                 <h:outputText value="Desea eliminar este registro?"/>
                 <h:outputText value="&lt;br/&gt;" escape="false" />
                 <h:outputText value="&lt;br/&gt;" escape="false" />
-                <p:commandButton  icon="ui-icon-check" value="Si" actionListener="#{beanUsuario.eliminarUsuario()}" update=":formListado:tablaUsuarios :mensaje" oncomplete="PF('dialogoEliminar').hide();"/>
+                <p:commandButton  icon="pi pi-check" value="Si" actionListener="#{beanUsuario.eliminarUsuario()}" update=":formListado:tablaUsuarios :mensaje" oncomplete="PF('dialogoEliminar').hide();"/>
                 &nbsp;
-                <p:commandButton  icon="ui-icon-close" value="No" onclick="PF('dialogoEliminar').hide();"/>
+                <p:commandButton  icon="pi pi-times" value="No" onclick="PF('dialogoEliminar').hide();"/>
             </p:dialog>
         </h:form>
         

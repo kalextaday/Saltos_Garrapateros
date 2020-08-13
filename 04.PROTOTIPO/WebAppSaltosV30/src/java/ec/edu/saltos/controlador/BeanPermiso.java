@@ -6,8 +6,12 @@
 package ec.edu.saltos.controlador;
 
 
+import ec.edu.saltos.dao.DAOPerfil;
 import ec.edu.saltos.dao.DAOPermiso;
+import ec.edu.saltos.dao.DAORecurso;
+import ec.edu.saltos.modelo.Perfil;
 import ec.edu.saltos.modelo.Permiso;
+import ec.edu.saltos.modelo.Recurso;
 import java.io.Serializable;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
@@ -26,6 +30,13 @@ public class BeanPermiso implements Serializable{
 
     private List<Permiso> listaPermisos;
     private Permiso permiso;
+    
+    private List<Recurso> listaRecursos;
+    private List<Recurso> recursosSeleccionados;
+    private Recurso recusoSeleccionado; 
+    
+    private List<Perfil> listaPerfiles;
+    private Perfil perfilSeleccionado;
     /**
      * Creates a new instance of BeanEmpleado
      */
@@ -35,10 +46,22 @@ public class BeanPermiso implements Serializable{
     
     @PostConstruct
     public void init(){
-        obtenerPermisos();
+        obtenerPermisosAsignados();
+        obtenerTodosRecursos();
+        obtenerPerfiles();
     }
     
-    public void obtenerPermisos(){
+    public void obtenerPerfiles(){
+        DAOPerfil dao=new DAOPerfil();
+        listaPerfiles=dao.obtenerPerfils();
+    }
+    
+    public void obtenerTodosRecursos(){
+        DAORecurso dao=new DAORecurso();
+        listaRecursos=dao.obtenerRecursos();
+    }
+    
+    public void obtenerPermisosAsignados(){
         DAOPermiso daopermiso=new DAOPermiso();
         listaPermisos=daopermiso.obtenerPermisos();
     }
@@ -82,7 +105,16 @@ public class BeanPermiso implements Serializable{
         }catch(Exception e){
             System.out.println("Excepcion al agregar: "+e);
         }
+    }
+    
+    public void asignarPermisos(){
+        DAOPermiso daopermiso=new DAOPermiso();
+        List<Permiso> permisosExistentes=daopermiso.permisosPerfil(perfilSeleccionado.getIdPerfil());
         
+        for(Permiso p:permisosExistentes){
+            daopermiso.eliminar(p);
+            
+        }
     }
     
     public void limpiarPermiso() {
@@ -90,7 +122,7 @@ public class BeanPermiso implements Serializable{
     }
 
     public List<Permiso> getListaPermisos() {
-        obtenerPermisos();
+        obtenerPermisosAsignados();
         return listaPermisos;
     }
 
@@ -105,6 +137,47 @@ public class BeanPermiso implements Serializable{
     public void setPermiso(Permiso permiso) {
         this.permiso = permiso;
     }
+
+    public List<Recurso> getListaRecursos() {
+        return listaRecursos;
+    }
+
+    public void setListaRecursos(List<Recurso> listaRecursos) {
+        this.listaRecursos = listaRecursos;
+    }
+
+    public Recurso getRecusoSeleccionado() {
+        return recusoSeleccionado;
+    }
+
+    public void setRecusoSeleccionado(Recurso recusoSeleccionado) {
+        this.recusoSeleccionado = recusoSeleccionado;
+    }
+
+    public Perfil getPerfilSeleccionado() {
+        return perfilSeleccionado;
+    }
+
+    public void setPerfilSeleccionado(Perfil perfilSeleccionado) {
+        this.perfilSeleccionado = perfilSeleccionado;
+    }
+
+    public List<Recurso> getRecursosSeleccionados() {
+        return recursosSeleccionados;
+    }
+
+    public void setRecursosSeleccionados(List<Recurso> recursosSeleccionados) {
+        this.recursosSeleccionados = recursosSeleccionados;
+    }
+
+    public List<Perfil> getListaPerfiles() {
+        return listaPerfiles;
+    }
+
+    public void setListaPerfiles(List<Perfil> listaPerfiles) {
+        this.listaPerfiles = listaPerfiles;
+    }
+    
     
     
 }

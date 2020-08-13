@@ -1,0 +1,86 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../WEB-INF/template.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="title">Gestion Permisos</ui:define>
+    
+    <ui:define name="content">
+        
+        <!--<p:messages id="mensaje" autoUpdate="false" severity="info, fatal" showSummary="true" showDetail="true"></p:messages>-->
+        <p:growl id="mensaje" severity="info, fatal" showSummary="true" showDetail="true"></p:growl>
+        
+        <h:form id="formAsignar">
+            <div class="ui-g">
+                <div class="ui-g-4"></div>
+                <div class="ui-g-4"></div>
+                <div class="ui-g-4">
+                    <p:outputLabel value="Perfil:" for="som-perfilese"/>
+                    <p:selectOneMenu id="som-perfilese" value="#{beanPermiso.perfilSeleccionado}"
+                                                 converter="perfilConverter" immediate="true"
+                                                 autoWidth="false" required="true" effect="fade">
+                        <f:selectItems value="#{beanPermiso.listaPerfiles}" var="perfil"
+                                       itemLabel="#{perfil.nombreper}" itemValue="#{perfil}"/>
+                        
+                    </p:selectOneMenu>
+                </div>
+            </div>
+        </h:form>
+        
+        
+
+        
+        <h:form id="formListadoRecursos">
+             <p:dataTable id="checkboxDT" paginator="true" paginatorPosition="bottom" var="recurso" 
+                          widgetVar="tablaRecursos" filteredValue="#{beanPermiso.listaRecursos}" 
+                          value="#{beanPermiso.listaRecursos}" selection="#{beanPermiso.recursosSeleccionados}" 
+                          rowKey="#{recurso.idRecurso}" style="margin-bottom:0"
+                          emptyMessage="No existen permisos" 
+                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                          currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords} registros"
+                          rows="5" reflow="true" rowsPerPageTemplate="5,10,15,50">
+                
+                
+                <f:facet name="header">
+                    Lista de Recursos
+                    <p:commandButton id="toggler" type="button" value="Columnas" style="float:right" icon="pi pi-align-justify" />
+                    <p:columnToggler datasource="checkboxDT" trigger="toggler" />
+                </f:facet>
+                <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
+                <p:column headerText="ID Recurso">
+                    <h:outputText value="#{recurso.idRecurso}" />
+                </p:column>
+                <p:column headerText="Nombre">
+                    <h:outputText value="#{recurso.nombrerec}" />
+                </p:column>
+                <p:column headerText="Estado">
+                    <h:outputText value="#{recurso.estadorec}" />
+                </p:column>
+                <p:column headerText="Indice">
+                    <h:outputText value="#{recurso.indicerec}" />
+                </p:column>
+                
+                <f:facet name="footer">
+                    <p:commandButton process="checkboxDT" update=":formAsignar2:multiCarDetail" icon="pi pi-search" value="Asignar" oncomplete="PF('multiCarDialog').show()" />
+                </f:facet>
+            </p:dataTable>
+
+        </h:form>
+        
+        <h:form id="formAsignar2">
+            <p:dialog header="Recursos Seleccionados" widgetVar="multiCarDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" width="220">
+                <p:outputPanel id="multiCarDetail" style="text-align:center;">
+                    <ui:repeat value="#{beanPermiso.recursosSeleccionados}" var="recurso">
+                        <h:outputText value="#{recurso.idRecurso} - #{recurso.nombrerec}" style="display:block"/>
+                    </ui:repeat>
+                    <p:commandButton value="Agregar Permisos" actionListener="#{beanPermiso.asignarPermisos()}" />
+                </p:outputPanel>
+            </p:dialog>
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>
