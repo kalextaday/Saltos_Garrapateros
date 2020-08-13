@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                template="./WEB-INF/template.xhtml"
+                template="./../WEB-INF/template.xhtml"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
@@ -11,7 +11,7 @@
     <ui:define name="content">
         
         <!--<p:messages id="mensaje" autoUpdate="false" severity="info, fatal" showSummary="true" showDetail="true"></p:messages>-->
-        <p:growl id="mensaje" autoUpdate="false" severity="info, fatal" showSummary="true" showDetail="true"></p:growl>
+        <p:growl id="mensaje" severity="info, fatal" showSummary="true" showDetail="true"></p:growl>
 
         <h:form>
             <p:commandButton value="Agregar Empleado" actionListener="#{beanEmpleado.limpiarEmpleado()}" oncomplete="PF('dialogoAgregar').show();" update=":formAgregar"/>
@@ -46,13 +46,12 @@
                 </p:column>
                  
 
-                <p:column headerText="MODIFICAR" style="text-align: center">
-                    <p:commandButton icon="ui-icon-pencil" title="Modificar" oncomplete="PF('dialogoModificar').show();" update=":formModificar">
+                <p:column headerText="Opciones" style="text-align: center">
+                    <p:commandButton icon="ui-icon-pencil" value="Modificar" oncomplete="PF('dialogoModificar').show();" update=":formModificar">
                         <f:setPropertyActionListener target="#{beanEmpleado.empleado}" value="#{empleado}"/>
                     </p:commandButton>
-                </p:column>
-                <p:column headerText="ELIMINAR" style="text-align: center">
-                    <p:commandButton icon="ui-icon-trash" title="Eliminar" oncomplete="PF('dialogoEliminar').show();" update=":formEliminar">
+                    
+                    <p:commandButton icon="ui-icon-trash" value="Eliminar" oncomplete="PF('dialogoEliminar').show();" update=":formEliminar">
                         <f:setPropertyActionListener target="#{beanEmpleado.empleado}" value="#{empleado}"/>
                     </p:commandButton>
                 </p:column>

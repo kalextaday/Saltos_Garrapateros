@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                template="./WEB-INF/template.xhtml"
+                template="./../WEB-INF/template.xhtml"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
@@ -22,7 +22,23 @@
         </h:form>
 
          <h:form id="formListado">
-             <p:dataTable id="tablaServicioAdicionals" paginator="true" paginatorPosition="bottom" rows="10" var="servicioAdicional" value="#{beanServicioAdicional.listaServicioAdicionals}" emptyMessage="No existen servicioAdicionals">
+             <p:dataTable id="tablaServicioAdicionals" paginator="true" paginatorPosition="bottom" 
+                          var="servicioAdicional" 
+                          widgetVar="tablaServicios2" filteredValue="#{beanServicioAdicional.listaServicioAdicionals}"
+                          
+                          value="#{beanServicioAdicional.listaServicioAdicionals}" 
+                          emptyMessage="No existen servicioAdicionals"
+                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                          currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords} registros"
+                          rows="5" reflow="true" rowsPerPageTemplate="5,10,15">
+                
+                 
+                <f:facet name="header">
+                    Lista de Servicios Adicionales
+                    <p:commandButton id="toggler" type="button" value="Columnas" style="float:right" icon="pi pi-align-justify" />
+                    <p:columnToggler datasource="tablaServicioAdicionals" trigger="toggler" />
+                </f:facet>
+                 
                 <p:column headerText="ID ServicioAdicional">
                     <h:outputText value="#{servicioAdicional.idServicio}" />
                 </p:column>
@@ -40,11 +56,11 @@
                 </p:column>
 
                 <p:column headerText="Opciones" style="text-align: center">
-                    <p:commandButton icon="ui-icon-pencil" value="Modificar" oncomplete="PF('dialogoModificar').show();" update=":formModificar">
+                    <p:commandButton icon="pi pi-pencil" value="Modificar" oncomplete="PF('dialogoModificar').show();" update=":formModificar">
                         <f:setPropertyActionListener target="#{beanServicioAdicional.servicioAdicional}" value="#{servicioAdicional}"/>
                     </p:commandButton>
 
-                    <p:commandButton icon="ui-icon-trash" value="Eliminar" oncomplete="PF('dialogoEliminar').show();" update=":formEliminar">
+                    <p:commandButton icon="pi pi-trash" value="Eliminar" oncomplete="PF('dialogoEliminar').show();" update=":formEliminar">
                         <f:setPropertyActionListener target="#{beanServicioAdicional.servicioAdicional}" value="#{servicioAdicional}"/>
                     </p:commandButton>
                 </p:column>
@@ -68,8 +84,8 @@
                     <p:spinner value="#{beanServicioAdicional.servicioAdicional.costoser}"/>
 
                 </p:panelGrid>
-                <p:commandButton icon="ui-icon-check" value="Guardar" actionListener="#{beanServicioAdicional.agregarServicioAdicional()}" update=":formListado:tablaServicioAdicionals :mensaje" oncomplete="PF('dialogoAgregar').hide();"/>
-                <p:commandButton  icon="ui-icon-close" value="Cancelar" onclick="PF('dialogoAgregar').hide();"/>
+                <p:commandButton icon="pi pi-check" value="Guardar" actionListener="#{beanServicioAdicional.agregarServicioAdicional()}" update=":formListado:tablaServicioAdicionals :mensaje" oncomplete="PF('dialogoAgregar').hide();"/>
+                <p:commandButton  icon="pi pi-times" value="Cancelar" onclick="PF('dialogoAgregar').hide();"/>
 
             </p:dialog>
         </h:form>
@@ -90,8 +106,8 @@
                     <p:spinner value="#{beanServicioAdicional.servicioAdicional.costoser}"/>
 
                 </p:panelGrid>
-                <p:commandButton  icon="ui-icon-check" value="Guardar" actionListener="#{beanServicioAdicional.modificarServicioAdicional()}" update=":formListado:tablaServicioAdicionals :mensaje" oncomplete="PF('dialogoModificar').hide();"/>
-                <p:commandButton  icon="ui-icon-close" value="Cancelar" onclick="PF('dialogoModificar').hide();"/>
+                <p:commandButton  icon="pi pi-check" value="Guardar" actionListener="#{beanServicioAdicional.modificarServicioAdicional()}" update=":formListado:tablaServicioAdicionals :mensaje" oncomplete="PF('dialogoModificar').hide();"/>
+                <p:commandButton  icon="pi pi-times" value="Cancelar" onclick="PF('dialogoModificar').hide();"/>
             </p:dialog>
         </h:form>
 
@@ -100,9 +116,9 @@
                 <h:outputText value="Desea eliminar este registro?"/>
                 <h:outputText value="&lt;br/&gt;" escape="false" />
                 <h:outputText value="&lt;br/&gt;" escape="false" />
-                <p:commandButton  icon="ui-icon-check" value="Si" actionListener="#{beanServicioAdicional.eliminarServicioAdicional()}" update=":formListado:tablaServicioAdicionals :mensaje" oncomplete="PF('dialogoEliminar').hide();"/>
+                <p:commandButton  icon="pi pi-check" value="Si" actionListener="#{beanServicioAdicional.eliminarServicioAdicional()}" update=":formListado:tablaServicioAdicionals :mensaje" oncomplete="PF('dialogoEliminar').hide();"/>
                 &nbsp;
-                <p:commandButton  icon="ui-icon-close" value="No" onclick="PF('dialogoEliminar').hide();"/>
+                <p:commandButton  icon="pi pi-times" value="No" onclick="PF('dialogoEliminar').hide();"/>
             </p:dialog>
         </h:form>
         

@@ -6,6 +6,7 @@
 package ec.edu.saltos.controlador;
 
 
+import ec.edu.saltos.config.EstadosConfig;
 import ec.edu.saltos.dao.DAOPerfil;
 import ec.edu.saltos.dao.DAOPermiso;
 import ec.edu.saltos.dao.DAORecurso;
@@ -108,12 +109,25 @@ public class BeanPermiso implements Serializable{
     }
     
     public void asignarPermisos(){
+        String nombrePerfil=perfilSeleccionado.getNombreper();
+        String nombreRecurso="";
         DAOPermiso daopermiso=new DAOPermiso();
         List<Permiso> permisosExistentes=daopermiso.permisosPerfil(perfilSeleccionado.getIdPerfil());
         
         for(Permiso p:permisosExistentes){
             daopermiso.eliminar(p);
+        }
+        
+        for(Recurso r:recursosSeleccionados){
+            nombreRecurso=r.getNombrerec();
             
+            Permiso per=new Permiso(); 
+            per.setRecurso(r);
+            per.setPerfil(perfilSeleccionado);
+            per.setNombreper(nombrePerfil+" - "+nombreRecurso);
+            per.setEstadoper(EstadosConfig.PERMISO_ACTIVO.getCodigo());
+            
+            daopermiso.guardar(per);
         }
     }
     

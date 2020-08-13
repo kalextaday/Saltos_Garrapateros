@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                template="./WEB-INF/template.xhtml"
+                template="./../WEB-INF/template.xhtml"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
@@ -27,19 +27,19 @@
                     <h:outputText value="#{pedido.idPedido}" />
                 </p:column>
                 <p:column headerText="Cliente">
-                    <h:outputText value="#{pedido.cliente.idCliente}" />
+                    <h:outputText value="#{pedido.cliente.nombrescli} #{pedido.cliente.apellidoscli}" />
                 </p:column>
                 <p:column headerText="Salto">
-                    <h:outputText value="#{pedido.salto.idSalto}" />
+                    <h:outputText value="#{pedido.salto.tiposalto}" />
                 </p:column>
                 <p:column headerText="Paracaidista">
-                    <h:outputText value="#{pedido.paracaidista.idParacaidista}" />
+                    <h:outputText value="#{pedido.paracaidista.nombrespar} #{pedido.paracaidista.apellidospar}" />
                 </p:column>
                  <p:column headerText="Descuento">
-                     <h:outputText value="#{pedido.descuento.idDescuento}" />
+                     <h:outputText value="#{pedido.descuento.nombredes} - $#{pedido.descuento.valordes}" />
                 </p:column>
                  <p:column headerText="Servicio">
-                     <h:outputText value="#{pedido.servicioAdicional.idServicio}" />
+                     <h:outputText value="#{pedido.servicioAdicional.nombreser} - $#{pedido.servicioAdicional.costoser}" />
                 </p:column>
                  <p:column headerText="Fecha de Pedido">
                      <h:outputText value="#{pedido.fechaped}" />
@@ -52,11 +52,11 @@
                 </p:column>
 
                 <p:column headerText="Opciones" style="text-align: center">
-                    <p:commandButton icon="ui-icon-pencil" value="Editar" oncomplete="PF('dialogoModificar').show();" update=":formModificar">
+                    <p:commandButton icon="pi pi-pencil" value="Editar" oncomplete="PF('dialogoModificar').show();" update=":formModificar">
                         <f:setPropertyActionListener target="#{beanPedido.pedido}" value="#{pedido}"/>
                     </p:commandButton>
 
-                    <p:commandButton icon="ui-icon-trash" value="Eliminar" oncomplete="PF('dialogoEliminar').show();" update=":formEliminar">
+                    <p:commandButton icon="pi pi-trash" value="Eliminar" oncomplete="PF('dialogoEliminar').show();" update=":formEliminar">
                         <f:setPropertyActionListener target="#{beanPedido.pedido}" value="#{pedido}"/>
                     </p:commandButton>
                 </p:column>
@@ -66,18 +66,63 @@
 
         <h:form id="formAgregar">
             <p:dialog id="dlgAgregar" header="Agregar Pedido" widgetVar="dialogoAgregar" resizable="false" showEffect="fade" hideEffect="explode" modal="true">
-                <p:panelGrid columns="2" style="margin: 0 auto;">                                
-                    <p:outputLabel value="Nombre:"/>
-                    <p:inputText value="#{beanPedido.pedido.nombreaer}"/>
+                <p:panelGrid columns="2" style="margin: 0 auto;">    
+                    
+                    <p:outputLabel value="Cliente:" for="som-clientes"/>
+                    <p:selectOneMenu id="som-clientes" value="#{beanPedido.clienteSeleccionado}"
+                                                 converter="clienteConverter" immediate="true"
+                                                 autoWidth="false" required="true" effect="fade">
+                        <f:selectItems value="#{beanPedido.listaClientes}" var="cliente"
+                                       itemLabel="#{cliente.nombrescli}" itemValue="#{cliente}"/>
+                        
+                    </p:selectOneMenu>
+                    
+                    <p:outputLabel value="Tipo de Salto:" for="som-saltos"/>
+                    <p:selectOneMenu id="som-saltos" value="#{beanPedido.saltoSeleccionado}"
+                                                 converter="saltoConverter" immediate="true"
+                                                 autoWidth="false" required="true" effect="fade">
+                        <f:selectItems value="#{beanPedido.listaSaltos}" var="salto"
+                                       itemLabel="#{salto.tiposalto}" itemValue="#{salto}"/>
+                        
+                    </p:selectOneMenu>
+                    
+                    
+                    <p:outputLabel value="Paracaidista:" for="som-par"/>
+                    <p:selectOneMenu id="som-par" value="#{beanPedido.paracaidistaSeleccionado}"
+                                                 converter="paracaidistaConverter" immediate="true"
+                                                 autoWidth="false" required="true" effect="fade">
+                        <f:selectItems value="#{beanPedido.listaParacaidista}" var="paracaidista"
+                                       itemLabel="#{paracaidista.nombrespar}" itemValue="#{paracaidista}"/>
+                        
+                    </p:selectOneMenu>
+                    
+                    <p:outputLabel value="Descuento:" for="som-des"/>
+                    <p:selectOneMenu id="som-des" value="#{beanPedido.descuentoSeleccionado}"
+                                                 converter="descuentoConverter" immediate="true"
+                                                 autoWidth="false" required="true" effect="fade">
+                        <f:selectItems value="#{beanPedido.listaDescuento}" var="descuento"
+                                       itemLabel="#{descuento.nombredes}" itemValue="#{descuento}"/>
+                    </p:selectOneMenu>
+                    
+                    <p:outputLabel value="Servicio" for="som-ser"/>
+                    <p:selectOneMenu id="som-ser" value="#{beanPedido.serviciosSeleccionado}"
+                                                 converter="servicioConverter" immediate="true"
+                                                 autoWidth="false" required="true" effect="fade">
+                        <f:selectItems value="#{beanPedido.listaServicios}" var="servicio"
+                                       itemLabel="#{servicio.nombreser}" itemValue="#{servicio}"/>
+                    </p:selectOneMenu>
+                    
+                    <p:outputLabel value="Fecha:"/>
+                    <p:calendar value="#{beanPedido.pedido.fechaped}"/>
 
-                    <p:outputLabel value="Modelo:"/>
-                    <p:inputText value="#{beanPedido.pedido.modeloaer}"/>
+                    <p:outputLabel value="Costo del Salto:"/>
+                    <p:spinner value="#{beanPedido.pedido.costosalto}"/>
 
                     <p:outputLabel value="Capacidad:"/>
-                    <p:spinner value="#{beanPedido.pedido.capacidadtotalaer}"/>
+                    <p:spinner value="#{beanPedido.pedido.costototalped}"/>
                 </p:panelGrid>
-                <p:commandButton icon="ui-icon-check" value="Guardar" actionListener="#{beanPedido.agregarPedido()}" update=":formListado:tablaPedidos :mensaje" oncomplete="PF('dialogoAgregar').hide();"/>
-                <p:commandButton  icon="ui-icon-close" value="Cancelar" onclick="PF('dialogoAgregar').hide();"/>
+                <p:commandButton icon="pi pi-check" value="Guardar" actionListener="#{beanPedido.agregarPedido()}" update=":formListado:tablaPedidos :mensaje" oncomplete="PF('dialogoAgregar').hide();"/>
+                <p:commandButton  icon="pi pi-times" value="Cancelar" onclick="PF('dialogoAgregar').hide();"/>
 
             </p:dialog>
         </h:form>
@@ -85,18 +130,62 @@
         <h:form id="formModificar">
             <p:dialog id="dlgModificar" header="Modificar Pedido" widgetVar="dialogoModificar" resizable="false" showEffect="fade" hideEffect="explode" modal="true">
                 <p:panelGrid columns="2" style="margin: 0 auto;">                                
-                    <p:outputLabel value="Nombre:"/>
-                    <p:inputText value="#{beanPedido.pedido.nombreaer}"/>
+                    <p:outputLabel value="Cliente:" for="som-clientes"/>
+                    <p:selectOneMenu id="som-clientes" value="#{beanPedido.clienteSeleccionado}"
+                                                 converter="clienteConverter" immediate="true"
+                                                 autoWidth="false" required="true" effect="fade">
+                        <f:selectItems value="#{beanPedido.listaClientes}" var="cliente"
+                                       itemLabel="#{cliente.nombrescli}" itemValue="#{cliente}"/>
+                        
+                    </p:selectOneMenu>
+                    
+                    <p:outputLabel value="Tipo de Salto:" for="som-saltos"/>
+                    <p:selectOneMenu id="som-saltos" value="#{beanPedido.saltoSeleccionado}"
+                                                 converter="saltoConverter" immediate="true"
+                                                 autoWidth="false" required="true" effect="fade">
+                        <f:selectItems value="#{beanPedido.listaSaltos}" var="salto"
+                                       itemLabel="#{salto.tiposalto}" itemValue="#{salto}"/>
+                        
+                    </p:selectOneMenu>
+                    
+                    
+                    <p:outputLabel value="Paracaidista:" for="som-par"/>
+                    <p:selectOneMenu id="som-par" value="#{beanPedido.paracaidistaSeleccionado}"
+                                                 converter="paracaidistaConverter" immediate="true"
+                                                 autoWidth="false" required="true" effect="fade">
+                        <f:selectItems value="#{beanPedido.listaParacaidista}" var="paracaidista"
+                                       itemLabel="#{paracaidista.nombrespar}" itemValue="#{paracaidista}"/>
+                        
+                    </p:selectOneMenu>
+                    
+                    <p:outputLabel value="Descuento:" for="som-des"/>
+                    <p:selectOneMenu id="som-des" value="#{beanPedido.descuentoSeleccionado}"
+                                                 converter="descuentoConverter" immediate="true"
+                                                 autoWidth="false" required="true" effect="fade">
+                        <f:selectItems value="#{beanPedido.listaDescuento}" var="descuento"
+                                       itemLabel="#{descuento.nombredes}" itemValue="#{descuento}"/>
+                    </p:selectOneMenu>
+                    
+                    <p:outputLabel value="Servicio" for="som-ser"/>
+                    <p:selectOneMenu id="som-ser" value="#{beanPedido.serviciosSeleccionado}"
+                                                 converter="servicioConverter" immediate="true"
+                                                 autoWidth="false" required="true" effect="fade">
+                        <f:selectItems value="#{beanPedido.listaServicios}" var="servicio"
+                                       itemLabel="#{servicio.nombreser}" itemValue="#{servicio}"/>
+                    </p:selectOneMenu>
+                    
+                    <p:outputLabel value="Fecha:"/>
+                    <p:calendar value="#{beanPedido.pedido.fechaped}"/>
 
-                    <p:outputLabel value="Modelo:"/>
-                    <p:inputText value="#{beanPedido.pedido.modeloaer}"/>
+                    <p:outputLabel value="Costo del Salto:"/>
+                    <p:spinner value="#{beanPedido.pedido.costosalto}"/>
 
                     <p:outputLabel value="Capacidad:"/>
-                    <p:spinner value="#{beanPedido.pedido.capacidadtotalaer}"/>
+                    <p:spinner value="#{beanPedido.pedido.costototalped}"/>
 
                 </p:panelGrid>
-                <p:commandButton  icon="ui-icon-check" value="Guardar" actionListener="#{beanPedido.modificarPedido()}" update=":formListado:tablaPedidos :mensaje" oncomplete="PF('dialogoModificar').hide();"/>
-                <p:commandButton  icon="ui-icon-close" value="Cancelar" onclick="PF('dialogoModificar').hide();"/>
+                <p:commandButton  icon="pi pi-check" value="Guardar" actionListener="#{beanPedido.modificarPedido()}" update=":formListado:tablaPedidos :mensaje" oncomplete="PF('dialogoModificar').hide();"/>
+                <p:commandButton  icon="pi pi-times" value="Cancelar" onclick="PF('dialogoModificar').hide();"/>
             </p:dialog>
         </h:form>
 
@@ -105,9 +194,9 @@
                 <h:outputText value="Desea eliminar este registro?"/>
                 <h:outputText value="&lt;br/&gt;" escape="false" />
                 <h:outputText value="&lt;br/&gt;" escape="false" />
-                <p:commandButton  icon="ui-icon-check" value="Si" actionListener="#{beanPedido.eliminarPedido()}" update=":formListado:tablaPedidos :mensaje" oncomplete="PF('dialogoEliminar').hide();"/>
+                <p:commandButton  icon="pi pi-check" value="Si" actionListener="#{beanPedido.eliminarPedido()}" update=":formListado:tablaPedidos :mensaje" oncomplete="PF('dialogoEliminar').hide();"/>
                 &nbsp;
-                <p:commandButton  icon="ui-icon-close" value="No" onclick="PF('dialogoEliminar').hide();"/>
+                <p:commandButton  icon="pi pi-times" value="No" onclick="PF('dialogoEliminar').hide();"/>
             </p:dialog>
         </h:form>
         

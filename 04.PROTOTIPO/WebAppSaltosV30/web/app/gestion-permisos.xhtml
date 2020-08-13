@@ -43,7 +43,10 @@
                     <h:outputText value="#{permiso.nombreper}" />
                 </p:column>
                 <p:column headerText="Perfil">
-                    <h:outputText value="#{permiso.perfil.idPerfil}" />
+                    <h:outputText value="#{permiso.perfil.nombreper}" />
+                </p:column>
+                 <p:column headerText="Recurso">
+                     <h:outputText value="#{permiso.recurso.nombrerec}" />
                 </p:column>
                 <p:column headerText="Estado">
                     <h:outputText value="#{permiso.estadoper}" />
@@ -69,26 +72,27 @@
                     <p:inputText value="#{beanPermiso.permiso.nombreper}"/>
                     
                     <p:outputLabel value="Perfil:" for="som-perfils"/>
-                    <p:selectOneMenu id="som-perfils" value="#{beanPermiso.aeronaveSeleccionada}"
-                                                 converter="aeronaveConverter" immediate="true"
+                    <p:selectOneMenu id="som-perfils" value="#{beanPermiso.perfilSeleccionado}"
+                                                 converter="perfilConverter" immediate="true"
                                                  autoWidth="false" required="true" effect="fade">
-                        <f:selectItems value="#{beanPermiso.listaAeronaves}" var="aeronave"
-                                       itemLabel="#{aeronave.nombreaer}" itemValue="#{aeronave}"/>
+                        <f:selectItems value="#{beanPermiso.listaPerfiles}" var="perfil"
+                                       itemLabel="#{perfil.nombreper}" itemValue="#{perfil}"/>
                         
                     </p:selectOneMenu>
                     
                     <p:outputLabel value="Recurso: " for="som-recursos"/>
-                    <p:selectOneMenu id="som-recursos" value="#{beanPermiso.pilotoSeleccionado}"
-                                                 converter="pilotoConverter" immediate="true"
+                    <p:selectOneMenu id="som-recursos" value="#{beanPermiso.recusoSeleccionado}"
+                                                 converter="recursoConverter" immediate="true"
                                                  autoWidth="false" required="true" effect="fade">
-                        <f:selectItems value="#{beanPermiso.listaPilotos}" var="piloto"
-                                       itemLabel="#{piloto.nombrespil}" itemValue="#{piloto}"/>
+                        <f:selectItems value="#{beanPermiso.recursosSeleccionados}" var="recurso"
+                                       itemLabel="#{recurso.nombrerec}" itemValue="#{recurso}"/>
                     </p:selectOneMenu>
 
                     <p:outputLabel value="Estado:"/>
                     <p:inputText value="#{beanPermiso.permiso.estadoper}"/>
                 </p:panelGrid>
                 <p:commandButton icon="pi pi-check" value="Guardar" actionListener="#{beanPermiso.agregarPermiso()}" update=":formListado:tablaPermisos :mensaje" oncomplete="PF('dialogoAgregar').hide();"/>
+                &nbsp;
                 <p:commandButton  icon="pi pi-times" value="Cancelar" onclick="PF('dialogoAgregar').hide();"/>
 
             </p:dialog>
@@ -99,12 +103,30 @@
                 <p:panelGrid columns="2" style="margin: 0 auto;">                                
                     <p:outputLabel value="Nombre:"/>
                     <p:inputText value="#{beanPermiso.permiso.nombreper}"/>
+                    
+                    <p:outputLabel value="Perfil:" for="som-perfils"/>
+                    <p:selectOneMenu id="som-perfils" value="#{beanPermiso.perfilSeleccionado}"
+                                                 converter="perfilConverter" immediate="true"
+                                                 autoWidth="false" required="true" effect="fade">
+                        <f:selectItems value="#{beanPermiso.listaPerfiles}" var="perfil"
+                                       itemLabel="#{perfil.nombreper}" itemValue="#{perfil}"/>
+                        
+                    </p:selectOneMenu>
+                    
+                    <p:outputLabel value="Recurso: " for="som-recursos"/>
+                    <p:selectOneMenu id="som-recursos" value="#{beanPermiso.recusoSeleccionado}"
+                                                 converter="recursoConverter" immediate="true"
+                                                 autoWidth="false" required="true" effect="fade">
+                        <f:selectItems value="#{beanPermiso.recursosSeleccionados}" var="recurso"
+                                       itemLabel="#{recurso.nombrerec}" itemValue="#{recurso}"/>
+                    </p:selectOneMenu>
 
                     <p:outputLabel value="Estado:"/>
                     <p:inputText value="#{beanPermiso.permiso.estadoper}"/>
 
                 </p:panelGrid>
                 <p:commandButton  icon="pi pi-check" value="Guardar" actionListener="#{beanPermiso.modificarPermiso()}" update=":formListado:tablaPermisos :mensaje" oncomplete="PF('dialogoModificar').hide();"/>
+                &nbsp;
                 <p:commandButton  icon="pi pi-times" value="Cancelar" onclick="PF('dialogoModificar').hide();"/>
             </p:dialog>
         </h:form>
