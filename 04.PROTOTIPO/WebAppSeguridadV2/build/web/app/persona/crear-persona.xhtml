@@ -1,0 +1,73 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../../WEB-INF/template.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="title">Crear Usuarios</ui:define>
+    
+    <ui:define name="content">
+        
+        <!--<p:messages id="mensaje" autoUpdate="false" severity="info, fatal" showSummary="true" showDetail="true"></p:messages>-->
+        <p:growl id="mensaje" severity="info, fatal" showSummary="true" showDetail="true"></p:growl>
+
+        <h:form id="formAgregar">
+            <p:tabView id="tabPrincipal">
+                <p:tab id="tabDat" title="Datos Personales">
+                    <h:panelGrid columns="2" cellpadding="10">
+                        <p:outputLabel value="Nombres:" for="nombreUsr"/>
+                        <p:inputText id="nombreUsr" value="#{beanPersona.persona.usrNombres}"/>
+                        
+                        <p:outputLabel value="Apellidos" for="apeUsr"/>
+                        <p:inputText id="apeUsr" value="#{beanPersona.persona.usrApellidos}"/>
+                        
+                        <p:outputLabel value="Identificacion: " for="ideUsr"/>
+                        <p:inputText id="ideUsr" value="#{beanPersona.persona.usrIdentificacion}"/>
+                        
+                        <p:outputLabel value="Fecha de nacimiento: " for="fenaUsr"/>
+                        <p:calendar id="fenaUsr" value="#{beanPersona.persona.usrFechaNacimiento}" placeholder="dd/mm/yyyy"/>
+                        
+                    </h:panelGrid>
+                </p:tab>
+                <p:tab id="tabDir" title="Direcciones">
+                    <h:panelGrid columns="2" cellpadding="10">
+                        
+                        <p:outputLabel value="Ciudad:" for="ciuUsr"/>
+                        <p:inputText id="ciuUsr" value="#{beanPersona.ciudad}"/>
+                        
+                        <p:outputLabel value="Sector:" for="secUsr"/>
+                        <p:inputText id="secUsr" value="#{beanPersona.sector}"/>
+                        
+                        <p:outputLabel value="Calle principal:" for="callUsr"/>
+                        <p:inputText id="callUsr" value="#{beanPersona.calle}"/>
+                        
+                        <p:outputLabel value="Numero de casa:" for="numcasaUsr"/>
+                        <p:inputText id="numcasaUsr" value="#{beanPersona.numCasa}"/>
+                        
+                    </h:panelGrid>
+                </p:tab>
+                <p:tab id="tabInf" title="Informacion de Contacto">
+                    <h:panelGrid columns="2" cellpadding="10">
+                        <p:outputLabel value="Telefono:" for="telUsr"/>
+                        <p:inputText id="telUsr" value="#{beanPersona.persona.usrTelefono}"/>
+                        
+                        <p:outputLabel value="Correo electronico:" for="emaUsr"/>
+                        <p:inputText id="emaUsr" value="#{beanPersona.persona.usrCorreo}"/>
+                    </h:panelGrid>
+                </p:tab>
+            </p:tabView>
+            
+            <div class="ui-g">
+                <div class="ui-g-12">
+                    <p:commandButton value="Agregar Usuario" actionListener="#{beanPersona.agregarPersona()}" update="formAgregar :mensaje"/>
+                </div>
+            </div>
+        </h:form>
+        
+    </ui:define>
+
+</ui:composition>
+
+<!--<p:graphicImage name="demo/images/godfather/godfather2.jpg" />-->

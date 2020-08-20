@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 18-ago-2020 23:39:27 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="ec.edu.saltos.modelo.Perfil" table="perfil" catalog="seguridadv2" optimistic-lock="version">
+        <id name="idPerfil" type="int">
+            <column name="ID_PERFIL" />
+            <generator class="assigned" />
+        </id>
+        <property name="perfilNombre" type="string">
+            <column name="PERFIL_NOMBRE" length="128" />
+        </property>
+        <property name="perfilDescripcion" type="string">
+            <column name="PERFIL_DESCRIPCION" length="256" />
+        </property>
+        <property name="perfilEstatus" type="string">
+            <column name="PERFIL_ESTATUS" length="3" />
+        </property>
+        <property name="perfilEstatus2" type="string">
+            <column name="PERFIL_ESTATUS2" length="3" />
+        </property>
+        <set name="asignarPerfils" table="asignar_perfil" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ID_PERFIL" />
+            </key>
+            <one-to-many class="ec.edu.saltos.modelo.AsignarPerfil" />
+        </set>
+        <set name="opcionPerfils" table="opcion_perfil" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ID_PERFIL" />
+            </key>
+            <one-to-many class="ec.edu.saltos.modelo.OpcionPerfil" />
+        </set>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,123 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../../WEB-INF/template.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="title">Gestion Usuarios</ui:define>
+    
+    <ui:define name="content">
+        
+        <!--<p:messages id="mensaje" autoUpdate="false" severity="info, fatal" showSummary="true" showDetail="true"></p:messages>-->
+        <p:growl id="mensaje" severity="info, fatal" showSummary="true" showDetail="true"></p:growl>
+        
+        <h:form>
+            <div class="ui-g">
+                <div class="ui-g-12">
+                    <p:commandButton value="Agregar Usuario" actionListener="#{beanUsuario.limpiarUsuario()}" oncomplete="PF('dialogoAgregar').show();" update=":formAgregar"/>
+                </div>
+            </div>
+        </h:form>
+
+         <h:form id="formListado">
+             <p:dataTable id="tablaUsuarios" value="#{beanUsuario.listaUsuarios}" var="usuario"
+                          selection="#{beanUsuario.usuariosSeleccionados}" rowKey="#{usuario.idUsuario}" style="margin-bottom:0"
+                          widgetVar="tablaUsuarios2" filteredValue="#{beanUsuario.listaUsuarios}"
+                          emptyMessage="No existen usuarios"
+                          paginator="true" paginatorPosition="bottom" 
+                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                          currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords} registros"
+                          rows="5" reflow="true" rowsPerPageTemplate="5,10,15">
+                
+                <f:facet name="header">
+                    Lista de Usuarios
+                    <p:commandButton id="toggler" type="button" value="Columnas" style="float:right" icon="pi pi-align-justify" />
+                    <p:columnToggler datasource="tablaUsuarios" trigger="toggler" />
+                </f:facet>
+                 
+                <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
+                <p:column headerText="Id">
+                    <h:outputText value="#{usuario.idUsuario}" />
+                </p:column>
+                 
+                <p:column headerText="ID Usuario">
+                    <h:outputText value="#{usuario.idUsuario}" />
+                </p:column>
+                <p:column headerText="Nombre de usuario">
+                    <h:outputText value="#{usuario.usrNombre}" />
+                </p:column>
+                <p:column headerText="Identificacion">
+                    <h:outputText value="#{usuario.usrIdentificacion}" />
+                </p:column>
+                <p:column headerText="Direccion">
+                    <h:outputText value="#{usuario.usrDireccion}" />
+                </p:column>
+
+                <!--
+                <p:column headerText="Opciones" style="text-align: center">
+                    <p:commandButton icon="pi pi-pencil" value="Editar" oncomplete="PF('dialogoModificar').show();" update=":formModificar">
+                        <f:setPropertyActionListener target="{beanUsuario.usuario}" value="{usuario}"/>
+                    </p:commandButton>
+
+                    <h:outputText value="&lt;br/&gt;" escape="false" />
+                    <h:outputText value="&lt;br/&gt;" escape="false" />
+                    
+                    <p:commandButton icon="pi pi-trash" value="Eliminar" oncomplete="PF('dialogoEliminar').show();" update=":formEliminar">
+                        <f:setPropertyActionListener target="{beanUsuario.usuario}" value="{usuario}"/>
+                    </p:commandButton>
+                </p:column>
+                -->
+            </p:dataTable>
+        </h:form>
+
+
+        <h:form id="formAgregar">
+            <p:dialog id="dlgAgregar" header="Agregar Usuario" widgetVar="dialogoAgregar" resizable="false" showEffect="fade" hideEffect="explode" modal="true">
+                <p:panelGrid columns="2" style="margin: 0 auto;"> 
+                    
+                    <p:outputLabel value="Nombre de usuario:" for="nombreUsr"/>
+                    <p:inputText id="nombreUsr" value="#{beanUsuario.usuario.usrNombre}"/>
+
+                    
+                    
+                </p:panelGrid>
+                <p:commandButton icon="pi pi-check" value="Guardar" actionListener="#{beanUsuario.agregarUsuario()}" update=":formListado:tablaUsuarios :mensaje" oncomplete="PF('dialogoAgregar').hide();"/>
+                <p:commandButton  icon="pi pi-times" value="Cancelar" onclick="PF('dialogoAgregar').hide();"/>
+                <h:outputText value="&lt;br/&gt;" escape="false" />
+                <h:outputText value="&lt;br/&gt;" escape="false" />
+                
+
+            </p:dialog>
+        </h:form>
+
+        <h:form id="formModificar">
+            <p:dialog id="dlgModificar" header="Modificar Usuario" widgetVar="dialogoModificar" resizable="false" showEffect="fade" hideEffect="explode" modal="true">
+                <p:panelGrid columns="2" style="margin: 0 auto;">  
+                    
+                    <p:outputLabel value="Nombre de usuario:" for="nombreUsr"/>
+                    <p:inputText id="nombreUsr" value="#{beanUsuario.usuario.usrNombre}"/>
+                    
+                </p:panelGrid>
+                <h:outputText value="&lt;br/&gt;" escape="false" />
+                <h:outputText value="&lt;br/&gt;" escape="false" />
+                <p:commandButton  icon="pi pi-check" value="Guardar" actionListener="#{beanUsuario.modificarUsuario()}" update=":formListado:tablaUsuarios :mensaje" oncomplete="PF('dialogoModificar').hide();"/>
+                <p:commandButton  icon="pi pi-times" value="Cancelar" onclick="PF('dialogoModificar').hide();"/>
+            </p:dialog>
+        </h:form>
+
+        <h:form id="formEliminar">
+            <p:dialog id="dlgEliminar" header="Eliminar Usuario" widgetVar="dialogoEliminar" resizable="false" showEffect="fade" hideEffect="explode" modal="true">
+                <h:outputText value="Desea eliminar este registro?"/>
+                <h:outputText value="&lt;br/&gt;" escape="false" />
+                <h:outputText value="&lt;br/&gt;" escape="false" />
+                <p:commandButton  icon="pi pi-check" value="Si" actionListener="#{beanUsuario.eliminarUsuario()}" update=":formListado:tablaUsuarios :mensaje" oncomplete="PF('dialogoEliminar').hide();"/>
+                &nbsp;
+                <p:commandButton  icon="pi pi-times" value="No" onclick="PF('dialogoEliminar').hide();"/>
+            </p:dialog>
+        </h:form>
+        
+    </ui:define>
+
+</ui:composition>

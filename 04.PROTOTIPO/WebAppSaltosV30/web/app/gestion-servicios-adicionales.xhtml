@@ -74,11 +74,18 @@
                     <p:outputLabel value="Nombre:"/>
                     <p:inputText value="#{beanServicioAdicional.servicioAdicional.nombreser}"/>
 
-                    <p:outputLabel value="Responsables:"/>
-                    <p:inputText value="#{beanServicioAdicional.servicioAdicional.responsable}"/>
+                    
+                    <p:outputLabel value="Responsables:" for="som-res"/>
+                    <p:selectOneMenu id="som-res" value="#{beanServicioAdicional.responsableSeleccionado}"
+                                                 converter="responsableConverter" immediate="true"
+                                                 autoWidth="false" required="true" effect="fade">
+                        <f:selectItems value="#{beanServicioAdicional.listaResponsables}" var="responsable"
+                                       itemLabel="#{responsable.nombresres}" itemValue="#{responsable}"/>
+                        
+                    </p:selectOneMenu>
 
                     <p:outputLabel value="Descripcion:"/>
-                    <p:spinner value="#{beanServicioAdicional.servicioAdicional.descripcionser}"/>
+                    <p:inputText value="#{beanServicioAdicional.servicioAdicional.descripcionser}"/>
                     
                     <p:outputLabel value="Costo:"/>
                     <p:spinner value="#{beanServicioAdicional.servicioAdicional.costoser}"/>

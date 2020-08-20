@@ -80,17 +80,21 @@
                     <p:outputLabel value="Escuela de formacion:"/>
                     <p:inputText value="#{beanParacaidista.paracaidista.escuelaformacion}"/>
                     
-                    <p:outputLabel value="Cursos:"/>
-                    <p:inputText value="#{beanParacaidista.paracaidista.formacionParacaidista}"/>
+                    <p:outputLabel value="Cursos:" for="som-cur"/>
+                    <p:selectOneMenu id="som-cur" value="#{beanParacaidista.cursoSeleccionado}"
+                                                 converter="forParConverter" immediate="true"
+                                                 autoWidth="false" required="true" effect="fade">
+                        <f:selectItems value="#{beanParacaidista.listaCursos}" var="formacionPar"
+                                       itemLabel="#{formacionPar.nombrecurso}" itemValue="#{formacionPar}"/>
+                        
+                    </p:selectOneMenu>
+                    
                     
                     <p:outputLabel value="Tipo de Paracaidista:"/>
                     <p:inputText value="#{beanParacaidista.paracaidista.tipopar}"/>
                     
                     <p:outputLabel value="Numero de saltos:"/>
                     <p:inputText value="#{beanParacaidista.paracaidista.numerosaltos}"/>
-                    
-                    <p:outputLabel value="Escuela de formacion:"/>
-                    <p:inputText value="#{beanParacaidista.paracaidista.escuelaformacion}"/>
                     
                     <p:outputLabel value="Fecha de ultimo Salto:"/>
                     <p:calendar value="#{beanParacaidista.paracaidista.fechaultimosalto}"/>

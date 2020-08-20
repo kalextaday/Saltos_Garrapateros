@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 18-ago-2020 23:39:27 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="ec.edu.saltos.modelo.Persona" table="persona" catalog="seguridadv2" optimistic-lock="version">
+        <id name="idUsuario" type="int">
+            <column name="ID_USUARIO" />
+            <generator class="assigned" />
+        </id>
+        <property name="usrNombres" type="string">
+            <column name="USR_NOMBRES" length="128" />
+        </property>
+        <property name="usrApellidos" type="string">
+            <column name="USR_APELLIDOS" length="128" />
+        </property>
+        <property name="usrDireccion" type="string">
+            <column name="USR_DIRECCION" length="256" />
+        </property>
+        <property name="usrIdentificacion" type="string">
+            <column name="USR_IDENTIFICACION" length="10" />
+        </property>
+        <property name="usrFechaNacimiento" type="timestamp">
+            <column name="USR_FECHA_NACIMIENTO" length="19" />
+        </property>
+        <property name="usrTelefono" type="string">
+            <column name="USR_TELEFONO" length="10" />
+        </property>
+        <property name="usrCorreo" type="string">
+            <column name="USR_CORREO" length="128" />
+        </property>
+        <property name="usrFoto" type="string">
+            <column name="USR_FOTO" length="256" />
+        </property>
+        <property name="usrFechaCreacion" type="timestamp">
+            <column name="USR_FECHA_CREACION" length="19" />
+        </property>
+        <property name="usrFechaMod" type="timestamp">
+            <column name="USR_FECHA_MOD" length="19" />
+        </property>
+        <set name="usuarioAccesos" table="usuario_acceso" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ID_USUARIO" />
+            </key>
+            <one-to-many class="ec.edu.saltos.modelo.UsuarioAcceso" />
+        </set>
+    </class>
+</hibernate-mapping>

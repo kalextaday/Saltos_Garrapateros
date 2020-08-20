@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../WEB-INF/template.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="title">Configuracion de Clave</ui:define>
+    
+    <ui:define name="content">
+        
+        <!--<p:messages id="mensaje" autoUpdate="false" severity="info, fatal" showSummary="true" showDetail="true"></p:messages>-->
+        <p:growl id="mensaje" severity="info, fatal" showSummary="true" showDetail="true"></p:growl>
+
+        <h:form id="formAgregar">
+            <p:tabView id="tabPrincipal">
+                <p:tab id="tabNumChar" title="Numero de Caracteres">
+                    <h:panelGrid columns="2" cellpadding="10">
+                        <p:outputLabel value="Maximo de Caracteres:" for="maxCla"/>
+                        <p:inputNumber id="maxCla" value="#{beanConfigClave.configClave.claveCharMax}"/>
+                        
+                        <p:outputLabel value="Minimo de Caracteres:" for="minCla"/>
+                        <p:inputNumber id="minCla" value="#{beanConfigClave.configClave.claveCharMin}"/>
+                        
+                    </h:panelGrid>
+                </p:tab>
+                <p:tab id="tabTypeChar" title="Tipo de Caracteres Permitidos">
+                    <h:panelGrid columns="2" cellpadding="10">
+                        
+                        <p:outputLabel value="Caracteres Alfanumericos: "/>
+                        <p:inputSwitch value="#{beanConfigClave.configClave.claveCharAlfanumerico}" onLabel="Activado" offLabel="Desactivado"/>
+                        
+                        <p:outputLabel value="Mayusculas: "/>
+                        <p:inputSwitch value="#{beanConfigClave.configClave.claveCharMayus}" onLabel="Activado" offLabel="Desactivado"/>
+                        
+                        <p:outputLabel value="Minusculas:"/>
+                        <p:inputSwitch value="#{beanConfigClave.configClave.claveCharMinus}" onLabel="Activado" offLabel="Desactivado"/>
+                        
+                        <p:outputLabel value="Caracteres Especiales:"/>
+                        <p:inputSwitch value="#{beanConfigClave.configClave.claveCharEspecial}" onLabel="Activado" offLabel="Desactivado" onchange="true">
+                            
+                        </p:inputSwitch>
+                        
+                        <p:outputLabel value=""/>
+                        <p:inputText  value="#{beanConfigClave.configClave.claveStrEspecial}"/>
+                        
+                    </h:panelGrid>
+                </p:tab>
+                <p:tab id="tabAdition" title="Adicionales">
+                    <h:panelGrid columns="2" cellpadding="10">
+                        <p:outputLabel value="Cambios de clave al dia Permitidos:" for="camClave"/>
+                        <p:inputNumber id="camClave" value="#{beanConfigClave.configClave.claveCambiosDia}"/>
+                        
+                        <p:outputLabel value="Intentos fallidos Permitidos:" for="inteClave"/>
+                        <p:inputNumber id="inteClave" value="#{beanConfigClave.configClave.claveIntentosFallidos}"/>
+                    </h:panelGrid>
+                </p:tab>
+            </p:tabView>
+            
+            <div class="ui-g">
+                <div class="ui-g-12">
+                    <p:commandButton value="Guardar Cambios" actionListener="#{beanConfigClave.modificarClave()}" update="formAgregar :mensaje"/>
+                </div>
+            </div>
+        </h:form>
+        
+    </ui:define>
+
+</ui:composition>
+
+<!--<p:graphicImage name="demo/images/godfather/godfather2.jpg" />-->

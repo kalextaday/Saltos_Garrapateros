@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../WEB-INF/template.xhtml"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="title">#{beanUsrInicio.tituloBienvenida}</ui:define>
+
+    <ui:define name="content">
+
+        <div class="ui-g ui-panel-content MarAuto ui-md-4" style="text-align: center;height:60vh;">
+            <div class="ui-g-12" style="margin-top: 40%">
+                <p:panelGrid rendered="#{beanUsrInicio.mostrarPanel}" style="border:0px none;background:none" >
+                    <p:graphicImage name="images/login/secure.png" library="paradise-layout" />
+                    <h1>#{beanUsrInicio.tituloBienvenida}</h1>
+
+                    <span> #{beanUsrInicio.mensajeBienvenida}</span>
+                </p:panelGrid>
+            </div>
+        </div>
+
+    </ui:define>
+
+</ui:composition>

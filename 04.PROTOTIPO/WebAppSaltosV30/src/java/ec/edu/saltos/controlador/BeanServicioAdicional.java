@@ -6,7 +6,9 @@
 package ec.edu.saltos.controlador;
 
 
+import ec.edu.saltos.dao.DAOResponsable;
 import ec.edu.saltos.dao.DAOServicioAdicional;
+import ec.edu.saltos.modelo.Responsable;
 import ec.edu.saltos.modelo.ServicioAdicional;
 import java.io.Serializable;
 import java.util.List;
@@ -26,16 +28,27 @@ public class BeanServicioAdicional implements Serializable{
 
     private List<ServicioAdicional> listaServicioAdicionales;
     private ServicioAdicional servicioAdicional;
+    
+    private List<Responsable> listaResponsables;
+    private Responsable responsableSeleccionado; 
     /**
      * Creates a new instance of BeanEmpleado
      */
     public BeanServicioAdicional() {
         servicioAdicional=new ServicioAdicional();
+        responsableSeleccionado=new Responsable();
     }
     
     @PostConstruct
     public void init(){
         obtenerServicioAdicionals();
+        obtenerResponsables();
+    }
+    
+    
+    public void obtenerResponsables(){
+        DAOResponsable dao=new DAOResponsable();
+        listaResponsables=dao.obtenerResponsables();
     }
     
     public void obtenerServicioAdicionals(){
@@ -105,6 +118,31 @@ public class BeanServicioAdicional implements Serializable{
     public void setServicioAdicional(ServicioAdicional servicioAdicional) {
         this.servicioAdicional = servicioAdicional;
     }
+
+    public List<ServicioAdicional> getListaServicioAdicionales() {
+        return listaServicioAdicionales;
+    }
+
+    public void setListaServicioAdicionales(List<ServicioAdicional> listaServicioAdicionales) {
+        this.listaServicioAdicionales = listaServicioAdicionales;
+    }
+
+    public List<Responsable> getListaResponsables() {
+        return listaResponsables;
+    }
+
+    public void setListaResponsables(List<Responsable> listaResponsables) {
+        this.listaResponsables = listaResponsables;
+    }
+
+    public Responsable getResponsableSeleccionado() {
+        return responsableSeleccionado;
+    }
+
+    public void setResponsableSeleccionado(Responsable responsableSeleccionado) {
+        this.responsableSeleccionado = responsableSeleccionado;
+    }
+    
     
     
 }

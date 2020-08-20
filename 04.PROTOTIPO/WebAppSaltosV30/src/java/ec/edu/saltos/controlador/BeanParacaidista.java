@@ -6,7 +6,9 @@
 package ec.edu.saltos.controlador;
 
 
+import ec.edu.saltos.dao.DAOFormacionParacaidista;
 import ec.edu.saltos.dao.DAOParacaidista;
+import ec.edu.saltos.modelo.FormacionParacaidista;
 import ec.edu.saltos.modelo.Paracaidista;
 import java.io.Serializable;
 import java.util.List;
@@ -26,21 +28,31 @@ public class BeanParacaidista implements Serializable{
 
     private List<Paracaidista> listaParacaidistas;
     private Paracaidista paracaidista;
+    
+    private List<FormacionParacaidista> listaCursos;
+    private FormacionParacaidista cursoSeleccionado;
     /**
      * Creates a new instance of BeanEmpleado
      */
     public BeanParacaidista() {
         paracaidista=new Paracaidista();
+        cursoSeleccionado=new FormacionParacaidista();
     }
     
     @PostConstruct
     public void init(){
         obtenerParacaidistas();
+        obtenerCursos();
     }
     
     public void obtenerParacaidistas(){
         DAOParacaidista daoparacaidista=new DAOParacaidista();
         listaParacaidistas=daoparacaidista.obtenerParacaidistas();
+    }
+    
+    public void obtenerCursos(){
+        DAOFormacionParacaidista dao=new DAOFormacionParacaidista();
+        listaCursos=dao.obtenerFormacionParacaidistas();
     }
     
     public void agregarParacaidista() {
@@ -60,7 +72,7 @@ public class BeanParacaidista implements Serializable{
         DAOParacaidista daoparacaidista=new DAOParacaidista();
         try{
             if(daoparacaidista.editar(paracaidista)){
-                //limpiarParacaidista();
+                limpiarParacaidista();
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,"Info: ","Se modifico correctamente"));
             }else{
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,"Error: ","No se modifico correctamente"));
@@ -74,7 +86,7 @@ public class BeanParacaidista implements Serializable{
         DAOParacaidista daoparacaidista=new DAOParacaidista();
         try{
             if(daoparacaidista.eliminar(paracaidista)){
-                //limpiarParacaidista();
+                limpiarParacaidista();
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,"Info: ","Se elimino correctamente"));
             }else{
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,"Error: ","No se elimino correctamente"));
@@ -104,6 +116,22 @@ public class BeanParacaidista implements Serializable{
 
     public void setParacaidista(Paracaidista paracaidista) {
         this.paracaidista = paracaidista;
+    }
+
+    public List<FormacionParacaidista> getListaCursos() {
+        return listaCursos;
+    }
+
+    public void setListaCursos(List<FormacionParacaidista> listaCursos) {
+        this.listaCursos = listaCursos;
+    }
+
+    public FormacionParacaidista getCursoSeleccionado() {
+        return cursoSeleccionado;
+    }
+
+    public void setCursoSeleccionado(FormacionParacaidista cursoSeleccionado) {
+        this.cursoSeleccionado = cursoSeleccionado;
     }
     
     

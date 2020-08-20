@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 18-ago-2020 23:39:27 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="ec.edu.saltos.modelo.ConfigClave" table="config_clave" catalog="seguridadv2" optimistic-lock="version">
+        <id name="idConfigClave" type="int">
+            <column name="ID_CONFIG_CLAVE" />
+            <generator class="assigned" />
+        </id>
+        <property name="claveCharMax" type="java.lang.Integer">
+            <column name="CLAVE_CHAR_MAX" />
+        </property>
+        <property name="claveCharMin" type="java.lang.Integer">
+            <column name="CLAVE_CHAR_MIN" />
+        </property>
+        <property name="claveCharAlfanumerico" type="java.lang.Boolean">
+            <column name="CLAVE_CHAR_ALFANUMERICO" />
+        </property>
+        <property name="claveCharMayus" type="java.lang.Boolean">
+            <column name="CLAVE_CHAR_MAYUS" />
+        </property>
+        <property name="claveCharMinus" type="java.lang.Boolean">
+            <column name="CLAVE_CHAR_MINUS" />
+        </property>
+        <property name="claveCharEspecial" type="java.lang.Boolean">
+            <column name="CLAVE_CHAR_ESPECIAL" />
+        </property>
+        <property name="claveStrEspecial" type="string">
+            <column name="CLAVE_STR_ESPECIAL" length="32" />
+        </property>
+        <property name="claveFecha" type="timestamp">
+            <column name="CLAVE_FECHA" length="19" />
+        </property>
+        <property name="claveFechaMod" type="timestamp">
+            <column name="CLAVE_FECHA_MOD" length="19" />
+        </property>
+        <property name="claveCambiosDia" type="java.lang.Integer">
+            <column name="CLAVE_CAMBIOS_DIA" />
+        </property>
+        <property name="claveIntentosFallidos" type="java.lang.Integer">
+            <column name="CLAVE_INTENTOS_FALLIDOS" />
+        </property>
+        <property name="claveUltimo" type="string">
+            <column name="CLAVE_ULTIMO" length="512" />
+        </property>
+        <set name="usuarioAccesos" table="usuario_acceso" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ID_CONFIG_CLAVE" />
+            </key>
+            <one-to-many class="ec.edu.saltos.modelo.UsuarioAcceso" />
+        </set>
+    </class>
+</hibernate-mapping>

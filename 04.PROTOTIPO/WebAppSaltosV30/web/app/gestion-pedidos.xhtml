@@ -118,7 +118,7 @@
                     <p:outputLabel value="Costo del Salto:"/>
                     <p:spinner value="#{beanPedido.pedido.costosalto}"/>
 
-                    <p:outputLabel value="Capacidad:"/>
+                    <p:outputLabel value="Costo Total:"/>
                     <p:spinner value="#{beanPedido.pedido.costototalped}"/>
                 </p:panelGrid>
                 <p:commandButton icon="pi pi-check" value="Guardar" actionListener="#{beanPedido.agregarPedido()}" update=":formListado:tablaPedidos :mensaje" oncomplete="PF('dialogoAgregar').hide();"/>
@@ -180,7 +180,7 @@
                     <p:outputLabel value="Costo del Salto:"/>
                     <p:spinner value="#{beanPedido.pedido.costosalto}"/>
 
-                    <p:outputLabel value="Capacidad:"/>
+                    <p:outputLabel value="Costo Total:"/>
                     <p:spinner value="#{beanPedido.pedido.costototalped}"/>
 
                 </p:panelGrid>

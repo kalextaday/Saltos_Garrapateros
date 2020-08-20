@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 18-ago-2020 23:39:27 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="ec.edu.saltos.modelo.OpcionPerfil" table="opcion_perfil" catalog="seguridadv2" optimistic-lock="version">
+        <id name="idPermiso" type="java.lang.Integer">
+            <column name="ID_PERMISO" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="opcion" class="ec.edu.saltos.modelo.Opcion" fetch="select" lazy="false">
+            <column name="ID_OPCION" />
+        </many-to-one>
+        <many-to-one name="perfil" class="ec.edu.saltos.modelo.Perfil" fetch="select" lazy="false">
+            <column name="ID_PERFIL" />
+        </many-to-one>
+        <property name="opcPerEstatus" type="string">
+            <column name="OPC_PER_ESTATUS" length="3" />
+        </property>
+    </class>
+</hibernate-mapping>
