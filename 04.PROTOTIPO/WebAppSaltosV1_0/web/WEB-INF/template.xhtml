@@ -1,0 +1,77 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Security-Policy" content="child-src 'none';"/>
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+        </f:facet>
+        <link rel="shortcut icon" type="image/png" href="#{resource['paradise-layout/images/login/secure.png']}"/>
+
+        <title><ui:insert name="title">Sistema de Seguridad</ui:insert></title>
+        <h:outputScript name="js/nanoscroller.js" library="paradise-layout" />
+        <h:outputScript name="js/layout.js" library="paradise-layout" />
+        <script type='text/javascript'>
+            document.oncontextmenu = function () {
+                return false;
+            };
+        </script>
+        <ui:insert name="head"/>
+        
+        <!--<f:event type="preRenderView" listener="{beanSesion.verificarSesion()}"/>-->
+    </h:head>
+
+    <h:body>
+
+        <div class="layout-wrapper #{preferencias.slimMenu ? 'layout-menu-slim' : (preferencias.overlayMenu ? 'layout-menu-overlay' : 'layout-menu-static')}">
+            <ui:include src="./topbar.xhtml" />
+
+            <div class="layout-main">
+                <ui:include src="./menu.xhtml" />
+
+                <div class="layout-content">
+                    <ui:insert name="content"/>
+                </div>
+
+                <!--<ui:include src="./footer.xhtml" />-->
+            </div>
+        </div>
+        
+        <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+
+        <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+            <p:panelGrid columns="2" style="border-style: none !important" >
+                <ui:insert name="icono-personalizado">
+                    <div class="reverse-spinner"></div> 
+                </ui:insert>
+                <ui:insert name="mensaje-personalizado">
+                    <h:outputText value="Por favor espere..." style="white-space: nowrap;"/>    
+                </ui:insert>
+            </p:panelGrid>
+        </p:dialog>
+        <h:outputStylesheet name="css/nanoscroller.css" library="paradise-layout" />
+        <h:outputStylesheet name="css/animate.css" library="paradise-layout" />
+        <h:outputStylesheet name="css/layout-#{preferencias.layout}.css" library="paradise-layout" />
+        <h:outputStylesheet name="css/custom.css" library="paradise-layout" />
+
+    </h:body>
+    
+    <p:idleMonitor timeout="#{preferencias.tiempoUpdate}">
+        <p:ajax event="idle" listener="#{preferencias.statusSesion()}" />
+    </p:idleMonitor>
+    
+    <style type="text/css">
+        .ui-datatable-header {
+            height: 50px;
+        }
+    </style>
+
+</html>

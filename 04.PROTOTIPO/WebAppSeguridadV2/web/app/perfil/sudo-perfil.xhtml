@@ -1,0 +1,210 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="./../../WEB-INF/template.xhtml">
+
+    
+    <ui:define name="title">Administración de Perfiles</ui:define>
+    
+    <ui:define name="content">
+        
+        
+        <h:form id="form">
+
+            <div class="ui-g ui-fluid">
+                <div class="ui-g-8 titulo-app">
+                    <span>
+                        <i class="pi pi-star icono-tamano"></i> <h:outputText value="Administración de Perfiles" />
+                    </span>
+
+                </div>
+                <div class="ui-g-4" style="text-align: right !important" >
+                    <p:clock pattern="HH:mm:ss dd.MM.yyyy" />
+                </div>
+            </div>
+
+            <div class="ui-g ui-fluid">
+                <div class="ui-g-12">
+                    <p:messages id="messages" showDetail="true" closable="true">
+                        <p:autoUpdate />
+                    </p:messages>
+                </div>
+            </div>
+
+            <div class="ui-g dashboard">
+                <div class="ui-g-12 ui-lg-12">
+                    <div class="border-material">
+                        <p:panel header="Mis Perfiles" style="min-height:100px">
+                            <p:dataTable var="unPerfil" id="dt-perfil" reflow="true" emptyMessage="No existen registros"
+                                         value="#{beanPerfil.listaPerfiles}" scrollRows="20" scrollable="true"
+                                         selectionMode="single" selection="#{beanPerfil.perfilSeleccionado}" rowKey="#{unPerfil.idPerfil}"
+                                         liveScroll="true" scrollHeight="300">
+
+
+                                <p:ajax event="rowSelect" listener="#{beanPerfil.onRowSelect}" update="editButton deshabilitarButton habilitarButton PerfilHabilitarForm" />
+                                <p:ajax event="rowUnselect" listener="#{beanPerfil.onRowUnselect}" update="editButton deshabilitarButton habilitarButton" />
+
+                                <p:column headerText="Tipo Perfil" sortBy="#{unPerfil.perfilEstatus2}" filterBy="#{unPerfil.perfilEstatus2}"  filterMatchMode="contains">
+                                    <h:outputText class="ancho-columna #{estiloUtiles.toStylePerfil(unPerfil.perfilEstatus2 )}"
+                                                  value="#{(unPerfil.perfilEstatus2 eq '') or (unPerfil.perfilEstatus2 == null) ?'-':estiloUtiles.toValuePerfil(unPerfil.perfilEstatus2)}" />
+                                </p:column>
+
+                                <p:column headerText="Nombre" sortBy="#{unPerfil.perfilNombre}">
+                                    <h:outputText value="#{unPerfil.perfilNombre}" />
+                                </p:column>
+
+
+                                <p:column headerText="Descripción" sortBy="#{unPerfil.perfilDescripcion}">
+                                    <h:outputText value="#{unPerfil.perfilDescripcion}" />
+                                </p:column>
+
+                                <p:column headerText="Estado Perfil" sortBy="#{unPerfil.perfilEstatus}">
+                                    <h:outputText class="ancho-columna #{estiloUtiles.toEstiloEstatus(unPerfil.perfilEstatus)}" value="#{estiloUtiles.toValorEstatus(unPerfil.perfilEstatus)}" />
+                                </p:column>
+
+                                <f:facet name="header" class="iconos-derecha">
+                                    <p:commandButton id="createButton" value="Crear" class="espacio-btn"
+                                                     icon="pi pi-plus" actionListener="#{beanPerfil.preparaCrear()}"
+                                                     update=":PerfilCreateForm"/>
+
+                                    <p:commandButton id="editButton" value="Editar"  class="espacio-btn"
+                                                     icon="pi pi-pencil"
+                                                     actionListener="#{beanPerfil.preparaActualizar()}"
+                                                     disabled="#{empty beanPerfil.perfilSeleccionado
+                                                                 or beanPerfil.perfilSeleccionado.perfilNombre eq ('ADMINISTRADOR')
+                                                                 or beanPerfil.perfilSeleccionado.perfilEstatus eq 'DES'}"
+                                                     update=":PerfilEditForm"/>
+
+                                </f:facet>
+                                <f:facet name="footer" class="iconos-derecha">
+                                    <p:commandButton id="deshabilitarButton"  styleClass="red-light-btn espacio-btn"
+                                                     value="Deshabilitar" icon="pi pi-ban"
+                                                     actionListener="#{beanPerfil.preparaDeshabilitar()}"
+                                                     disabled="#{empty beanPerfil.perfilSeleccionado
+                                                                 or beanPerfil.perfilSeleccionado.perfilNombre eq ('ADMINISTRADOR')
+                                                                 or beanPerfil.perfilSeleccionado.perfilEstatus eq 'DES'}"
+                                                     update=":PerfilEliminarForm"/>
+
+                                    <p:commandButton id="habilitarButton"  styleClass="green-light-btn espacio-btn"
+                                                     value="Habilitar" icon="pi pi-check"
+                                                     actionListener="#{beanPerfil.preparaHabilitar()}"
+                                                     disabled="#{empty beanPerfil.perfilSeleccionado
+                                                                 or beanPerfil.perfilSeleccionado.perfilNombre eq ('ADMINISTRADOR')
+                                                                 or beanPerfil.perfilSeleccionado.perfilEstatus eq 'PAC'}"
+                                                     update=":PerfilHabilitarForm"/>
+                                </f:facet>
+
+                            </p:dataTable>
+                        </p:panel>
+                    </div>
+                </div>
+            </div>
+
+        </h:form>
+        
+        <!--dialogs-->
+
+        <p:dialog header="Nuevo Perfil" widgetVar="wv-crearPerfil" modal="true"
+                  showEffect="slide" hideEffect="slide">
+
+            <h:form id="PerfilCreateForm">
+                <h:panelGroup id="display" style="border:0px none;background:none">
+
+                    <p:panelGrid columns="2" rendered="#{beanPerfil.perfilSeleccionado != null}" style="border:0px none;background:none" >
+                        <p:outputLabel value="Nombre:" for="nombrePerfil" />
+                        <p:inputText id="nombrePerfil" value="#{beanPerfil.perfilSeleccionado.perfilNombre}" title="Nombre" required="true" requiredMessage="Campo Obligatorio"/>
+                        <p:outputLabel value="Descripción:" for="descipcionPerfil" />
+                        <p:inputText id="descipcionPerfil" value="#{beanPerfil.perfilSeleccionado.perfilDescripcion}" title="Descripcion" required="true" requiredMessage="Campo Obligatorio"/>
+
+                        <p:outputLabel for="tipoPerfil" value="Tipo:" />
+                        <p:selectOneMenu id="tipoPerfil" value="#{beanPerfil.perfilSeleccionado.perfilEstatus2}" >
+                            <f:selectItem itemLabel="Administrador" itemValue="ADM" />
+                            <f:selectItem itemLabel="Usuario" itemValue="USR" />
+                        </p:selectOneMenu>
+
+                    </p:panelGrid>
+                    <div class="ui-g-12 ui-fluid contact-form">
+                        <div class="ui-g">
+                            <div class="ui-g-12">
+                                <p:commandButton actionListener="#{beanPerfil.agregarPerfil()}" value="Crear"
+                                                 icon="fa fa-save" update=":form:dt-perfil" />
+                            </div>
+                        </div>
+                    </div>
+
+                </h:panelGroup>
+            </h:form>
+
+        </p:dialog>
+
+        <p:dialog header="Actualizar Perfil" widgetVar="wv-actualizarPerfil" modal="true" >
+            <h:form id="PerfilEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{beanPerfil.perfilSeleccionado != null}" style="border:0px none;background:none" >
+                        <p:outputLabel value="Nombre:" for="nombrePerfil" />
+                        <p:inputText id="nombrePerfil" value="#{beanPerfil.perfilSeleccionado.perfilNombre}" title="Nombre" required="true" requiredMessage="Campo Obligatorio"/>
+                        <p:outputLabel value="Descripción:" for="descipcionPerfil" />
+                        <p:inputText id="descipcionPerfil" value="#{beanPerfil.perfilSeleccionado.perfilDescripcion}" title="Descripcion" required="true" requiredMessage="Campo Obligatorio"/>
+                    </p:panelGrid>
+                    <div class="ui-g-12 ui-fluid contact-form">
+                        <div class="ui-g">
+                            <div class="ui-g-12">
+                                <p:commandButton actionListener="#{beanPerfil.modificarPerfil()}"
+                                                 icon="fa fa-refresh"
+                                                 value="Actualizar" update=":form:dt-perfil" />
+                            </div>
+                        </div>
+                    </div>
+
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+        <p:dialog header="Deshabilitar Perfil" widgetVar="wv-deshabilitarPerfil" modal="true"
+                  showEffect="slide" width="450" hideEffect="slide">
+            <h:form id="PerfilEliminarForm">
+                <div class="ui-g-6 textAlRight">
+                    <h:outputText value="Está seguro de: "/><br/>
+                    <h:outputText value="El perfil: "/><br/>
+                </div>
+                <div class="ui-g-6 TexAlLeft">
+                    <b><h:outputText value="Deshabilitar"/></b><br/>
+                    <b><h:outputText value="#{beanPerfil.perfilSeleccionado.perfilNombre}"/></b><br/>
+                </div>
+
+                <div class="ui-g-12 textAlCenter">
+                    <p:commandButton actionListener="#{beanPerfil.modificarPerfil()}"
+                                     icon="fa fa-window-close-o" styleClass="red-light-btn espacio-btn"
+                                     value="Deshabilitar" update=":form:dt-perfil" />
+                </div>
+            </h:form>
+        </p:dialog>
+
+        <p:dialog header="Habilitar Perfil" widgetVar="wv-habilitarPerfil" modal="true"
+                  showEffect="slide" width="450" hideEffect="slide">
+            <h:form id="PerfilHabilitarForm">
+                <div class="ui-g-6 textAlRight">
+                    <h:outputText value="Está seguro de: "/><br/>
+                    <h:outputText value="El perfil: "/><br/>
+                </div>
+                <div class="ui-g-6 TexAlLeft">
+                    <b><h:outputText value="Habilitar"/></b><br/>
+                    <b><h:outputText value="#{beanPerfil.perfilSeleccionado.perfilNombre}"/></b><br/>
+                </div>
+
+                <div class="ui-g-12 textAlCenter">
+                    <p:commandButton actionListener="#{beanPerfil.modificarPerfil()}"
+                                     icon="fa fa-check-square-o" styleClass="green-light-btn espacio-btn"
+                                     value="Habilitar" update=":form:messages :form:dt-perfil" />
+                </div>
+            </h:form>
+        </p:dialog>
+        
+    </ui:define>
+
+    
+</ui:composition>

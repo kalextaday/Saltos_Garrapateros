@@ -1,0 +1,26 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml"
+                xmlns:jsf="http://xmlns.jcp.org/jsf">
+
+    <ui:define name="title">#{beanUsrInicio.tituloBienvenida}</ui:define>
+
+    <ui:define name="content">
+        
+        <div class="ui-g ui-panel-content MarAuto ui-md-4" style="text-align: center;height:60vh;">
+            <div class="ui-g-12" style="margin-top: 40%">
+                <p:panelGrid style="border:0px none;background:none" >
+                    <p:graphicImage name="images/exception/access-icon.png" library="paradise-layout" />
+                    <h1>Sitio en Contrucción</h1>
+                    <h2>PRÓXIMAMENTE! </h2>
+                    <h3>Estamos trabajando en la contrucción de esta sección.</h3>
+                </p:panelGrid>
+            </div>
+        </div>
+
+    </ui:define>
+
+</ui:composition>

@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 21-ago-2020 20:56:20 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="ec.edu.saltos.modelo.AsignarPerfil" table="asignar_perfil" catalog="db_saltos" optimistic-lock="version">
+        <id name="idAsignarPerfil" type="java.lang.Integer">
+            <column name="ID_ASIGNAR_PERFIL" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="perfil" class="ec.edu.saltos.modelo.Perfil" fetch="select" lazy="false">
+            <column name="ID_PERFIL" />
+        </many-to-one>
+        <many-to-one name="usuarioAcceso" class="ec.edu.saltos.modelo.UsuarioAcceso" fetch="select" lazy="false">
+            <column name="ID_USUARIO_ACCESO" />
+        </many-to-one>
+        <property name="asiPerFechaCreacion" type="timestamp">
+            <column name="ASI_PER_FECHA_CREACION" length="19" />
+        </property>
+    </class>
+</hibernate-mapping>

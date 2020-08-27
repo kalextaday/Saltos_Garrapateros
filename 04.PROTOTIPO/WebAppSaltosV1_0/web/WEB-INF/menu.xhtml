@@ -1,0 +1,42 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:pv="http://primefaces.org/paradise">
+
+    <div class="layout-menu-wrapper #{preferencias.darkMenu ? 'layout-menu-dark' : null}">
+        <div class="over-entity" >
+
+            <div class="contenedor-logo" >
+                <p:graphicImage class="logo-entidad" name="images/garrapateros.png" library="paradise-layout" />
+                <!--<h:graphicImage class="logo-entidad" value="data:image/jpg;base64,{beanMenu.pathLogoEntidad}" />-->
+                <!--<div class="text-logo">{beanMenu.unaEntidad.entidadNombre}</div>-->
+            </div>
+
+            <div class="over-color-negro"/>
+            <!--<div class="over-color-azul"/>-->
+        </div>
+        <div class="nano">
+
+            <div class="nano-content sidebar-scroll-content">
+                <div class="layout-menu-container">
+                    <h:form id="menuform">
+                        <div class="mobile-search">
+                            <i class="fa fa-fw fa-search topbar-search-icon"></i>
+                            <input type="text" class="topbar-search" placeholder="Buscar..."/>
+                        </div>
+
+                        <pv:menu id="sm_leftmenu" model="#{beanMenu.model}" />
+                        
+                        <!--<p:menu  class="nano-content sidebar-scroll-content" toggleable="true" id="sm_leftmenu" 
+                                model="{beanMenu.model}" style="width: 100%"/>
+                        -->
+                    </h:form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</ui:composition>

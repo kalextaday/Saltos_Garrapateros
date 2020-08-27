@@ -1,0 +1,125 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+
+
+    <ui:define name="title">Administración de Perfiles</ui:define>
+
+    <ui:define name="content">
+
+        <div class="ui-g ui-fluid">
+            <div class="ui-g-8 titulo-app">
+                <span>
+                    <i class="fa fa-star icono-tamano"></i> <h:outputText value="ASIGNAR PERFILES A USUARIOS" />
+                </span>
+
+            </div>
+            <div class="ui-g-4" style="text-align: right !important" >
+                <p:clock pattern="HH:mm:ss dd-MM-yyyy" />
+            </div>
+        </div>
+
+        <div class="ui-g dashboard">
+
+            <p:growl id="pg-notificacion" showDetail="true" life="3000" />
+            <div class="ui-g-12 ui-lg-4 ui-fluid contact-form">
+                <h:form id="f-asignar-usuario">
+                    <p:panel header="Asignar perfil a un usuario" style="min-height:100px">
+                        <div class="ui-g">
+                            <div class="ui-g-12">
+                                <ul>
+                                    <li>Primero seleccionar la Entidad </li>
+                                    <li>Seleccionar el perfil para asignar</li>
+                                    <li>Seleccionar un usuario de la Entidad </li>
+                                    <li>Presionar <b>Asignar Perfil</b></li>
+                                </ul>
+
+                            </div>
+                        </div>
+                    </p:panel>
+
+
+                </h:form>
+            </div>
+            
+            <div class="ui-g-12 ui-lg-4 ui-fluid contact-form">
+                <h:form id="f-perfiles">
+                    <p:panel header="Perfiles" style="min-height:100px">
+                        <div class="ui-g">
+                            <div class="ui-g-12">
+                                <p:selectOneMenu id="som-perfil" value="#{beanAsignarPerfiles.perfilSeleccionado}"
+                                                 converter="perfilConverter" immediate="true"
+                                                 autoWidth="false" required="true" effect="fade">
+                                    <f:selectItems value="#{beanAsignarPerfiles.listaPerfiles}" var="perfil"
+                                                   itemLabel="#{perfil.perfilNombre}" itemValue="#{perfil}"/>
+                                    <p:ajax event="itemSelect" listener="#{beanAsignarPerfiles.actualizarPermisosPerfil}" update="som-perfil :form-asignar"/>
+                                </p:selectOneMenu>
+                            </div>
+                        </div>
+                    </p:panel>
+
+
+                </h:form>
+            </div>
+            
+            <div class="ui-g-12 ui-lg-12">
+                <div class="border-material">
+                    <p:panel header="Asignar Perfiles" style="min-height:100px">
+                        <h:form id="form-asignar">
+                            <p:pickList id="PojoPickList" value="#{beanAsignarPerfiles.usuariosGlobal}" var="usuario" effect="bounce"
+                                        itemValue="#{usuario}" itemLabel="#{usuario.usrAccesoNombre}" showSourceControls="true" showTargetControls="true" showCheckbox="true"
+                                        showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains" converter="usuarioConverter" responsive="true">
+
+                                <f:facet name="sourceCaption">Usuarios</f:facet>
+                                <f:facet name="targetCaption">Perfil: #{beanAsignarPerfiles.perfilSeleccionado.perfilNombre}</f:facet>
+
+                                <p:ajax event="transfer" listener="#{beanAsignarPerfiles.onTransfer}" update="pg-notificacion" />
+                                <p:ajax event="select" listener="#{beanAsignarPerfiles.onSelect}" update="pg-notificacion"/>
+                                <p:ajax event="unselect" listener="#{beanAsignarPerfiles.onUnselect}" update="pg-notificacion"/>
+                                <p:ajax event="reorder" listener="#{beanAsignarPerfiles.onReorder}" update="pg-notificacion"/>
+
+                                <p:column style="width:15%">
+                                    <!--<h:graphicImage name="showcase/images/themeswitcher/themeswitcher-{usuario.idUsuarioAcceso}.png" alt="{usuario.usrAccesoNombre}" styleClass="ui-theme"/>-->
+                                    <p:graphicImage name="images/login/secure.png" library="paradise-layout" />
+                                </p:column>
+
+                                <p:column style="width:85%;">
+                                    <h:outputText value="#{usuario.usrAccesoNombre}" />
+                                </p:column>
+                            </p:pickList>
+
+                            <p:commandButton id="pojoSubmit" value="Asignar" update=":f-asignacion:panelUsrPerfil" actionListener="#{beanAsignarPerfiles.preparaAsignarPerfil}" style="margin-top:5px" />
+                        </h:form>
+                    </p:panel>
+                </div>
+            </div>
+        </div>
+
+        <!--dialogs-->
+        
+        <p:dialog modal="true" showEffect="fade" hideEffect="fade" widgetVar="wv-usr-perfiles">
+            <h:form id="f-asignacion" style="text-align:center;">
+                <h:panelGrid id="panelUsrPerfil" columns="2">
+                    <h:outputText value="De: " style="font-weight:bold" />
+                    <ui:repeat value="#{beanAsignarPerfiles.usuariosGlobal.source}" var="usuario">
+                        <h:outputText value="#{usuario.usrAccesoNombre}" style="margin-right:5px" />
+                    </ui:repeat>
+
+                    <h:outputText value="A: " style="font-weight:bold" />
+                    <ui:repeat value="#{beanAsignarPerfiles.usuariosGlobal.target}" var="usuario">
+                        <h:outputText value="#{usuario.usrAccesoNombre}" style="margin-right:5px" />
+                    </ui:repeat>
+                </h:panelGrid>
+            </h:form>
+        </p:dialog>
+
+
+    </ui:define>
+
+</ui:composition>

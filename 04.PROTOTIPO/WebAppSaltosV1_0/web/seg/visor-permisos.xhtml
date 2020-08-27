@@ -1,0 +1,109 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+
+    <ui:define name="title">Visor de Permisos</ui:define>
+
+    <ui:define name="content">
+
+        <div class="ui-g ui-fluid">
+            <div class="ui-g-8 titulo-app">
+                <span>
+                    <i class="fa fa-star icono-tamano"></i> <h:outputText value="VISOR DE LOS PERMISOS DE CADA PERFIL" />
+                </span>
+
+            </div>
+            <div class="ui-g-4" style="text-align: right !important" >
+                <p:clock pattern="HH:mm:ss dd-MM-yyyy" />
+            </div>
+        </div>
+
+
+        <div class="ui-g dashboard">
+
+            <div class="ui-g-12 ui-lg-12 ui-fluid contact-form">
+                <h:form id="f-mensajes">
+                    <p:growl id="pg-notificacion" showDetail="true" life="3000" />
+                    <p:messages id="messages" showDetail="true" closable="true">
+                        <p:autoUpdate />
+                    </p:messages>
+                </h:form>
+            </div>
+
+            <div class="ui-g-12 ui-lg-4 ui-fluid contact-form">
+                <h:form id="f-perfiles">
+                    <p:panel header="Perfiles" style="min-height:100px">
+                        <div class="ui-g">
+                            <div class="ui-g-12">
+                                <p:selectOneMenu id="som-perfil" value="#{beanPermisosVisor.perfilSeleccionado}"
+                                                 converter="perfilConverter" immediate="true"
+                                                 autoWidth="false" effect="fade">
+                                    
+                                    <f:selectItem noSelectionOption="true" itemLabel="Seleccionar Perfil" itemValue="#{null}" />
+                                    <f:selectItems value="#{beanPermisosVisor.perfiles}" var="perfil"
+                                                   itemLabel="#{perfil.perfilNombre}" itemValue="#{perfil}"/>
+                                    
+                                    <p:ajax update="som-perfil :f-asignar"/>
+                                </p:selectOneMenu>
+                            </div>
+                        </div>
+                    </p:panel>
+
+
+                </h:form>
+            </div>
+
+
+
+            <div class="ui-g-12 ui-lg-4 ui-fluid contact-form">
+                <h:form id="f-asignar">
+                    <p:panel header="Ver Permisos de: #{beanPermisosVisor.perfilSeleccionado.perfilNombre}" style="min-height:100px">
+                        <div class="ui-g">
+                            <div class="ui-g-12">
+                                <p:commandButton actionListener="#{beanPermisosVisor.actualizarPermisos}"
+                                                 icon="fa fa fw fa-check-circle" update="f-arbol-recurso"
+                                                 value="Ver Permisos" />
+                            </div>
+
+                        </div>
+                    </p:panel>
+                </h:form>
+
+            </div>
+
+            
+            <div class="ui-g-12 ui-lg-12 ui-fluid contact-form">
+                <h:form id="f-arbol-recurso">
+                    <p:panel header="Mis Permisos" style="min-height:200px">
+                        <p:treeTable id="arbol-recursos" value="#{beanPermisosVisor.permisoPadre}" var="opcion"
+                                     expandMode="true" emptyMessage="No existen permisos"
+                                     scrollable="true" scrollHeight="450" style="margin-top:0" >
+
+                            <p:columnGroup type="header">
+                                <p:row>
+                                    <p:column headerText="Nombre" />
+                                    <p:column headerText="Tipo de Aplicación" style="width:150px;"/>
+                                </p:row>
+                            </p:columnGroup>
+
+                            <p:column headerText="Nombre" rendered="#{opcion.opcEstatus eq 'APP' or opcion.opcEstatus eq 'MOD'}">
+                                <h:outputText value="#{opcion.opcNombre}" />
+                            </p:column>
+
+                            <p:column headerText="Tipo de Aplicación" style="width:150px;" rendered="#{opcion.opcEstatus eq 'APP' or opcion.opcEstatus eq 'MOD'}">
+                                <h:outputText class="ancho-columna #{estiloUtiles.toStyleOpcion(opcion.opcEstatus)}" value="#{estiloUtiles.toValueOpcion(opcion.opcEstatus)}" />
+                            </p:column>
+
+                        </p:treeTable>
+                    </p:panel>
+                </h:form>
+            </div>
+        </div>
+
+    </ui:define>
+
+</ui:composition>

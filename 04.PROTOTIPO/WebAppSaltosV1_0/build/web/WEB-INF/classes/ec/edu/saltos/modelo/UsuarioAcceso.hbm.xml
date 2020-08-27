@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 21-ago-2020 20:56:20 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="ec.edu.saltos.modelo.UsuarioAcceso" table="usuario_acceso" catalog="db_saltos" optimistic-lock="version">
+        <id name="idUsuarioAcceso" type="java.lang.Integer">
+            <column name="ID_USUARIO_ACCESO" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="configClave" class="ec.edu.saltos.modelo.ConfigClave" fetch="select" lazy="false">
+            <column name="ID_CONFIG_CLAVE" />
+        </many-to-one>
+        <many-to-one name="persona" class="ec.edu.saltos.modelo.Persona" fetch="select" lazy="false">
+            <column name="ID_PERSONA" />
+        </many-to-one>
+        <property name="usrAccesoNombre" type="string">
+            <column name="USR_ACCESO_NOMBRE" length="128" />
+        </property>
+        <property name="usrAccesoClave" type="string">
+            <column name="USR_ACCESO_CLAVE" length="512" />
+        </property>
+        <property name="usrAccesoIntentosFallidos" type="java.lang.Integer">
+            <column name="USR_ACCESO_INTENTOS_FALLIDOS" />
+        </property>
+        <property name="usrAccesoEstatus" type="string">
+            <column name="USR_ACCESO_ESTATUS" length="3" />
+        </property>
+        <property name="usrAccesoFechaCreacion" type="timestamp">
+            <column name="USR_ACCESO_FECHA_CREACION" length="19" />
+        </property>
+        <property name="usrAccesoFechaMod" type="timestamp">
+            <column name="USR_ACCESO_FECHA_MOD" length="19" />
+        </property>
+        <set name="asignarPerfils" table="asignar_perfil" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ID_USUARIO_ACCESO" />
+            </key>
+            <one-to-many class="ec.edu.saltos.modelo.AsignarPerfil" />
+        </set>
+        <set name="bitacoras" table="bitacora" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ID_USUARIO_ACCESO" />
+            </key>
+            <one-to-many class="ec.edu.saltos.modelo.Bitacora" />
+        </set>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,263 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+
+
+    <ui:define name="title">Administración de Personas</ui:define>
+
+    <ui:define name="content">
+
+        <div class="ui-g ui-fluid">
+            <div class="ui-g-8 titulo-app">
+                <span>
+                    <i class="fa fa-star icono-tamano"></i> <h:outputText value="Administración de Personas" />
+                </span>
+
+            </div>
+            <div class="ui-g-4" style="text-align: right !important" >
+                <p:clock pattern="HH:mm:ss dd-MM-yyyy" />
+            </div>
+        </div>
+
+        <div class="ui-g dashboard">
+
+            <p:growl id="pg-notificacion" showDetail="true" life="3000" />
+            <!--<div class="ui-g-12 ui-lg-4 ui-fluid contact-form">
+                <h:form id="f-asignar-usuario">
+                    <p:panel header="Asignar perfil a un usuario" style="min-height:100px">
+                        <div class="ui-g">
+                            <div class="ui-g-12">
+                                <ul>
+                                    <li>Primero seleccionar la Entidad </li>
+                                    <li>Seleccionar el perfil para asignar</li>
+                                    <li>Seleccionar un usuario de la Entidad </li>
+                                    <li>Presionar <b>Asignar Perfil</b></li>
+                                </ul>
+
+                            </div>
+                        </div>
+                    </p:panel>
+
+
+                </h:form>
+            </div>-->
+
+            <div class="ui-g-12 ui-lg-12">
+                <div class="border-material">
+                    <p:panel header="Personas" style="min-height:100px">
+                        <h:form id="form">
+                            <p:dataTable var="persona" id="dt-entidad" reflow="true"
+                                         value="#{beanPersona.listaPersonas}" scrollRows="20" scrollable="true"
+                                         selectionMode="single" selection="#{beanPersona.personaSeleccionada}" rowKey="#{persona.idPersona}"
+                                         liveScroll="true" scrollHeight="375">
+
+                                <p:ajax event="rowSelect" listener="#{beanPersona.onRowSelect}" update="editButton asociarButton eliminarButton" />
+                                <p:ajax event="rowUnselect" listener="#{beanPersona.onRowUnselect}" update="editButton asociarButton eliminarButton" />
+
+                                <p:column headerText="Identificación" sortBy="#{persona.perIdentificacion}" filterBy="#{persona.perIdentificacion}"  filterMatchMode="contains">
+                                    <h:outputText value="#{persona.perIdentificacion}" />
+                                </p:column>
+
+                                <p:column headerText="Nombres" sortBy="#{persona.perNombres}">
+                                    <h:outputText value="#{persona.perNombres}" />
+                                </p:column>
+                                
+                                <p:column headerText="Apellidos" sortBy="#{persona.perApellidos}">
+                                    <h:outputText value="#{persona.perApellidos}" />
+                                </p:column>
+
+                                <p:column headerText="Correo" sortBy="#{persona.perDireccion}">
+                                    <h:outputText value="#{persona.perDireccion}" />
+                                </p:column>
+                                
+                                <p:column headerText="Direccion" sortBy="#{persona.perCorreo}">
+                                    <h:outputText value="#{persona.perCorreo}" />
+                                </p:column>
+                                
+                                <p:column headerText="Fecha de Nacimiento" sortBy="#{persona.perFechaNacimiento}">
+                                    <h:outputText value="#{persona.perFechaNacimiento}" />
+                                </p:column>
+                                
+                                <p:column headerText="Telefono" sortBy="#{persona.perTelefono}">
+                                    <h:outputText value="#{persona.perTelefono}" />
+                                </p:column>
+                                
+                                <p:column headerText="Foto" style="width:32px;text-align: center">
+                                    <p:commandButton update=":FotoForm" oncomplete="PF('wv-mostrar-foto').show()" icon="fa fa-image" title="View">
+                                        <f:setPropertyActionListener value="#{persona}" target="#{beanPersona.personaSeleccionada}" />
+                                    </p:commandButton>
+                                </p:column>
+
+                                <p:column headerText="Estatus" sortBy="#{persona.perEstatus}">
+                                    <h:outputText   class="ancho-columna #{estiloUtiles.toStylePersona(persona.perEstatus )}"
+                                                    value="#{estiloUtiles.toValuePersona(persona.perEstatus)}" />
+                                </p:column>
+
+                                <f:facet name="header" class="iconos-derecha">
+                                    <p:commandButton id="createButton" value="Crear" class="espacio-btn"
+                                                     icon="ui-icon-plus" actionListener="#{beanPersona.preparaCrear}"
+                                                     update=":CreateForm"/>
+
+                                    <p:commandButton id="editButton" value="Editar"  class="espacio-btn"
+                                                     icon="ui-icon-pencil"
+                                                     actionListener="#{beanPersona.preparaActualizar}"
+                                                     disabled="#{empty beanPersona.personaSeleccionada or fn:startsWith(beanPersona.personaSeleccionada.perIdentificacion,'SAD') or (beanPersona.listaPersonas.size() eq 1)}"
+                                                     update=":EditForm"/>
+
+                                    <p:commandButton id="asociarButton" styleClass="red-light-btn espacio-btn"
+                                                     value="Archivar" icon="fa fa-trash-o"
+                                                     actionListener="#{beanPersona.preparaArchivar}"
+                                                     disabled="#{empty beanPersona.personaSeleccionada or fn:startsWith(beanPersona.personaSeleccionada.perIdentificacion,'SAD') or (beanPersona.listaPersonas.size() eq 1)}"
+                                                     update=":ArchivarForm"/>
+                                    
+                                    <p:commandButton id="eliminarButton" styleClass="red-light-btn espacio-btn"
+                                                     value="Eliminar" icon="fa fa-trash-o"
+                                                     actionListener="#{beanPersona.preparaEliminar}"
+                                                     disabled="#{empty beanPersona.personaSeleccionada or fn:startsWith(beanPersona.personaSeleccionada.perIdentificacion,'SAD') or (beanPersona.listaPersonas.size() eq 1)}"
+                                                     update=":EliminarForm"/>
+
+                                </f:facet>
+                            </p:dataTable>
+                        </h:form>
+                    </p:panel>
+                </div>
+            </div>
+        </div>
+
+        <!--dialogs-->
+        
+        <p:dialog header="Foto" widgetVar="wv-mostrar-foto" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+            <h:form id="FotoForm" style="text-align:center;">
+                <p:panelGrid  columns="2" rendered="#{not empty beanPersona.personaSeleccionada}" columnClasses="label,value">
+                    <f:facet name="header">
+                        <!--<p:graphicImage name="demo/images/car/{beanPersona.personaSeleccionada.brand}-big.gif"/> -->
+                        <p:graphicImage name="images/login/secure.png" library="paradise-layout" />
+                    </f:facet>
+
+                    <h:outputText value="Id:" />
+                    <h:outputText value="#{beanPersona.personaSeleccionada.idPersona}" />
+
+                    <h:outputText value="Nombres:" />
+                    <h:outputText value="#{beanPersona.personaSeleccionada.perNombres}" />
+
+                    <h:outputText value="Correo" />
+                    <h:outputText value="#{beanPersona.personaSeleccionada.perCorreo}" />
+                </p:panelGrid>
+            </h:form>
+        </p:dialog>
+
+        <p:dialog header="Nueva Persona" widgetVar="wv-crear" modal="true" >
+
+            <h:form id="CreateForm">
+
+                <h:panelGroup id="display" style="border:0px none;background:none">
+                    <p:panelGrid columns="3" rendered="#{beanPersona.personaSeleccionada != null}" style="border:0px none;background:none" >
+                        <p:outputLabel value="Nombre" for="usrNombre" />
+                        <p:inputText id="usrNombre" value="#{beanPersona.personaSeleccionada.perNombres}" title="Nombre" required="true" requiredMessage="Nombre Obligatorio" />
+                        <p:message for="usrNombre"/>
+
+                        <p:outputLabel value="Identificación" for="usrIdentificacion" />
+                        <p:inputText id="usrIdentificacion" value="#{beanPersona.personaSeleccionada.perIdentificacion}" title="Identificación" required="true" requiredMessage="Identificacion Obligatorio">
+                            <p:ajax event="keyup" update="display" listener="#{beanPersona.validarCedula}" />
+                        </p:inputText>
+                        <p:messages for="usrIdentificacion"/>
+
+                        <p:outputLabel value="Correo" for="usrCorreo" />
+                        <p:inputText id="usrCorreo" value="#{beanPersona.personaSeleccionada.perCorreo}" title="Correo" required="true" requiredMessage="Correo Obligatorio"/>
+                        <p:message for="usrCorreo"/>
+                        
+                        <p:outputLabel value="Teléfono" for="usrTelefono" />
+                        <p:inputText id="usrTelefono" value="#{beanPersona.personaSeleccionada.perTelefono}" title="Teléfono" />
+                        <h:outputText value="" />
+                        
+                        <p:outputLabel value="Dirección" for="usrDireccion" />
+                        <p:inputText id="usrDireccion" value="#{beanPersona.personaSeleccionada.perDireccion}" title="Dirección" />
+                        <h:outputText value="" />
+                        
+                    </p:panelGrid>
+
+                </h:panelGroup>
+                <div class="ui-g-12 ui-fluid contact-form">
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <p:commandButton actionListener="#{beanPersona.agregarPersona}" value="Guardar" update=":form:dt-entidad :pg-notificacion display" validateClient="true"/>    
+                        </div>    
+                    </div>
+                </div>
+            </h:form>
+
+        </p:dialog>
+
+        <p:dialog header="Actualizar Persona" widgetVar="wv-actualizar" modal="true" >
+
+            <h:form id="EditForm">
+                <h:panelGroup id="display" style="border:0px none;background:none">
+
+                    <p:panelGrid columns="2" rendered="#{beanPersona.personaSeleccionada != null}" style="border:0px none;background:none" >
+                        <p:outputLabel value="Nombre" for="usrNombre" />
+                        <p:inputText id="usrNombre" value="#{beanPersona.personaSeleccionada.perNombres}" title="Nombre" required="true" requiredMessage="Campo Obligatorio"/>
+
+                        <p:outputLabel value="Identificación" for="usrIdentificacion" />
+                        <p:inputText id="usrIdentificacion" value="#{beanPersona.personaSeleccionada.perIdentificacion}" title="Identificación" required="true" requiredMessage="Campo Obligatorio"/>
+
+                        <p:outputLabel value="Correo" for="usrCorreo" />
+                        <p:inputText id="usrCorreo" value="#{beanPersona.personaSeleccionada.perCorreo}" title="Correo" required="true" requiredMessage="Campo Obligatorio"/>
+
+                        <p:outputLabel value="Teléfono" for="usrTelefono" />
+                        <p:inputText id="usrTelefono" value="#{beanPersona.personaSeleccionada.perTelefono}" title="Teléfono" />
+
+                        <p:outputLabel value="Dirección" for="usrDireccion" />
+                        <p:inputText id="usrDireccion" value="#{beanPersona.personaSeleccionada.perDireccion}" title="Dirección" />
+
+                    </p:panelGrid>
+
+                </h:panelGroup>
+                <div class="ui-g-12 ui-fluid contact-form">
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <p:commandButton actionListener="#{beanPersona.modificarPersona}" 
+                                             rendered="#{beanPersona.personaSeleccionada != null}"
+                                             value="Actualizar" style="min-width:300px" update=":form:dt-entidad :pg-notificacion" />
+                        </div>    
+                    </div>
+                </div>
+
+            </h:form>
+
+        </p:dialog>
+        
+        
+            <p:dialog id="d-archivar" header="Archivar Persona" widgetVar="wv-archivar" modal="true" 
+                      showEffect="slide" width="450" hideEffect="slide">
+                <h:form id="ArchivarForm">
+                    <div class="ui-g-12 textAlCenter">
+                        <h:outputText value="Está seguro de archivar a: #{beanPersona.personaSeleccionada.perNombres}" />
+                    </div>
+                    <div class="ui-g-12 textAlCenter">
+                        <p:commandButton actionListener="#{beanPersona.archivarPersona}" value="Archivar ahora!" update=":form:dt-entidad :pg-notificacion" />
+                    </div>
+                </h:form>
+            </p:dialog>
+        
+        
+        <p:dialog id="d-eliminar" header="Eliminar Persona" widgetVar="wv-eliminar" modal="true" 
+                  showEffect="slide" width="450" hideEffect="slide">
+            <h:form id="EliminarForm">
+                <div class="ui-g-12 textAlCenter">
+                    <h:outputText value="Está seguro de eliminar a: #{beanPersona.personaSeleccionada.perNombres }" />
+                </div>
+                <div class="ui-g-12 textAlCenter">
+                    <p:commandButton actionListener="#{beanPersona.eliminarPersona}" value="Archivar ahora!" update=":form:dt-entidad :pg-notificacion" />
+                </div>
+            </h:form>
+        </p:dialog>
+
+    </ui:define>
+
+</ui:composition>

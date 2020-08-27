@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 21-ago-2020 20:56:20 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="ec.edu.saltos.modelo.Persona" table="persona" catalog="db_saltos" optimistic-lock="version">
+        <id name="idPersona" type="int">
+            <column name="ID_PERSONA" />
+            <generator class="assigned" />
+        </id>
+        <property name="perNombres" type="string">
+            <column name="PER_NOMBRES" length="128" />
+        </property>
+        <property name="perApellidos" type="string">
+            <column name="PER_APELLIDOS" length="128" />
+        </property>
+        <property name="perDireccion" type="string">
+            <column name="PER_DIRECCION" length="256" />
+        </property>
+        <property name="perIdentificacion" type="string">
+            <column name="PER_IDENTIFICACION" length="10" />
+        </property>
+        <property name="perFechaNacimiento" type="timestamp">
+            <column name="PER_FECHA_NACIMIENTO" length="19" />
+        </property>
+        <property name="perTelefono" type="string">
+            <column name="PER_TELEFONO" length="10" />
+        </property>
+        <property name="perCorreo" type="string">
+            <column name="PER_CORREO" length="128" />
+        </property>
+        <property name="perFoto" type="string">
+            <column name="PER_FOTO" length="256" />
+        </property>
+        <property name="perFechaCreacion" type="timestamp">
+            <column name="PER_FECHA_CREACION" length="19" />
+        </property>
+        <property name="perFechaMod" type="timestamp">
+            <column name="PER_FECHA_MOD" length="19" />
+        </property>
+        <property name="perEstatus" type="string">
+            <column name="PER_ESTATUS" length="3" />
+        </property>
+        <set name="usuarioAccesos" table="usuario_acceso" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ID_PERSONA" />
+            </key>
+            <one-to-many class="ec.edu.saltos.modelo.UsuarioAcceso" />
+        </set>
+    </class>
+</hibernate-mapping>
