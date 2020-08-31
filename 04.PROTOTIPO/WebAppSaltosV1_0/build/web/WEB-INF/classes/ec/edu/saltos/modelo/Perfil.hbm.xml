@@ -1,12 +1,12 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated 21-ago-2020 20:56:20 by Hibernate Tools 4.3.1 -->
+<!-- Generated 31-ago-2020 17:42:01 by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
     <class name="ec.edu.saltos.modelo.Perfil" table="perfil" catalog="db_saltos" optimistic-lock="version">
-        <id name="idPerfil" type="int">
+        <id name="idPerfil" type="java.lang.Integer">
             <column name="ID_PERFIL" />
-            <generator class="assigned" />
+            <generator class="identity" />
         </id>
         <property name="perfilNombre" type="string">
             <column name="PERFIL_NOMBRE" length="128" />

@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 31-ago-2020 17:42:01 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="ec.edu.saltos.modelo.FormacionParacaidista" table="formacion_paracaidista" catalog="db_saltos" optimistic-lock="version">
+        <id name="idForParacaidista" type="java.lang.Integer">
+            <column name="ID_FOR_PARACAIDISTA" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="cursosFormacion" class="ec.edu.saltos.modelo.CursosFormacion" fetch="select" lazy="false">
+            <column name="ID_CUR_FORMACION" />
+        </many-to-one>
+        <many-to-one name="paracaidista" class="ec.edu.saltos.modelo.Paracaidista" fetch="select" lazy="false">
+            <column name="ID_PARACAIDISTA" />
+        </many-to-one>
+        <property name="forParFechaCreacion" type="timestamp">
+            <column name="FOR_PAR_FECHA_CREACION" length="19" />
+        </property>
+    </class>
+</hibernate-mapping>

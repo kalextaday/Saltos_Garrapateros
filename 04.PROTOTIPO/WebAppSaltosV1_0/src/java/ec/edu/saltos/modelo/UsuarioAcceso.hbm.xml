@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated 21-ago-2020 20:56:20 by Hibernate Tools 4.3.1 -->
+<!-- Generated 31-ago-2020 17:42:01 by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
     <class name="ec.edu.saltos.modelo.UsuarioAcceso" table="usuario_acceso" catalog="db_saltos" optimistic-lock="version">
         <id name="idUsuarioAcceso" type="java.lang.Integer">
@@ -32,6 +32,12 @@
         <property name="usrAccesoFechaMod" type="timestamp">
             <column name="USR_ACCESO_FECHA_MOD" length="19" />
         </property>
+        <set name="vuelos" table="vuelo" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ID_USUARIO_PILOTO" />
+            </key>
+            <one-to-many class="ec.edu.saltos.modelo.Vuelo" />
+        </set>
         <set name="asignarPerfils" table="asignar_perfil" inverse="true" lazy="true" fetch="select">
             <key>
                 <column name="ID_USUARIO_ACCESO" />
@@ -43,6 +49,30 @@
                 <column name="ID_USUARIO_ACCESO" />
             </key>
             <one-to-many class="ec.edu.saltos.modelo.Bitacora" />
+        </set>
+        <set name="paracaidistas" table="paracaidista" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ID_USUARIO_ACCESO" />
+            </key>
+            <one-to-many class="ec.edu.saltos.modelo.Paracaidista" />
+        </set>
+        <set name="servicioAdicionals" table="servicio_adicional" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ID_USUARIO_RESPONSABLE" />
+            </key>
+            <one-to-many class="ec.edu.saltos.modelo.ServicioAdicional" />
+        </set>
+        <set name="cabeceraFacturasForIdUsuarioGeneradorFac" table="cabecera_factura" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ID_USUARIO_GENERADOR_FAC" />
+            </key>
+            <one-to-many class="ec.edu.saltos.modelo.CabeceraFactura" />
+        </set>
+        <set name="cabeceraFacturasForIdUsuarioCliente" table="cabecera_factura" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ID_USUARIO_CLIENTE" />
+            </key>
+            <one-to-many class="ec.edu.saltos.modelo.CabeceraFactura" />
         </set>
     </class>
 </hibernate-mapping>

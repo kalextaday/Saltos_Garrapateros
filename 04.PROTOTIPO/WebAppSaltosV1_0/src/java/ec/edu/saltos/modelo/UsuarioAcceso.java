@@ -1,5 +1,5 @@
 package ec.edu.saltos.modelo;
-// Generated 21-ago-2020 20:56:19 by Hibernate Tools 4.3.1
+// Generated 31-ago-2020 17:42:00 by Hibernate Tools 4.3.1
 
 
 import java.util.Date;
@@ -22,13 +22,18 @@ public class UsuarioAcceso  implements java.io.Serializable {
      private String usrAccesoEstatus;
      private Date usrAccesoFechaCreacion;
      private Date usrAccesoFechaMod;
+     private Set<Vuelo> vuelos = new HashSet<Vuelo>(0);
      private Set<AsignarPerfil> asignarPerfils = new HashSet<AsignarPerfil>(0);
      private Set<Bitacora> bitacoras = new HashSet<Bitacora>(0);
+     private Set<Paracaidista> paracaidistas = new HashSet<Paracaidista>(0);
+     private Set<ServicioAdicional> servicioAdicionals = new HashSet<ServicioAdicional>(0);
+     private Set<CabeceraFactura> cabeceraFacturasForIdUsuarioGeneradorFac = new HashSet<CabeceraFactura>(0);
+     private Set<CabeceraFactura> cabeceraFacturasForIdUsuarioCliente = new HashSet<CabeceraFactura>(0);
 
     public UsuarioAcceso() {
     }
 
-    public UsuarioAcceso(ConfigClave configClave, Persona persona, String usrAccesoNombre, String usrAccesoClave, Integer usrAccesoIntentosFallidos, String usrAccesoEstatus, Date usrAccesoFechaCreacion, Date usrAccesoFechaMod, Set<AsignarPerfil> asignarPerfils, Set<Bitacora> bitacoras) {
+    public UsuarioAcceso(ConfigClave configClave, Persona persona, String usrAccesoNombre, String usrAccesoClave, Integer usrAccesoIntentosFallidos, String usrAccesoEstatus, Date usrAccesoFechaCreacion, Date usrAccesoFechaMod, Set<Vuelo> vuelos, Set<AsignarPerfil> asignarPerfils, Set<Bitacora> bitacoras, Set<Paracaidista> paracaidistas, Set<ServicioAdicional> servicioAdicionals, Set<CabeceraFactura> cabeceraFacturasForIdUsuarioGeneradorFac, Set<CabeceraFactura> cabeceraFacturasForIdUsuarioCliente) {
        this.configClave = configClave;
        this.persona = persona;
        this.usrAccesoNombre = usrAccesoNombre;
@@ -37,8 +42,13 @@ public class UsuarioAcceso  implements java.io.Serializable {
        this.usrAccesoEstatus = usrAccesoEstatus;
        this.usrAccesoFechaCreacion = usrAccesoFechaCreacion;
        this.usrAccesoFechaMod = usrAccesoFechaMod;
+       this.vuelos = vuelos;
        this.asignarPerfils = asignarPerfils;
        this.bitacoras = bitacoras;
+       this.paracaidistas = paracaidistas;
+       this.servicioAdicionals = servicioAdicionals;
+       this.cabeceraFacturasForIdUsuarioGeneradorFac = cabeceraFacturasForIdUsuarioGeneradorFac;
+       this.cabeceraFacturasForIdUsuarioCliente = cabeceraFacturasForIdUsuarioCliente;
     }
    
     public Integer getIdUsuarioAcceso() {
@@ -104,6 +114,13 @@ public class UsuarioAcceso  implements java.io.Serializable {
     public void setUsrAccesoFechaMod(Date usrAccesoFechaMod) {
         this.usrAccesoFechaMod = usrAccesoFechaMod;
     }
+    public Set<Vuelo> getVuelos() {
+        return this.vuelos;
+    }
+    
+    public void setVuelos(Set<Vuelo> vuelos) {
+        this.vuelos = vuelos;
+    }
     public Set<AsignarPerfil> getAsignarPerfils() {
         return this.asignarPerfils;
     }
@@ -118,11 +135,39 @@ public class UsuarioAcceso  implements java.io.Serializable {
     public void setBitacoras(Set<Bitacora> bitacoras) {
         this.bitacoras = bitacoras;
     }
+    public Set<Paracaidista> getParacaidistas() {
+        return this.paracaidistas;
+    }
+    
+    public void setParacaidistas(Set<Paracaidista> paracaidistas) {
+        this.paracaidistas = paracaidistas;
+    }
+    public Set<ServicioAdicional> getServicioAdicionals() {
+        return this.servicioAdicionals;
+    }
+    
+    public void setServicioAdicionals(Set<ServicioAdicional> servicioAdicionals) {
+        this.servicioAdicionals = servicioAdicionals;
+    }
+    public Set<CabeceraFactura> getCabeceraFacturasForIdUsuarioGeneradorFac() {
+        return this.cabeceraFacturasForIdUsuarioGeneradorFac;
+    }
+    
+    public void setCabeceraFacturasForIdUsuarioGeneradorFac(Set<CabeceraFactura> cabeceraFacturasForIdUsuarioGeneradorFac) {
+        this.cabeceraFacturasForIdUsuarioGeneradorFac = cabeceraFacturasForIdUsuarioGeneradorFac;
+    }
+    public Set<CabeceraFactura> getCabeceraFacturasForIdUsuarioCliente() {
+        return this.cabeceraFacturasForIdUsuarioCliente;
+    }
+    
+    public void setCabeceraFacturasForIdUsuarioCliente(Set<CabeceraFactura> cabeceraFacturasForIdUsuarioCliente) {
+        this.cabeceraFacturasForIdUsuarioCliente = cabeceraFacturasForIdUsuarioCliente;
+    }
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 89 * hash + Objects.hashCode(this.idUsuarioAcceso);
+        int hash = 5;
+        hash = 11 * hash + Objects.hashCode(this.idUsuarioAcceso);
         return hash;
     }
 

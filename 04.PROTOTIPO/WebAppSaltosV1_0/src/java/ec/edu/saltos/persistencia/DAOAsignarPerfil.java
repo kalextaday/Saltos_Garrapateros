@@ -8,6 +8,7 @@ package ec.edu.saltos.persistencia;
 
 import ec.edu.saltos.config.HibernateUtil;
 import ec.edu.saltos.modelo.AsignarPerfil;
+import ec.edu.saltos.modelo.UsuarioAcceso;
 import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -70,6 +71,49 @@ public class DAOAsignarPerfil extends DAOGenerico<AsignarPerfil, Integer>{
             sesion = HibernateUtil.getSessionFactory().openSession();
             t = sesion.beginTransaction();
             String hql = "FROM AsignarPerfil where id_usuario_acceso="+_idUsuarioAcceso;
+            a = sesion.createQuery(hql).list();
+            t.commit();
+            
+        }catch(Exception e) {
+            t.rollback();
+        }finally{
+            if (sesion != null) {
+                sesion.close();
+            }
+        }
+        return a;
+    }
+    
+    public List<UsuarioAcceso> obtenerUsuariosSinEstePerfil(int _idPerfil) {
+        List<UsuarioAcceso> a = null;
+        Session sesion = null;
+        Transaction t=null;
+        try {
+            sesion = HibernateUtil.getSessionFactory().openSession();
+            t = sesion.beginTransaction();
+            String hql = "Select distinct (ua) FROM AsignarPerfil ap,UsuarioAcceso ua "
+                    + "where ap.perfil.idPerfil not in ("+_idPerfil+")";
+            a = sesion.createQuery(hql).list();
+            t.commit();
+            
+        }catch(Exception e) {
+            t.rollback();
+        }finally{
+            if (sesion != null) {
+                sesion.close();
+            }
+        }
+        return a;
+    }
+    
+    public List<AsignarPerfil> obtenerAsignacionesPorPerfil(int _idPerfil) {
+        List<AsignarPerfil> a = null;
+        Session sesion = null;
+        Transaction t=null;
+        try {
+            sesion = HibernateUtil.getSessionFactory().openSession();
+            t = sesion.beginTransaction();
+            String hql = "FROM AsignarPerfil where id_perfil="+_idPerfil;
             a = sesion.createQuery(hql).list();
             t.commit();
             

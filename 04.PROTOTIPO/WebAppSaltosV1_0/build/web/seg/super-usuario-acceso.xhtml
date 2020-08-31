@@ -92,7 +92,7 @@
                                 </p:column>
 
                                 <f:facet name="header" class="iconos-derecha">
-                                    <p:commandButton id="createButton" value="Crear" class="espacio-btn"
+                                    <p:commandButton id="createButton" value="Crear" class="espacio-btn" rendered="false"
                                                      icon="ui-icon-plus" actionListener="#{beanUsuarioAcceso.preparaCrear}"
                                                      update=":CreateForm"/>
 
@@ -214,17 +214,17 @@
         </p:dialog>
         
         
-            <p:dialog id="d-archivar" header="Archivar Persona" widgetVar="wv-archivar" modal="true" 
-                      showEffect="slide" width="450" hideEffect="slide">
-                <h:form id="ArchivarForm">
-                    <div class="ui-g-12 textAlCenter">
-                        <h:outputText value="Está seguro de archivar a: #{beanUsuarioAcceso.usuarioSeleccionado.usrAccesoNombre}" />
-                    </div>
-                    <div class="ui-g-12 textAlCenter">
-                        <p:commandButton actionListener="#{beanUsuarioAcceso.archivarUsuarioAcceso}" value="Archivar ahora!" update=":form:dt-entidad :pg-notificacion" />
-                    </div>
-                </h:form>
-            </p:dialog>
+        <p:dialog id="d-archivar" header="Archivar Persona" widgetVar="wv-archivar" modal="true" 
+                  showEffect="slide" width="450" hideEffect="slide">
+            <h:form id="ArchivarForm">
+                <div class="ui-g-12 textAlCenter">
+                    <h:outputText value="Está seguro de archivar a: #{beanUsuarioAcceso.usuarioSeleccionado.usrAccesoNombre}" />
+                </div>
+                <div class="ui-g-12 textAlCenter">
+                    <p:commandButton actionListener="#{beanUsuarioAcceso.archivarUsuarioAcceso}" value="Archivar ahora!" update=":form:dt-entidad :pg-notificacion" />
+                </div>
+            </h:form>
+        </p:dialog>
         
         
         <p:dialog id="d-eliminar" header="Eliminar Persona" widgetVar="wv-eliminar" modal="true" 

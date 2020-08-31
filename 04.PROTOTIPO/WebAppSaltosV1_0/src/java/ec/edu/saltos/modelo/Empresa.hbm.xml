@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 31-ago-2020 17:42:01 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="ec.edu.saltos.modelo.Empresa" table="empresa" catalog="db_saltos" optimistic-lock="version">
+        <id name="idEmpresa" type="int">
+            <column name="ID_EMPRESA" />
+            <generator class="assigned" />
+        </id>
+        <property name="empRazonSocial" type="string">
+            <column name="EMP_RAZON_SOCIAL" length="64" />
+        </property>
+        <property name="empRuc" type="string">
+            <column name="EMP_RUC" length="13" />
+        </property>
+        <property name="empDireccion" type="string">
+            <column name="EMP_DIRECCION" length="256" />
+        </property>
+        <property name="empTelefono" type="string">
+            <column name="EMP_TELEFONO" length="10" />
+        </property>
+        <property name="empCorreo" type="string">
+            <column name="EMP_CORREO" length="64" />
+        </property>
+        <property name="numResoContribuyenteSri" type="java.lang.Integer">
+            <column name="NUM_RESO_CONTRIBUYENTE_SRI" />
+        </property>
+        <property name="numAutorizacionSri" type="string">
+            <column name="NUM_AUTORIZACION_SRI" length="138" />
+        </property>
+        <property name="obligadoLlevarContabilidad" type="java.lang.Boolean">
+            <column name="OBLIGADO_LLEVAR_CONTABILIDAD" />
+        </property>
+        <property name="empFechaCreacion" type="timestamp">
+            <column name="EMP_FECHA_CREACION" length="19" />
+        </property>
+        <property name="empFechaMod" type="timestamp">
+            <column name="EMP_FECHA_MOD" length="19" />
+        </property>
+        <set name="cabeceraFacturas" table="cabecera_factura" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ID_EMPRESA" />
+            </key>
+            <one-to-many class="ec.edu.saltos.modelo.CabeceraFactura" />
+        </set>
+    </class>
+</hibernate-mapping>

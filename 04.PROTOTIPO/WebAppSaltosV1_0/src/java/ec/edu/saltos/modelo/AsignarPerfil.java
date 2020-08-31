@@ -1,5 +1,5 @@
 package ec.edu.saltos.modelo;
-// Generated 21-ago-2020 20:56:19 by Hibernate Tools 4.3.1
+// Generated 31-ago-2020 17:42:00 by Hibernate Tools 4.3.1
 
 
 import java.util.Date;
@@ -57,7 +57,7 @@ public class AsignarPerfil  implements java.io.Serializable {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 47 * hash + Objects.hashCode(this.idAsignarPerfil);
+        hash = 83 * hash + Objects.hashCode(this.idAsignarPerfil);
         return hash;
     }
 

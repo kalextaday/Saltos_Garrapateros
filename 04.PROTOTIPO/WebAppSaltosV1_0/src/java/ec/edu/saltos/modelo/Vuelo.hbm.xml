@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 31-ago-2020 17:42:01 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="ec.edu.saltos.modelo.Vuelo" table="vuelo" catalog="db_saltos" optimistic-lock="version">
+        <id name="idVuelo" type="java.lang.Integer">
+            <column name="ID_VUELO" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="aeronave" class="ec.edu.saltos.modelo.Aeronave" fetch="select" lazy="false">
+            <column name="ID_AERONAVE" />
+        </many-to-one>
+        <many-to-one name="usuarioAcceso" class="ec.edu.saltos.modelo.UsuarioAcceso" fetch="select" lazy="false">
+            <column name="ID_USUARIO_PILOTO" />
+        </many-to-one>
+        <property name="vueHoraSalida" type="timestamp">
+            <column name="VUE_HORA_SALIDA" length="19" />
+        </property>
+        <property name="vueHoraLlegada" type="timestamp">
+            <column name="VUE_HORA_LLEGADA" length="19" />
+        </property>
+        <property name="vuePersonasABordo" type="java.lang.Integer">
+            <column name="VUE_PERSONAS_A_BORDO" />
+        </property>
+        <set name="pedidos" table="pedido" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ID_VUELO" />
+            </key>
+            <one-to-many class="ec.edu.saltos.modelo.Pedido" />
+        </set>
+    </class>
+</hibernate-mapping>

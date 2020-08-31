@@ -41,9 +41,10 @@
                                 <p:selectOneMenu id="som-perfil" value="#{beanAsignarPermisos.perfilSeleccionado}"
                                                  converter="perfilConverter" immediate="true"
                                                  autoWidth="false" required="true" effect="fade">
+                                    <f:selectItem noSelectionOption="true" itemLabel="Seleccionar Perfil ..." itemValue="#{null}" />
                                     <f:selectItems value="#{beanAsignarPermisos.perfiles}" var="perfil"
                                                    itemLabel="#{perfil.perfilNombre}" itemValue="#{perfil}"/>
-                                    <p:ajax event="itemSelect" listener="#{beanAsignarPermisos.actualizarPermisosPerfil}" update="som-perfil :f-arbol-recurso"/>
+                                    <p:ajax event="itemSelect" listener="#{beanAsignarPermisos.actualizarPermisosPerfil}" update="som-perfil :f-arbol-recurso :f-asignar"/>
                                 </p:selectOneMenu>
                             </div>
                         </div>
@@ -68,14 +69,15 @@
                             <div class="ui-g-12">
                                 <p:commandButton actionListener="#{beanAsignarPermisos.preparaRetirarRecursosPerfil()}"
                                                  icon="fa fa-trash-o" styleClass="red-light-btn"
-                                                 disabled="#{beanAsignarPermisos.perfilSeleccionado.perfilNombre eq 'SUPER ADMINISTRADOR'}"
+                                                 disabled="#{beanAsignarPermisos.perfilSeleccionado.perfilNombre eq 'SUPER ADMINISTRADOR' 
+                                                             or empty beanAsignarPermisos.perfilSeleccionado 
+                                                            or empty beanAsignarPermisos.idsPermisosPerfil}"
                                                  value="Retirar Todos los Permisos" update="pd-eliminar-entidad" />
                             </div>
 
                         </div>
                     </p:panel>
                 </h:form>
-
             </div>
 
             <div class="ui-g-12 ui-lg-12">
@@ -112,37 +114,41 @@
         </div>
 
         <p:dialog id="pd-eliminar-entidad" header="Retirar TODOS los Permisos" widgetVar="wv-retirarPermisos" modal="true" showEffect="fade" hideEffect="fade">
-            <div class="ui-g-12 textAlCenter">
-                <h:outputText value="Está seguro de RETIRAR TODOS LOS PERMISOS al PERFIL: #{beanAsignarPermisos.perfilSeleccionado.perfilNombre}" />
-            </div>
-            <div class="ui-g-12 textAlCenter">
-                <p:commandButton actionListener="#{beanAsignarPermisos.retirarRecursosPerfil()}" value="RETIRAR TODOS LOS PERMISOS" update=":f-mensajes:messages" />
-            </div>
+            <h:form id="f-dlg-retirar">
+                <div class="ui-g-12 textAlCenter">
+                    <h:outputText value="Está seguro de RETIRAR TODOS LOS PERMISOS al PERFIL: #{beanAsignarPermisos.perfilSeleccionado.perfilNombre}" />
+                </div>
+                <div class="ui-g-12 textAlCenter">
+                    <p:commandButton actionListener="#{beanAsignarPermisos.retirarRecursosPerfil()}" value="RETIRAR TODOS LOS PERMISOS" update=":f-mensajes:messages" />
+                </div>
+            </h:form>
         </p:dialog>
 
         <p:dialog id="pd-permisos-asignados" header="Asignación de Recursos al Perfil" widgetVar="wv-permisosAsignados" modal="true"
                   showEffect="slide" width="450" hideEffect="slide">
-            <div class="ui-g-12 ui-lg-12 ui-fluid contact-form">
-                <p:dataTable var="unPermiso" id="dt-permisosx" reflow="true"
-                             value="#{beanAsignarPermisos.nombreRx}" scrollRows="15" scrollable="true"
-                             selectionMode="single" rowKey="#{unPermiso}"
-                             emptyMessage="No hay recursos asignados"
-                             liveScroll="true" scrollHeight="300">
+            <h:form id="f-dlg-asignar">
+                <div class="ui-g-12 ui-lg-12 ui-fluid contact-form">
+                    <p:dataTable var="unPermiso" id="dt-permisosx" reflow="true"
+                                 value="#{beanAsignarPermisos.nombreRx}" scrollRows="15" scrollable="true"
+                                 selectionMode="single" rowKey="#{unPermiso}"
+                                 emptyMessage="No hay recursos asignados"
+                                 liveScroll="true" scrollHeight="300">
 
-                    <p:column headerText="Recursos Asignados" >
-                        <h:outputText value="#{unPermiso}" />
-                    </p:column>
+                        <p:column headerText="Recursos Asignados" >
+                            <h:outputText value="#{unPermiso}" />
+                        </p:column>
 
-                </p:dataTable>
-                <div class="ui-g">
-                    <div class="ui-g-12">
-                        <p:commandButton actionListener="#{beanAsignarPermisos.cerrarRecursosAsignados()}"
-                                         icon="fa fa fw fa-check-circle" styleClass="white-btn espacio-btn"
-                                         value="Entendido" />
+                    </p:dataTable>
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <p:commandButton actionListener="#{beanAsignarPermisos.cerrarRecursosAsignados()}"
+                                             icon="fa fa fw fa-check-circle" styleClass="white-btn espacio-btn"
+                                             value="Entendido" />
+                        </div>
                     </div>
-                </div>
 
-            </div>
+                </div>
+            </h:form>
         </p:dialog>
 
 

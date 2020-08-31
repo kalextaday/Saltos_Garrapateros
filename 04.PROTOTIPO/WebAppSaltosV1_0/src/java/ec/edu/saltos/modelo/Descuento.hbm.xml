@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 31-ago-2020 17:42:01 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="ec.edu.saltos.modelo.Descuento" table="descuento" catalog="db_saltos" optimistic-lock="version">
+        <id name="idDescuento" type="int">
+            <column name="ID_DESCUENTO" />
+            <generator class="assigned" />
+        </id>
+        <property name="desNombre" type="string">
+            <column name="DES_NOMBRE" length="100" />
+        </property>
+        <property name="desDescripcion" type="string">
+            <column name="DES_DESCRIPCION" length="250" />
+        </property>
+        <property name="desValor" type="big_decimal">
+            <column name="DES_VALOR" precision="6" />
+        </property>
+        <property name="desFechaCreacion" type="timestamp">
+            <column name="DES_FECHA_CREACION" length="19" />
+        </property>
+        <property name="desFechaMod" type="timestamp">
+            <column name="DES_FECHA_MOD" length="19" />
+        </property>
+        <set name="pedidos" table="pedido" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ID_DESCUENTO" />
+            </key>
+            <one-to-many class="ec.edu.saltos.modelo.Pedido" />
+        </set>
+    </class>
+</hibernate-mapping>

@@ -136,7 +136,7 @@ public class BeanPersona extends FiltroAcceso implements Serializable{
                 
                 LOG.log(Level.INFO, "Persona Eliminada Correctamente");
             }else{
-                PrimeUtiles.mostrarMensaje(FacesMessage.SEVERITY_ERROR, "Eror: ", "Hubo un error al eliminar");
+                PrimeUtiles.mostrarMensaje(FacesMessage.SEVERITY_ERROR, "Error: ", "Hubo un error al eliminar");
                 
                 LOG.log(Level.INFO, "No se pudo eliminar la persona");
             }

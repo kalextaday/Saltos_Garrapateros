@@ -27,26 +27,7 @@
 
         <div class="ui-g dashboard">
 
-            <p:growl id="pg-notificacion" showDetail="true" life="3000" />
-            <div class="ui-g-12 ui-lg-4 ui-fluid contact-form">
-                <h:form id="f-asignar-usuario">
-                    <p:panel header="Asignar perfil a un usuario" style="min-height:100px">
-                        <div class="ui-g">
-                            <div class="ui-g-12">
-                                <ul>
-                                    <li>Primero seleccionar la Entidad </li>
-                                    <li>Seleccionar el perfil para asignar</li>
-                                    <li>Seleccionar un usuario de la Entidad </li>
-                                    <li>Presionar <b>Asignar Perfil</b></li>
-                                </ul>
-
-                            </div>
-                        </div>
-                    </p:panel>
-
-
-                </h:form>
-            </div>
+            <p:growl id="pg-notificacion" showDetail="true" life="3000" escape="false"/>
             
             <div class="ui-g-12 ui-lg-4 ui-fluid contact-form">
                 <h:form id="f-perfiles">
@@ -56,10 +37,53 @@
                                 <p:selectOneMenu id="som-perfil" value="#{beanAsignarPerfiles.perfilSeleccionado}"
                                                  converter="perfilConverter" immediate="true"
                                                  autoWidth="false" required="true" effect="fade">
+                                    <f:selectItem noSelectionOption="true" itemLabel="Seleccionar Perfil ..." itemValue="#{null}" />
                                     <f:selectItems value="#{beanAsignarPerfiles.listaPerfiles}" var="perfil"
                                                    itemLabel="#{perfil.perfilNombre}" itemValue="#{perfil}"/>
-                                    <p:ajax event="itemSelect" listener="#{beanAsignarPerfiles.actualizarPermisosPerfil}" update="som-perfil :form-asignar"/>
+                                    <p:ajax event="itemSelect" listener="#{beanAsignarPerfiles.actualizarPermisosPerfil}" update="som-perfil :form-asignar:PojoPickList" />
                                 </p:selectOneMenu>
+                            </div>
+                        </div>
+                    </p:panel>
+
+
+                </h:form>
+            </div>
+            
+            <div class="ui-g-12 ui-lg-4 ui-fluid contact-form">
+                <h:form id="f-asignar">
+                    <p:panel header="Asignar Perfiles" style="min-height:100px">
+                        <div class="ui-g">
+                            <div class="ui-g-12">
+                                <p:commandButton actionListener="#{beanAsignarPerfiles.preparaAsignarPerfil()}"
+                                                 icon="fa fa fw fa-check-circle" update="d-asignar-perfil-usuario"
+                                                 disabled="#{empty beanAsignarPerfiles.usuariosGlobal.target}"
+                                                 value="Asignar Perfil" />
+                            </div>
+                            <div class="ui-g-12">
+                                <p:commandButton actionListener="#{beanAsignarPerfiles.preparaRetirarPerfil()}"
+                                                 icon="fa fa-trash-o" styleClass="red-light-btn"
+                                                 disabled="#{empty beanAsignarPerfiles.usuariosGlobal.target}"
+                                                 value="Retirar Perfil" update="pd-eliminar-entidad" />
+                            </div>
+
+                        </div>
+                    </p:panel>
+                </h:form>
+            </div>
+            
+            <div class="ui-g-12 ui-lg-4 ui-fluid contact-form">
+                <h:form id="f-asignar-usuario">
+                    <p:panel header="Asignar o retirar perfil a un o varios usuarios" style="min-height:100px">
+                        <div class="ui-g">
+                            <div class="ui-g-12">
+                                <ul>
+                                    <li>Primero Seleccionar el <b>perfil</b> para asignar</li>
+                                    <li><b>Seleccionar</b> uno o varios usuarios de la parte izquierda
+                                        y transferirlos a la parte derecha</li>
+                                    <li>Presionar <b>Asignar Perfil</b> o <b>Retirar Perfil</b></li>
+                                </ul>
+
                             </div>
                         </div>
                     </p:panel>
@@ -74,27 +98,26 @@
                         <h:form id="form-asignar">
                             <p:pickList id="PojoPickList" value="#{beanAsignarPerfiles.usuariosGlobal}" var="usuario" effect="bounce"
                                         itemValue="#{usuario}" itemLabel="#{usuario.usrAccesoNombre}" showSourceControls="true" showTargetControls="true" showCheckbox="true"
-                                        showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains" converter="usuarioConverter" responsive="true">
+                                        showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains" converter="usuarioConverter" responsive="true" 
+                                        addLabel="Añadir" addAllLabel="Añadir Todos" removeLabel="Remover" removeAllLabel="Remover Todos">
 
                                 <f:facet name="sourceCaption">Usuarios</f:facet>
                                 <f:facet name="targetCaption">Perfil: #{beanAsignarPerfiles.perfilSeleccionado.perfilNombre}</f:facet>
 
-                                <p:ajax event="transfer" listener="#{beanAsignarPerfiles.onTransfer}" update="pg-notificacion" />
+                                <p:ajax event="transfer" listener="#{beanAsignarPerfiles.onTransfer}" update=":f-asignar pg-notificacion" />
                                 <p:ajax event="select" listener="#{beanAsignarPerfiles.onSelect}" update="pg-notificacion"/>
                                 <p:ajax event="unselect" listener="#{beanAsignarPerfiles.onUnselect}" update="pg-notificacion"/>
                                 <p:ajax event="reorder" listener="#{beanAsignarPerfiles.onReorder}" update="pg-notificacion"/>
 
                                 <p:column style="width:15%">
                                     <!--<h:graphicImage name="showcase/images/themeswitcher/themeswitcher-{usuario.idUsuarioAcceso}.png" alt="{usuario.usrAccesoNombre}" styleClass="ui-theme"/>-->
-                                    <p:graphicImage name="images/login/secure.png" library="paradise-layout" />
+                                    <p:graphicImage name="images/avatar.png" library="paradise-layout" style="width: 85%"/>
                                 </p:column>
 
                                 <p:column style="width:85%;">
                                     <h:outputText value="#{usuario.usrAccesoNombre}" />
                                 </p:column>
                             </p:pickList>
-
-                            <p:commandButton id="pojoSubmit" value="Asignar" update=":f-asignacion:panelUsrPerfil" actionListener="#{beanAsignarPerfiles.preparaAsignarPerfil}" style="margin-top:5px" />
                         </h:form>
                     </p:panel>
                 </div>
@@ -119,6 +142,36 @@
             </h:form>
         </p:dialog>
 
+        <p:dialog id="d-asignar-perfil-usuario" header="Asignar Perfil" widgetVar="wv-asignarPerfil" modal="true" 
+                  showEffect="slide" width="450" hideEffect="slide">
+            <h:form id="f-asignar-perfil">
+                <div class="ui-g-6 textAlRight">
+                    <h2><h:outputText value="Asignar el Perfil: "/></h2>
+                    <h3><h:outputText value="A los usuarios: "/></h3>
+                </div>
+                <div class="ui-g-6 TexAlLeft">
+                    <h2><h:outputText value="#{beanAsignarPerfiles.perfilSeleccionado.perfilNombre}"/></h2>
+                    <h3><h:outputText value="#{beanAsignarPerfiles.builder}" escape="false"/></h3>
+                </div>
+
+                <div class="ui-g-12 textAlCenter">
+                    <p:commandButton actionListener="#{beanAsignarPerfiles.asignarPerfil()}"
+                                     icon="fa fa fw fa-check-circle" value="Asignar Perfil" update=":form-asignar:PojoPickList :f-asignar pg-notificacion"/>
+                </div>
+            </h:form>
+        </p:dialog>
+        
+        <p:dialog id="pd-eliminar-entidad" header="Retirar perfil de los usuarios" widgetVar="wv-retirarPerfil" modal="true" showEffect="fade" hideEffect="fade">
+            <h:form id="f-dlg-retirar">
+                <div class="ui-g-12 textAlCenter">
+                    <h:outputText value="Está seguro de RETIRAR EL PERFIL A LOS USUARIOS: #{beanAsignarPerfiles.builder}" escape="false"/>
+                </div>
+                <div class="ui-g-12 textAlCenter">
+                    <p:commandButton  value="RETIRAR EL PERFIL" actionListener="#{beanAsignarPerfiles.retirarPerfil()}" 
+                                      icon="fa fa-trash-o" update=":form-asignar:PojoPickList :f-asignar pg-notificacion" />
+                </div>
+            </h:form>
+        </p:dialog>
 
     </ui:define>
 

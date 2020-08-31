@@ -1,0 +1,139 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+
+
+    <ui:define name="title">Administración de Usuarios por Perfil</ui:define>
+
+    <ui:define name="content">
+
+        <div class="ui-g ui-fluid">
+            <div class="ui-g-8 titulo-app">
+                <span>
+                    <i class="fa fa-star icono-tamano"></i> <h:outputText value="VER USUARIOS POR PERFIL" />
+                </span>
+
+            </div>
+            <div class="ui-g-4" style="text-align: right !important" >
+                <p:clock pattern="HH:mm:ss dd-MM-yyyy" />
+            </div>
+        </div>
+
+        <div class="ui-g dashboard">
+
+            <p:growl id="pg-notificacion" showDetail="true" life="3000" />
+            
+            <div class="ui-g-12 ui-lg-4 ui-fluid contact-form">
+                <h:form id="f-perfiles">
+                    <p:panel header="Perfiles" style="min-height:100px">
+                        <div class="ui-g">
+                            <div class="ui-g-12">
+                                <p:selectOneMenu id="som-perfil" value="#{beanVerUsuariosPorPerfil.perfilSeleccionado}"
+                                                 converter="perfilConverter" immediate="true"
+                                                 autoWidth="false" required="true" effect="fade">
+                                    <f:selectItem noSelectionOption="true" itemLabel="Seleccionar Perfil ..." itemValue="#{null}" />
+                                    <f:selectItems value="#{beanVerUsuariosPorPerfil.listaPerfiles}" var="perfil"
+                                                   itemLabel="#{perfil.perfilNombre}" itemValue="#{perfil}"/>
+                                    <p:ajax event="itemSelect" listener="#{beanVerUsuariosPorPerfil.actualizarPermisosPerfil}" update="som-perfil :form:dt-entidad" />
+                                </p:selectOneMenu>
+                            </div>
+                        </div>
+                    </p:panel>
+
+
+                </h:form>
+            </div>
+
+            <div class="ui-g-12 ui-lg-12">
+                <div class="border-material">
+                    <p:panel header="Usuarios Por Perfil" style="min-height:100px">
+                        <h:form id="form">
+                            <p:dataTable var="usuarioPerfil" id="dt-entidad" reflow="true"
+                                         value="#{beanVerUsuariosPorPerfil.listaAsignacionesPerfil}" scrollRows="20" scrollable="true"
+                                         selectionMode="single" selection="#{beanVerUsuariosPorPerfil.usuarioPerfilSeleccionado}" rowKey="#{usuarioPerfil.idAsignarPerfil}"
+                                         liveScroll="true" scrollHeight="375">
+
+                                <p:ajax event="rowSelect" listener="#{beanVerUsuariosPorPerfil.onRowSelect}" update=" " />
+                                <p:ajax event="rowUnselect" listener="#{beanVerUsuariosPorPerfil.onRowUnselect}" update=" " />
+
+                                <p:column headerText="Nombre de Usuario:" sortBy="#{usuarioPerfil.usuarioAcceso.usrAccesoNombre}" filterBy="#{usuarioPerfil.usuarioAcceso.usrAccesoNombre}"  filterMatchMode="contains">
+                                    <h:outputText value="#{usuarioPerfil.usuarioAcceso.usrAccesoNombre}" />
+                                </p:column>
+                                
+                                <p:column headerText="Nombre de la Persona" sortBy="#{usuarioPerfil.usuarioAcceso.persona.perNombres}">
+                                    <h:outputText value="#{usuarioPerfil.usuarioAcceso.persona.perNombres} #{usuarioPerfil.usuarioAcceso.persona.perApellidos}" />
+                                </p:column>
+
+                                <p:column headerText="Correo" sortBy="#{usuarioPerfil.usuarioAcceso.persona.perCorreo}">
+                                    <h:outputText value="#{usuarioPerfil.usuarioAcceso.persona.perCorreo}" />
+                                </p:column>
+                                
+                                <p:column headerText="Intentos Fallidos de Acceso" sortBy="#{usuarioPerfil.usuarioAcceso.usrAccesoIntentosFallidos}">
+                                    <h:outputText value="#{usuarioPerfil.usuarioAcceso.usrAccesoIntentosFallidos}" />
+                                </p:column>
+                                
+                                <p:column headerText="Fecha de Creacion de Usuario" sortBy="#{usuarioPerfil.usuarioAcceso.usrAccesoFechaCreacion}">
+                                    <h:outputText value="#{estiloUtiles.toValueFechaFormato(usuarioPerfil.usuarioAcceso.usrAccesoFechaCreacion, beanVerUsuariosPorPerfil.formatoFecha)}" />
+                                </p:column>
+                                
+                                <p:column headerText="Fecha de Asignacion de Perfil" sortBy="#{usuarioPerfil.asiPerFechaCreacion}">
+                                    <h:outputText value="#{estiloUtiles.toValueFechaFormato(usuarioPerfil.asiPerFechaCreacion, beanVerUsuariosPorPerfil.formatoFecha)}" />
+                                </p:column>
+                                
+                                <p:column headerText="Foto" style="width:32px;text-align: center">
+                                    <p:commandButton update=":FotoForm" oncomplete="PF('wv-mostrar-foto').show()" icon="fa fa-image" title="View">
+                                        <f:setPropertyActionListener value="#{usuarioPerfil}" target="#{beanVerUsuariosPorPerfil.usuarioPerfilSeleccionado}" />
+                                    </p:commandButton>
+                                </p:column>
+                                
+                                <p:column headerText="Perfil" sortBy="#{usuarioPerfil.perfil.perfilNombre}">
+                                    <h:outputText value="#{usuarioPerfil.perfil.perfilNombre}" />
+                                </p:column>
+
+                                <p:column headerText="Estatus de Usuario" sortBy="#{usuarioPerfil.usuarioAcceso.usrAccesoEstatus}">
+                                    <h:outputText   class="ancho-columna #{estiloUtiles.toStyleUsuario(usuarioPerfil.usuarioAcceso.usrAccesoEstatus )}"
+                                                    value="#{estiloUtiles.toValueUsuario(usuarioPerfil.usuarioAcceso.usrAccesoEstatus)}" />
+                                </p:column>
+
+                                <f:facet name="header" class="iconos-derecha">
+                                    
+                                </f:facet>
+                            </p:dataTable>
+                        </h:form>
+                    </p:panel>
+                </div>
+            </div>
+        </div>
+
+        <!--dialogs-->
+        
+        <p:dialog header="Foto" widgetVar="wv-mostrar-foto" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+            <h:form id="FotoForm" style="text-align:center;">
+                <p:panelGrid  columns="2" rendered="#{not empty beanVerUsuariosPorPerfil.usuarioPerfilSeleccionado}" columnClasses="label,value">
+                    <f:facet name="header">
+                        <!--<p:graphicImage name="demo/images/car/{beanVerUsuariosPorPerfil.personaSeleccionada.brand}-big.gif"/> -->
+                        <p:graphicImage name="images/login/secure.png" library="paradise-layout" />
+                    </f:facet>
+
+                    <h:outputText value="Id de Usuario:" />
+                    <h:outputText value="#{beanVerUsuariosPorPerfil.usuarioPerfilSeleccionado.usuarioAcceso.idUsuarioAcceso}" />
+
+                    <h:outputText value="Cedula de Identidad:" />
+                    <h:outputText value="#{beanVerUsuariosPorPerfil.usuarioPerfilSeleccionado.usuarioAcceso.persona.perIdentificacion}" />
+
+                    <h:outputText value="Telefono:" />
+                    <h:outputText value="#{beanVerUsuariosPorPerfil.usuarioPerfilSeleccionado.usuarioAcceso.persona.perTelefono}" />
+                </p:panelGrid>
+            </h:form>
+        </p:dialog>
+
+
+    </ui:define>
+
+</ui:composition>

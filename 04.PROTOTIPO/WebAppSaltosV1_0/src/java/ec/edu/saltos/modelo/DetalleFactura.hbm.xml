@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 31-ago-2020 17:42:01 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="ec.edu.saltos.modelo.DetalleFactura" table="detalle_factura" catalog="db_saltos" optimistic-lock="version">
+        <id name="idDetVuelo" type="java.lang.Integer">
+            <column name="ID_DET_VUELO" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="cabeceraFactura" class="ec.edu.saltos.modelo.CabeceraFactura" fetch="select" lazy="false">
+            <column name="ID_FACTURA" />
+        </many-to-one>
+        <many-to-one name="pedido" class="ec.edu.saltos.modelo.Pedido" fetch="select" lazy="false">
+            <column name="ID_PEDIDO" />
+        </many-to-one>
+    </class>
+</hibernate-mapping>

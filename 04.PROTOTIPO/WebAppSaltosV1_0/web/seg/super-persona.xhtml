@@ -72,16 +72,16 @@
                                     <h:outputText value="#{persona.perApellidos}" />
                                 </p:column>
 
-                                <p:column headerText="Correo" sortBy="#{persona.perDireccion}">
+                                <p:column headerText="Direccion" sortBy="#{persona.perDireccion}">
                                     <h:outputText value="#{persona.perDireccion}" />
                                 </p:column>
                                 
-                                <p:column headerText="Direccion" sortBy="#{persona.perCorreo}">
+                                <p:column headerText="Correo" sortBy="#{persona.perCorreo}">
                                     <h:outputText value="#{persona.perCorreo}" />
                                 </p:column>
                                 
                                 <p:column headerText="Fecha de Nacimiento" sortBy="#{persona.perFechaNacimiento}">
-                                    <h:outputText value="#{persona.perFechaNacimiento}" />
+                                    <h:outputText value="#{estiloUtiles.toValueFechaFormato(persona.perFechaNacimiento, beanPersona.formatoFecha)}" />
                                 </p:column>
                                 
                                 <p:column headerText="Telefono" sortBy="#{persona.perTelefono}">
@@ -100,26 +100,26 @@
                                 </p:column>
 
                                 <f:facet name="header" class="iconos-derecha">
-                                    <p:commandButton id="createButton" value="Crear" class="espacio-btn"
+                                    <p:commandButton id="createButton" value="Crear" class="espacio-btn" rendered="false"
                                                      icon="ui-icon-plus" actionListener="#{beanPersona.preparaCrear}"
                                                      update=":CreateForm"/>
 
                                     <p:commandButton id="editButton" value="Editar"  class="espacio-btn"
                                                      icon="ui-icon-pencil"
                                                      actionListener="#{beanPersona.preparaActualizar}"
-                                                     disabled="#{empty beanPersona.personaSeleccionada or fn:startsWith(beanPersona.personaSeleccionada.perIdentificacion,'SAD') or (beanPersona.listaPersonas.size() eq 1)}"
+                                                     disabled="#{empty beanPersona.personaSeleccionada or fn:startsWith(beanPersona.personaSeleccionada.perEstatus,'SAD') or (beanPersona.listaPersonas.size() eq 1)}"
                                                      update=":EditForm"/>
 
                                     <p:commandButton id="asociarButton" styleClass="red-light-btn espacio-btn"
                                                      value="Archivar" icon="fa fa-trash-o"
                                                      actionListener="#{beanPersona.preparaArchivar}"
-                                                     disabled="#{empty beanPersona.personaSeleccionada or fn:startsWith(beanPersona.personaSeleccionada.perIdentificacion,'SAD') or (beanPersona.listaPersonas.size() eq 1)}"
+                                                     disabled="#{empty beanPersona.personaSeleccionada or fn:startsWith(beanPersona.personaSeleccionada.perEstatus,'SAD') or (beanPersona.listaPersonas.size() eq 1)}"
                                                      update=":ArchivarForm"/>
                                     
                                     <p:commandButton id="eliminarButton" styleClass="red-light-btn espacio-btn"
                                                      value="Eliminar" icon="fa fa-trash-o"
                                                      actionListener="#{beanPersona.preparaEliminar}"
-                                                     disabled="#{empty beanPersona.personaSeleccionada or fn:startsWith(beanPersona.personaSeleccionada.perIdentificacion,'SAD') or (beanPersona.listaPersonas.size() eq 1)}"
+                                                     disabled="#{empty beanPersona.personaSeleccionada or fn:startsWith(beanPersona.personaSeleccionada.perEstatus,'SAD') or (beanPersona.listaPersonas.size() eq 1)}"
                                                      update=":EliminarForm"/>
 
                                 </f:facet>
@@ -253,7 +253,7 @@
                     <h:outputText value="Está seguro de eliminar a: #{beanPersona.personaSeleccionada.perNombres }" />
                 </div>
                 <div class="ui-g-12 textAlCenter">
-                    <p:commandButton actionListener="#{beanPersona.eliminarPersona}" value="Archivar ahora!" update=":form:dt-entidad :pg-notificacion" />
+                    <p:commandButton actionListener="#{beanPersona.eliminarPersona}" value="Eliminar ahora!" update=":form:dt-entidad :pg-notificacion" />
                 </div>
             </h:form>
         </p:dialog>

@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 31-ago-2020 17:42:01 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="ec.edu.saltos.modelo.FormaPago" table="forma_pago" catalog="db_saltos" optimistic-lock="version">
+        <id name="idFormaPago" type="int">
+            <column name="ID_FORMA_PAGO" />
+            <generator class="assigned" />
+        </id>
+        <property name="pagoNombre" type="string">
+            <column name="PAGO_NOMBRE" length="64" />
+        </property>
+        <property name="pagoDescripcion" type="string">
+            <column name="PAGO_DESCRIPCION" length="256" />
+        </property>
+        <set name="cabeceraFacturas" table="cabecera_factura" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ID_FORMA_PAGO" />
+            </key>
+            <one-to-many class="ec.edu.saltos.modelo.CabeceraFactura" />
+        </set>
+    </class>
+</hibernate-mapping>

@@ -1,8 +1,9 @@
 package ec.edu.saltos.modelo;
-// Generated 21-ago-2020 20:56:19 by Hibernate Tools 4.3.1
+// Generated 31-ago-2020 17:42:00 by Hibernate Tools 4.3.1
 
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -11,7 +12,7 @@ import java.util.Set;
 public class Perfil  implements java.io.Serializable {
 
 
-     private int idPerfil;
+     private Integer idPerfil;
      private String perfilNombre;
      private String perfilDescripcion;
      private String perfilEstatus;
@@ -22,12 +23,7 @@ public class Perfil  implements java.io.Serializable {
     public Perfil() {
     }
 
-	
-    public Perfil(int idPerfil) {
-        this.idPerfil = idPerfil;
-    }
-    public Perfil(int idPerfil, String perfilNombre, String perfilDescripcion, String perfilEstatus, String perfilEstatus2, Set<AsignarPerfil> asignarPerfils, Set<OpcionPerfil> opcionPerfils) {
-       this.idPerfil = idPerfil;
+    public Perfil(String perfilNombre, String perfilDescripcion, String perfilEstatus, String perfilEstatus2, Set<AsignarPerfil> asignarPerfils, Set<OpcionPerfil> opcionPerfils) {
        this.perfilNombre = perfilNombre;
        this.perfilDescripcion = perfilDescripcion;
        this.perfilEstatus = perfilEstatus;
@@ -36,11 +32,11 @@ public class Perfil  implements java.io.Serializable {
        this.opcionPerfils = opcionPerfils;
     }
    
-    public int getIdPerfil() {
+    public Integer getIdPerfil() {
         return this.idPerfil;
     }
     
-    public void setIdPerfil(int idPerfil) {
+    public void setIdPerfil(Integer idPerfil) {
         this.idPerfil = idPerfil;
     }
     public String getPerfilNombre() {
@@ -88,8 +84,8 @@ public class Perfil  implements java.io.Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 71 * hash + this.idPerfil;
+        int hash = 3;
+        hash = 23 * hash + Objects.hashCode(this.idPerfil);
         return hash;
     }
 
@@ -105,11 +101,14 @@ public class Perfil  implements java.io.Serializable {
             return false;
         }
         final Perfil other = (Perfil) obj;
-        if (this.idPerfil != other.idPerfil) {
+        if (!Objects.equals(this.idPerfil, other.idPerfil)) {
             return false;
         }
         return true;
     }
+
+
+
 
 }
 

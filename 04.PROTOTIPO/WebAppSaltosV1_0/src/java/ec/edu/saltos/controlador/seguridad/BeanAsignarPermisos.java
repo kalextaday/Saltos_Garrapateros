@@ -21,6 +21,7 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
@@ -75,7 +76,7 @@ public class BeanAsignarPermisos extends FiltroAcceso implements Serializable {
     public void obtenerMisPerfiles() {
         
         perfiles = new DAOPerfil().obtenerTodos();
-        perfilSeleccionado = perfiles.get(0);
+        //perfilSeleccionado = perfiles.get(0);
         
         perfilesMasAdmin = perfiles.stream().filter(p -> p.getPerfilEstatus2().equals(EstadosConfig.PERFIL_SUPERADMIN.getCodigo())).collect(Collectors.toList());
         perfilesAdmin = perfiles.stream().filter(p -> p.getPerfilEstatus2().equals(EstadosConfig.PERFIL_ADMINISTRADOR.getCodigo())).collect(Collectors.toList());
@@ -197,6 +198,7 @@ public class BeanAsignarPermisos extends FiltroAcceso implements Serializable {
 
     public void cerrarRecursosAsignados() {
         PrimeUtiles.primeExecute("PF('wv-permisosAsignados').hide();");
+        PrimeUtiles.mostrarMensaje(FacesMessage.SEVERITY_INFO, "Info: ","Se han asignado los permisos correctamente");
     }
 
     public TreeNode[] preparaAsignarRecursos() {
@@ -244,10 +246,12 @@ public class BeanAsignarPermisos extends FiltroAcceso implements Serializable {
                     PrimeUtiles.primeExecute("PF('wv-asignarRecursos').hide();");
 
                 } else {
-                    LOG.info("No se han podido agregar perfiles.");
+                    LOG.info("No se han podido agregar permisos.");
+                    PrimeUtiles.mostrarMensaje(FacesMessage.SEVERITY_ERROR, "Error: ","No se ha asignado los permisos.");
                 }
             } else {
                 LOG.info("No se han eliminado permisos.");
+                PrimeUtiles.mostrarMensaje(FacesMessage.SEVERITY_FATAL, "Fatal: ","Revisa tu conexion a internet.");
             }
 
         } catch (Exception e) {
@@ -268,9 +272,11 @@ public class BeanAsignarPermisos extends FiltroAcceso implements Serializable {
             if (new DAOOpcionPerfil().eliminarPermisos(perfilSeleccionado.getIdPerfil())) {
                 LOG.log(Level.INFO, "Se eliminaron todos los recursos del perfil: {0} ", new Object[]{perfilSeleccionado.getPerfilNombre()});
                 PrimeUtiles.primeExecute("PF('wv-retirarPermisos').hide();");
+                PrimeUtiles.mostrarMensaje(FacesMessage.SEVERITY_INFO, "Info: ","Se han retirado todos los permisos correctamente.");
             } else {
-                System.out.println("No se han podido asignar perfiles");
-                LOG.log(Level.SEVERE, null, "No se han podido asignar perfiles");
+                System.out.println("No se han podido eliminar permisos");
+                LOG.log(Level.SEVERE, null, "No se han podido eliminar permisos");
+                PrimeUtiles.mostrarMensaje(FacesMessage.SEVERITY_ERROR, "Info: ","No se ha retirado los permisos correctamente.");
             }
             
         } catch (Exception e) {

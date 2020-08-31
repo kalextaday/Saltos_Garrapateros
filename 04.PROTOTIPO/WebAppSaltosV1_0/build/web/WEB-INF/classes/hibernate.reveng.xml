@@ -41,12 +41,25 @@ Contributor(s):
 -->
 <hibernate-reverse-engineering>
   <schema-selection match-catalog="db_saltos"/>
+  <table-filter match-name="aeronave"/>
   <table-filter match-name="perfil"/>
-  <table-filter match-name="bitacora"/>
-  <table-filter match-name="usuario_acceso"/>
-  <table-filter match-name="config_clave"/>
   <table-filter match-name="asignar_perfil"/>
-  <table-filter match-name="persona"/>
-  <table-filter match-name="opcion_perfil"/>
+  <table-filter match-name="servicio_adicional"/>
+  <table-filter match-name="formacion_paracaidista"/>
+  <table-filter match-name="descuento"/>
+  <table-filter match-name="bitacora"/>
+  <table-filter match-name="vuelo"/>
+  <table-filter match-name="pedido"/>
+  <table-filter match-name="config_clave"/>
+  <table-filter match-name="forma_pago"/>
   <table-filter match-name="opcion"/>
+  <table-filter match-name="paracaidista"/>
+  <table-filter match-name="detalle_factura"/>
+  <table-filter match-name="cursos_formacion"/>
+  <table-filter match-name="cabecera_factura"/>
+  <table-filter match-name="persona"/>
+  <table-filter match-name="usuario_acceso"/>
+  <table-filter match-name="empresa"/>
+  <table-filter match-name="salto"/>
+  <table-filter match-name="opcion_perfil"/>
 </hibernate-reverse-engineering>

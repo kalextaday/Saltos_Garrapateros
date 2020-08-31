@@ -5,8 +5,11 @@
  */
 package ec.edu.saltos.persistencia;
 
+import ec.edu.saltos.config.HibernateUtil;
 import ec.edu.saltos.modelo.ConfigClave;
 import java.util.List;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 /**
  *
@@ -37,4 +40,25 @@ public class DAOConfigClave extends DAOGenerico<ConfigClave, Integer>{
     public Boolean eliminar(ConfigClave _configClave){
         return super.delete(_configClave);
     }
+    
+    public ConfigClave obtenerUltimoRegistro() {
+        ConfigClave a = null;
+        Session sesion = null;
+        Transaction t=null;
+        try {
+            sesion = HibernateUtil.getSessionFactory().openSession();
+            t = sesion.beginTransaction();
+            String hql = "FROM ConfigClave order by id_config_clave DESC";
+            a = (ConfigClave)sesion.createQuery(hql).setMaxResults(1).uniqueResult();
+            t.commit();
+            
+        }catch(Exception e) {
+            t.rollback();
+        }finally{
+            if (sesion != null) {
+                sesion.close();
+            }
+        }
+        return a;
+    } 
 }

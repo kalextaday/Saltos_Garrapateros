@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 31-ago-2020 17:42:01 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="ec.edu.saltos.modelo.ServicioAdicional" table="servicio_adicional" catalog="db_saltos" optimistic-lock="version">
+        <id name="idServicioAdicional" type="java.lang.Integer">
+            <column name="ID_SERVICIO_ADICIONAL" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="usuarioAcceso" class="ec.edu.saltos.modelo.UsuarioAcceso" fetch="select" lazy="false">
+            <column name="ID_USUARIO_RESPONSABLE" />
+        </many-to-one>
+        <property name="serNombre" type="string">
+            <column name="SER_NOMBRE" length="100" />
+        </property>
+        <property name="serDescripcion" type="string">
+            <column name="SER_DESCRIPCION" length="250" />
+        </property>
+        <property name="serCosto" type="big_decimal">
+            <column name="SER_COSTO" precision="6" />
+        </property>
+        <property name="serFechaCreacion" type="timestamp">
+            <column name="SER_FECHA_CREACION" length="19" />
+        </property>
+        <property name="serFechaMod" type="timestamp">
+            <column name="SER_FECHA_MOD" length="19" />
+        </property>
+        <set name="pedidos" table="pedido" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ID_SERVICIO_ADICIONAL" />
+            </key>
+            <one-to-many class="ec.edu.saltos.modelo.Pedido" />
+        </set>
+    </class>
+</hibernate-mapping>

@@ -57,18 +57,22 @@ public class EstiloUtiles {
     
     public String toValueFechaFormato(Date _fecha,String _formato) {
         String result;
-        switch (_formato) {
-            case "si":
-                result = FechaUtil.fechaSimple(_fecha);
-                break;
-            case "cm":
-                result = FechaUtil.fechaCompuestoMes(_fecha);
-                break;
-            case "cdm":
-                result = FechaUtil.fechaCompuestoDiaMes(_fecha);
-                break;
-            default:
-                result = FechaUtil.fechaSinFormato(_fecha);
+        if(_fecha!=null){
+            switch (_formato) {
+                case "si":
+                    result = FechaUtil.fechaSimple(_fecha);
+                    break;
+                case "cm":
+                    result = FechaUtil.fechaCompuestoMes(_fecha);
+                    break;
+                case "cdm":
+                    result = FechaUtil.fechaCompuestoDiaMes(_fecha);
+                    break;
+                default:
+                    result = FechaUtil.fechaSinFormato(_fecha);
+            }
+        }else{
+            result="-";
         }
         return result;
     }

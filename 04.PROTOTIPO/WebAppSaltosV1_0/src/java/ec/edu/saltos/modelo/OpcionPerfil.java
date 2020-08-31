@@ -1,5 +1,5 @@
 package ec.edu.saltos.modelo;
-// Generated 21-ago-2020 20:56:19 by Hibernate Tools 4.3.1
+// Generated 31-ago-2020 17:42:00 by Hibernate Tools 4.3.1
 
 import java.util.Objects;
 
@@ -57,8 +57,8 @@ public class OpcionPerfil  implements java.io.Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 31 * hash + Objects.hashCode(this.idPermiso);
+        int hash = 5;
+        hash = 61 * hash + Objects.hashCode(this.idPermiso);
         return hash;
     }
 

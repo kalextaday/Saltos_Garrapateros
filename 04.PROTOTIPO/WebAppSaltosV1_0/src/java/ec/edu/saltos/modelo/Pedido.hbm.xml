@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 31-ago-2020 17:42:01 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="ec.edu.saltos.modelo.Pedido" table="pedido" catalog="db_saltos" optimistic-lock="version">
+        <id name="idPedido" type="java.lang.Integer">
+            <column name="ID_PEDIDO" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="descuento" class="ec.edu.saltos.modelo.Descuento" fetch="select" lazy="false">
+            <column name="ID_DESCUENTO" />
+        </many-to-one>
+        <many-to-one name="paracaidista" class="ec.edu.saltos.modelo.Paracaidista" fetch="select" lazy="false">
+            <column name="ID_PARACAIDISTA" />
+        </many-to-one>
+        <many-to-one name="salto" class="ec.edu.saltos.modelo.Salto" fetch="select" lazy="false">
+            <column name="ID_SALTO" />
+        </many-to-one>
+        <many-to-one name="servicioAdicional" class="ec.edu.saltos.modelo.ServicioAdicional" fetch="select" lazy="false">
+            <column name="ID_SERVICIO_ADICIONAL" />
+        </many-to-one>
+        <many-to-one name="vuelo" class="ec.edu.saltos.modelo.Vuelo" fetch="select" lazy="false">
+            <column name="ID_VUELO" />
+        </many-to-one>
+        <property name="costoSalto" type="big_decimal">
+            <column name="COSTO_SALTO" precision="6" />
+        </property>
+        <property name="costoTotalPedido" type="big_decimal">
+            <column name="COSTO_TOTAL_PEDIDO" precision="6" />
+        </property>
+        <property name="fecaARealizarseSalto" type="timestamp">
+            <column name="FECA_A_REALIZARSE_SALTO" length="19" />
+        </property>
+        <property name="estatusFacturacion" type="java.lang.Boolean">
+            <column name="ESTATUS_FACTURACION" />
+        </property>
+        <property name="fechaPedido" type="timestamp">
+            <column name="FECHA_PEDIDO" length="19" />
+        </property>
+        <set name="detalleFacturas" table="detalle_factura" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ID_PEDIDO" />
+            </key>
+            <one-to-many class="ec.edu.saltos.modelo.DetalleFactura" />
+        </set>
+    </class>
+</hibernate-mapping>

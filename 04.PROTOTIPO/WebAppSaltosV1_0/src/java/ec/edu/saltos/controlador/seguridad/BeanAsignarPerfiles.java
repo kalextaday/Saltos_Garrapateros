@@ -8,9 +8,11 @@ package ec.edu.saltos.controlador.seguridad;
 
 import ec.edu.saltos.config.EstadosConfig;
 import ec.edu.saltos.controlador.FiltroAcceso;
+import ec.edu.saltos.modelo.AsignarPerfil;
 import ec.edu.saltos.modelo.Perfil;
 import ec.edu.saltos.modelo.Persona;
 import ec.edu.saltos.modelo.UsuarioAcceso;
+import ec.edu.saltos.persistencia.DAOAsignarPerfil;
 import ec.edu.saltos.persistencia.DAOPerfil;
 import ec.edu.saltos.persistencia.DAOPersona;
 import ec.edu.saltos.persistencia.DAOUsuarioAcceso;
@@ -51,7 +53,10 @@ public class BeanAsignarPerfiles extends FiltroAcceso implements Serializable{
     private List<UsuarioAcceso> usuariosSeleccionados;
     private Perfil perfilSeleccionado;
     
+    private List<AsignarPerfil> todasAsignacionesPerfil;
+    
     private String formatoFecha;
+    private StringBuilder builder; 
 
     
     /**
@@ -64,22 +69,61 @@ public class BeanAsignarPerfiles extends FiltroAcceso implements Serializable{
     @PostConstruct
     public void init(){
         formatoFecha="si";
-        obtenerUsuarios();
+        //obtenerTodosUsuarios();
         obtenerPerfiles();
         initUsuarios();
     }
     
     public void initUsuarios(){
+        usuariosOrigen = new ArrayList<>();
         usuariosSeleccionados = new ArrayList<>();
         usuariosGlobal = new DualListModel<UsuarioAcceso>(usuariosOrigen, usuariosSeleccionados);
     }
     
-    public void obtenerUsuarios(){
+    public void setPickUsuarios(){
+        usuariosSeleccionados = new ArrayList<>();
+        usuariosGlobal = new DualListModel<UsuarioAcceso>(usuariosOrigen, usuariosSeleccionados);
+    }
+    
+    public void obtenerTodosUsuarios(){
         DAOUsuarioAcceso dao=new DAOUsuarioAcceso();
         try{
             usuariosOrigen=dao.obtenerTodos();
         }catch(Exception e){
-            LOG.log(Level.INFO, "Excepcion al obtener a todos: {0}",e);
+            LOG.info("Excepcion al obtener a todos:"+e);
+        }
+    }
+    
+    public void obtenerTodaAsignacionPerfil(){
+        DAOAsignarPerfil dao=new DAOAsignarPerfil();
+        try{
+            todasAsignacionesPerfil=dao.obtenerTodos();
+        }catch(Exception e){
+            LOG.info("Excepcion al obtener a todas las asignaciones por perfil:"+e);
+        }
+    }
+    
+    public void obtenerUsersPermitidosParaAsignar(){
+        DAOAsignarPerfil daoap=new DAOAsignarPerfil();
+        DAOUsuarioAcceso dao=new DAOUsuarioAcceso();
+        
+        obtenerTodaAsignacionPerfil();
+        usuariosOrigen=daoap.obtenerUsuariosSinEstePerfil(perfilSeleccionado.getIdPerfil());
+        
+        try{
+            for(int i=0;i<usuariosOrigen.size();i++){
+                for(int j=0;j<todasAsignacionesPerfil.size();j++){
+                    if(usuariosOrigen.get(i).getIdUsuarioAcceso()==todasAsignacionesPerfil.get(j).getUsuarioAcceso().getIdUsuarioAcceso()){
+                        if(todasAsignacionesPerfil.get(j).getPerfil().getIdPerfil()==perfilSeleccionado.getIdPerfil()){
+                            usuariosOrigen.remove(usuariosOrigen.get(i));
+                            i=0;
+                        }
+                    }
+                }
+
+            }
+        }catch(Exception e){
+            LOG.info("Excepcion al obtener a usuarios permitidos:"+e);
         }
     }
     
@@ -88,138 +132,117 @@ public class BeanAsignarPerfiles extends FiltroAcceso implements Serializable{
         try{
             listaPerfiles=dao.obtenerTodos();
         }catch(Exception e){
-            LOG.log(Level.INFO, "Excepcion al obtener a todos: {0}",e);
+            LOG.info("Excepcion al obtener a todos: "+e);
         }
         
     }
     
     public void actualizarPermisosPerfil(SelectEvent event) {
         perfilSeleccionado=(Perfil)event.getObject();
+        //obtenerUsersPermitidosParaAsignar();
+        obtenerTodosUsuarios();
+        setPickUsuarios();
     }
-    
-    public void preparaAsignarPerfil() {
-        PrimeUtiles.primeExecute("PF('wv-usr-perfiles').show();");
-    }
-    
     /*
-    public void agregarPersona() {
-        DAOPersona daopersona=new DAOPersona();
+    public void asignarPerfil(){
+        LOG.info("Listo para Asignar");
         
-        personaSeleccionada.setPerFoto("imagenes/app/personas/fotos/");
-        personaSeleccionada.setPerFechaCreacion(FechaUtil.ahoraSinFormato());
-        personaSeleccionada.setPerFechaMod(FechaUtil.ahoraSinFormato());
-        personaSeleccionada.setPerEstatus(EstadosConfig.PERSONA_EST_ACTIVADO.getCodigo());
-        try{
-            if(daopersona.guardar(personaSeleccionada)){
-                PrimeUtiles.mostrarMensaje(FacesMessage.SEVERITY_INFO, "Info:", "Se registro correctamente.");
-                limpiarPersona();
-            }else{
-                PrimeUtiles.mostrarMensaje(FacesMessage.SEVERITY_ERROR, "Error: ","Hubo un error al registrar");
-            }
-        }catch(Exception e){
-            LOG.log(Level.INFO, "Excepcion al agregar: {0}",e);
-        }finally{
-            PrimeUtiles.primeExecute("PF('wv-crear').hide();");
-        }
-    }
+        DAOAsignarPerfil dao=new DAOAsignarPerfil();
 
-    public void modificarPersona() {
-        DAOPersona daopersona=new DAOPersona();
-        personaSeleccionada.setPerFechaMod(FechaUtil.ahoraSinFormato());
+        usuariosSeleccionados=usuariosGlobal.getTarget();
+
         try{
-            if(daopersona.editar(personaSeleccionada)){
-                limpiarPersona();
-                PrimeUtiles.mostrarMensaje(FacesMessage.SEVERITY_INFO, "Info: ","Se actualizo correctamente");
-            }else{
-                PrimeUtiles.mostrarMensaje(FacesMessage.SEVERITY_ERROR, "Error: ","Hubo un error al actualizar");
+            for(UsuarioAcceso u:usuariosSeleccionados){
+                AsignarPerfil asigPer=new AsignarPerfil();
+                asigPer.setUsuarioAcceso(u);
+                asigPer.setPerfil(perfilSeleccionado);
+                asigPer.setAsiPerFechaCreacion(FechaUtil.ahoraSinFormato());
+
+                if(dao.guardar(asigPer)){
+                    PrimeUtiles.mostrarMensaje(FacesMessage.SEVERITY_INFO, "Info:", "Al usuario: "
+                            +u.getUsrAccesoNombre()+" se le asigno correctamente el perfil.");
+                }else{
+                    PrimeUtiles.mostrarMensaje(FacesMessage.SEVERITY_ERROR, "Error:", "Al usuario: "
+                            +u.getUsrAccesoNombre()+" se le asigno correctamente el perfil.");
+                }
             }
         }catch(Exception e){
-            LOG.log(Level.INFO, "Excepcion al modificar: {0}",e);
+            LOG.log(Level.INFO, "Error para Asignar{0}", e);
         }finally{
-            PrimeUtiles.primeExecute("PF('wv-actualizar').hide();");
+            initUsuarios();
+            PrimeUtiles.primeExecute("PF('wv-asignarPerfil').hide();");
+        }
+    }*/
+    
+    public void asignarPerfil(){
+        LOG.info("Listo para Asignar");
+        
+        DAOAsignarPerfil dao=new DAOAsignarPerfil();
+
+        usuariosSeleccionados=usuariosGlobal.getTarget();
+
+        try{
+            for(UsuarioAcceso u:usuariosSeleccionados){
+                AsignarPerfil asignarPerfil=dao.autenticarPerfil(u.getIdUsuarioAcceso(), perfilSeleccionado.getIdPerfil());
+                if(asignarPerfil!=null){
+                    dao.eliminar(asignarPerfil);
+                }
+                AsignarPerfil asigPer=new AsignarPerfil();
+                asigPer.setUsuarioAcceso(u);
+                asigPer.setPerfil(perfilSeleccionado);
+                asigPer.setAsiPerFechaCreacion(FechaUtil.ahoraSinFormato());
+
+                if(dao.guardar(asigPer)){
+                    PrimeUtiles.mostrarMensaje(FacesMessage.SEVERITY_INFO, "Info:", "Al usuario: <b>"
+                            +u.getUsrAccesoNombre()+"</b> se le asigno correctamente el perfil.");
+                }else{
+                    PrimeUtiles.mostrarMensaje(FacesMessage.SEVERITY_ERROR, "Error:", "Al usuario: "
+                            +u.getUsrAccesoNombre()+"</b> se le asigno correctamente el perfil.");
+                }
+            }
+        }catch(Exception e){
+            LOG.log(Level.INFO, "Error para Asignar{0}", e);
+        }finally{
+            initUsuarios();
+            PrimeUtiles.primeExecute("PF('wv-asignarPerfil').hide();");
         }
     }
     
-    public void archivarPersona(){
-        DAOPersona daopersona=new DAOPersona();
-        personaSeleccionada.setPerEstatus(EstadosConfig.PERSONA_EST_ARCHIVADO.getCodigo());
-        personaSeleccionada.setPerFechaMod(FechaUtil.ahoraSinFormato());
+    public void retirarPerfil(){
+        LOG.info("Listo para retirar");
+        
+        DAOAsignarPerfil dao=new DAOAsignarPerfil();
+
+        usuariosSeleccionados=usuariosGlobal.getTarget();
+
         try{
-            if(daopersona.editar(personaSeleccionada)){
-                limpiarPersona();
-                PrimeUtiles.mostrarMensaje(FacesMessage.SEVERITY_INFO, "Info: Se Archivo correctamente ", "Recuerda, Ya no podras usar el registro");
-            }else{
-                PrimeUtiles.mostrarMensaje(FacesMessage.SEVERITY_ERROR, "Error: ","Hubo un error al archivar");
+            for(UsuarioAcceso u:usuariosSeleccionados){
+                AsignarPerfil asignarPerfil=dao.autenticarPerfil(u.getIdUsuarioAcceso(), perfilSeleccionado.getIdPerfil());
+                if(asignarPerfil!=null){
+                    if(dao.eliminar(asignarPerfil)){
+                        PrimeUtiles.mostrarMensaje(FacesMessage.SEVERITY_INFO, "Info:", "Al usuario: <b>"
+                                +u.getUsrAccesoNombre()+"</b> se le retiro correctamente el perfil.");
+                    }else{
+                        PrimeUtiles.mostrarMensaje(FacesMessage.SEVERITY_ERROR, "Error:", "Al usuario: <b>"
+                                +u.getUsrAccesoNombre()+"</b> se le retiro correctamente el perfil.");
+                    }
+                }
             }
         }catch(Exception e){
-            LOG.log(Level.INFO, "Excepcion al archivar: {0}",e);
+            LOG.log(Level.INFO, "Error para Asignar{0}", e);
         }finally{
-            PrimeUtiles.primeExecute("PF('wv-archivar').hide();");
+            initUsuarios();
+            PrimeUtiles.primeExecute("PF('wv-retirarPerfil').hide();");
         }
     }
-
-    public void eliminarPersona() {
-        DAOPersona daopersona=new DAOPersona();
-        
-        try{
-            if(daopersona.eliminar(personaSeleccionada)){
-                PrimeUtiles.mostrarMensaje(FacesMessage.SEVERITY_INFO, "Info: ", "Se elimino correctamente");
-                
-                LOG.log(Level.INFO, "Persona Eliminada Correctamente");
-            }else{
-                PrimeUtiles.mostrarMensaje(FacesMessage.SEVERITY_ERROR, "Eror: ", "Hubo un error al eliminar");
-                
-                LOG.log(Level.INFO, "No se pudo eliminar la persona");
-            }
-        }catch(Exception e){
-            LOG.log(Level.INFO, "Excepcion al eliminar: {0}",e);
-        }finally{
-            PrimeUtiles.primeExecute("PF('wv-eliminar').hide();");
-        }
-        
-    }
-
-    public Persona preparaCrear() {
-        LOG.log(Level.INFO, "Preparando nueva persona");
-
-        personaSeleccionada = new Persona();
-        PrimeUtiles.primeExecute("PF('wv-crear').show();");
-        return personaSeleccionada;
-
-    }
-
-    public Persona preparaActualizar() {
-        LOG.log(Level.INFO, "Persona {0} lista para actualizar.", personaSeleccionada.getPerNombres());
-        
-        PrimeUtiles.primeExecute("PF('wv-actualizar').show();");
-        return personaSeleccionada;
-    }
-
-    public void preparaArchivar() {
-        LOG.log(Level.INFO, "Persona {0} lista para archivar.", personaSeleccionada.getPerNombres());
-        
-        PrimeUtiles.primeExecute("PF('wv-archivar').show();");
-    }
-    
-    public void preparaEliminar() {
-
-        LOG.log(Level.INFO, "Persona {0} lista para eliminar.", personaSeleccionada.getPerNombres());
-        PrimeUtiles.primeExecute("PF('wv-eliminar').show();");
-    }
-    */
     
     public void onTransfer(TransferEvent event) {
-        StringBuilder builder = new StringBuilder();
+        builder = new StringBuilder();
         for(Object item : event.getItems()) {
             builder.append(((UsuarioAcceso) item).getUsrAccesoNombre()).append("<br />");
         }
-         
-        FacesMessage msg = new FacesMessage();
-        msg.setSeverity(FacesMessage.SEVERITY_INFO);
-        msg.setSummary("Usuarios Transferidos");
-        msg.setDetail(builder.toString());
-         
-        FacesContext.getCurrentInstance().addMessage(null, msg);
+        
+        PrimeUtiles.mostrarMensaje(FacesMessage.SEVERITY_INFO, "Usuarios Transferidos", builder.toString());
     }  
      
     public void onSelect(SelectEvent<UsuarioAcceso> event) {
@@ -235,6 +258,16 @@ public class BeanAsignarPerfiles extends FiltroAcceso implements Serializable{
     public void onReorder() {
         FacesContext context = FacesContext.getCurrentInstance();
         context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Lista Reordenada", null));
+    }
+    
+    public void preparaAsignarPerfil() {
+        PrimeUtiles.primeExecute("PF('wv-asignarPerfil').show();");
+    }
+    
+    public void preparaRetirarPerfil() {
+        LOG.info("Preparando Eliminar el perfil de los usuarios ");
+        PrimeUtiles.primeExecute("PF('wv-retirarPerfil').show();");
+
     }
 
     public List<Perfil> getListaPerfiles() {
@@ -283,6 +316,14 @@ public class BeanAsignarPerfiles extends FiltroAcceso implements Serializable{
 
     public void setUsuariosOrigen(List<UsuarioAcceso> usuariosOrigen) {
         this.usuariosOrigen = usuariosOrigen;
+    }
+
+    public StringBuilder getBuilder() {
+        return builder;
+    }
+
+    public void setBuilder(StringBuilder builder) {
+        this.builder = builder;
     }
 
     

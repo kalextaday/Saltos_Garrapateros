@@ -1,11 +1,12 @@
 package ec.edu.saltos.modelo;
-// Generated 21-ago-2020 20:56:19 by Hibernate Tools 4.3.1
+// Generated 31-ago-2020 17:42:00 by Hibernate Tools 4.3.1
 
 
 import ec.edu.saltos.config.EstadosConfig;
 import ec.edu.saltos.util.FechaUtil;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -14,7 +15,7 @@ import java.util.Set;
 public class ConfigClave  implements java.io.Serializable {
 
 
-     private int idConfigClave;
+     private Integer idConfigClave;
      private Integer claveCharMax;
      private Integer claveCharMin;
      private Boolean claveCharAlfanumerico;
@@ -32,12 +33,7 @@ public class ConfigClave  implements java.io.Serializable {
     public ConfigClave() {
     }
 
-	
-    public ConfigClave(int idConfigClave) {
-        this.idConfigClave = idConfigClave;
-    }
-    public ConfigClave(int idConfigClave, Integer claveCharMax, Integer claveCharMin, Boolean claveCharAlfanumerico, Boolean claveCharMayus, Boolean claveCharMinus, Boolean claveCharEspecial, String claveStrEspecial, Integer claveCambiosDia, Integer claveIntentosFallidos, String claveUltimaClave, Date claveFechaCreacion, Date claveFechaMod, Set<UsuarioAcceso> usuarioAccesos) {
-       this.idConfigClave = idConfigClave;
+    public ConfigClave(Integer claveCharMax, Integer claveCharMin, Boolean claveCharAlfanumerico, Boolean claveCharMayus, Boolean claveCharMinus, Boolean claveCharEspecial, String claveStrEspecial, Integer claveCambiosDia, Integer claveIntentosFallidos, String claveUltimaClave, Date claveFechaCreacion, Date claveFechaMod, Set<UsuarioAcceso> usuarioAccesos) {
        this.claveCharMax = claveCharMax;
        this.claveCharMin = claveCharMin;
        this.claveCharAlfanumerico = claveCharAlfanumerico;
@@ -53,28 +49,26 @@ public class ConfigClave  implements java.io.Serializable {
        this.usuarioAccesos = usuarioAccesos;
     }
     
-    public ConfigClave configClavePorDefecto(ConfigClave _config){
-       _config.setClaveCharMax(EstadosConfig.CARACTERES_MAX_CLAVES.getId());
-       _config.setClaveCharMin(EstadosConfig.CARACTERES_MIN_CLAVES.getId());
-       _config.setClaveCharAlfanumerico((EstadosConfig.CARACTERES_ALFANUMERICOS.getId() == 1));
-       _config.setClaveCharMayus((EstadosConfig.CARACTERES_MAX_CLAVES.getId() == 1));
-       _config.setClaveCharMinus((EstadosConfig.CARACTERES_MAX_CLAVES.getId() == 1));
-       _config.setClaveCharEspecial((EstadosConfig.CARACTERES_MAX_CLAVES.getId() == 1));
-       _config.setClaveStrEspecial(EstadosConfig.CARACTERES_ESPECIALES_PERMITIDOS.getCodigo());
-       _config.setClaveCambiosDia(EstadosConfig.NUMERO_CAMBIOS_POR_DIA.getId());
-       _config.setClaveIntentosFallidos(EstadosConfig.INTENTOS_FALLIDOS.getId());
-       _config.setClaveUltimaClave(EstadosConfig.ULTIMA_CLAVE.getCodigo());
-       _config.setClaveFechaCreacion(FechaUtil.ahoraSinFormato());
-       _config.setClaveFechaMod(FechaUtil.ahoraSinFormato());
-       
-        return _config;
+    public ConfigClave(String _ultimaClave){
+       this.claveCharMax = EstadosConfig.CARACTERES_MAX_CLAVES.getId();
+       this.claveCharMin = EstadosConfig.CARACTERES_MIN_CLAVES.getId();
+       this.claveCharAlfanumerico = (EstadosConfig.CARACTERES_ALFANUMERICOS.getId() == 1);
+       this.claveCharMayus = (EstadosConfig.CARACTERES_MAX_CLAVES.getId() == 1);
+       this.claveCharMinus = (EstadosConfig.CARACTERES_MAX_CLAVES.getId() == 1);
+       this.claveCharEspecial = (EstadosConfig.CARACTERES_MAX_CLAVES.getId() == 1);
+       this.claveStrEspecial = EstadosConfig.CARACTERES_ESPECIALES_PERMITIDOS.getCodigo();
+       this.claveCambiosDia = EstadosConfig.NUMERO_CAMBIOS_POR_DIA.getId();
+       this.claveIntentosFallidos = EstadosConfig.INTENTOS_FALLIDOS.getId();
+       this.claveUltimaClave = _ultimaClave;
+       this.claveFechaCreacion = FechaUtil.ahoraSinFormato();
+       this.claveFechaMod = FechaUtil.ahoraSinFormato();
     }
    
-    public int getIdConfigClave() {
+    public Integer getIdConfigClave() {
         return this.idConfigClave;
     }
     
-    public void setIdConfigClave(int idConfigClave) {
+    public void setIdConfigClave(Integer idConfigClave) {
         this.idConfigClave = idConfigClave;
     }
     public Integer getClaveCharMax() {
@@ -172,7 +166,7 @@ public class ConfigClave  implements java.io.Serializable {
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 13 * hash + this.idConfigClave;
+        hash = 89 * hash + Objects.hashCode(this.idConfigClave);
         return hash;
     }
 
@@ -188,7 +182,7 @@ public class ConfigClave  implements java.io.Serializable {
             return false;
         }
         final ConfigClave other = (ConfigClave) obj;
-        if (this.idConfigClave != other.idConfigClave) {
+        if (!Objects.equals(this.idConfigClave, other.idConfigClave)) {
             return false;
         }
         return true;

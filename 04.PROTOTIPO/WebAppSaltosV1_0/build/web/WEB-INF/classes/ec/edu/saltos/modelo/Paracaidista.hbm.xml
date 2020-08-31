@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 31-ago-2020 17:42:01 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="ec.edu.saltos.modelo.Paracaidista" table="paracaidista" catalog="db_saltos" optimistic-lock="version">
+        <id name="idParacaidista" type="java.lang.Integer">
+            <column name="ID_PARACAIDISTA" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="usuarioAcceso" class="ec.edu.saltos.modelo.UsuarioAcceso" fetch="select" lazy="false">
+            <column name="ID_USUARIO_ACCESO" />
+        </many-to-one>
+        <property name="tipoParacaidista" type="string">
+            <column name="TIPO_PARACAIDISTA" length="32" />
+        </property>
+        <property name="escuelaFormacion" type="string">
+            <column name="ESCUELA_FORMACION" length="100" />
+        </property>
+        <property name="numSaltosCompletados" type="java.lang.Integer">
+            <column name="NUM_SALTOS_COMPLETADOS" />
+        </property>
+        <property name="fechaUltimoSalto" type="timestamp">
+            <column name="FECHA_ULTIMO_SALTO" length="19" />
+        </property>
+        <property name="licencia" type="java.lang.Boolean">
+            <column name="LICENCIA" />
+        </property>
+        <property name="fechaCaducidadLicencia" type="timestamp">
+            <column name="FECHA_CADUCIDAD_LICENCIA" length="19" />
+        </property>
+        <set name="formacionParacaidistas" table="formacion_paracaidista" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ID_PARACAIDISTA" />
+            </key>
+            <one-to-many class="ec.edu.saltos.modelo.FormacionParacaidista" />
+        </set>
+        <set name="pedidos" table="pedido" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ID_PARACAIDISTA" />
+            </key>
+            <one-to-many class="ec.edu.saltos.modelo.Pedido" />
+        </set>
+    </class>
+</hibernate-mapping>

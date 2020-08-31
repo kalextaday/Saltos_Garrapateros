@@ -1,0 +1,254 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+
+
+    <ui:define name="title">Administración de Personas</ui:define>
+
+    <ui:define name="content">
+
+        <div class="ui-g ui-fluid">
+            <div class="ui-g-8 titulo-app">
+                <span>
+                    <i class="fa fa-star icono-tamano"></i> <h:outputText value="Agregar Personas" />
+                </span>
+
+            </div>
+            <div class="ui-g-4" style="text-align: right !important" >
+                <p:clock pattern="HH:mm:ss dd-MM-yyyy" />
+            </div>
+        </div>
+
+        <div class="ui-g dashboard">
+
+            <p:growl id="pg-notificacion" showDetail="true" life="3000" />
+            
+            <div class="ui-g-12 ">
+                <h:form id="formAgregar">
+
+                    <div class="ui-lg-4 ui-fluid contact-form">
+                        <p:panel header="Acciónes" style="min-height:100px">
+                            <div class="ui-g">
+                                <div class="ui-g-12">
+                                    <p:commandButton actionListener="#{beanAgregarPersona.agregarPersona}"
+                                                     icon="fa fa fw fa-check-circle" update="pg-notificacion formAgregar:display :form:dt-entidad" 
+                                                     value="Guardar Persona" validateClient="true"/>
+                                </div>
+
+                            </div>
+                        </p:panel>
+                    </div>
+
+                    <div class="ui-g-6">
+                        <h:panelGroup id="display">
+                            <p:tabView>
+                                <p:tab id="tabDat" title="Datos Personales">
+                                    <h:panelGrid columns="3" cellpadding="10">
+                                        
+                                        <p:outputLabel value="Cedula de Identidad:" for="ideUsr" />
+                                        <p:inputText id="ideUsr" value="#{beanAgregarPersona.identificacion}" title="Cedula" required="true" requiredMessage="Cédula Obligatorio">
+                                            <p:ajax event="keyup" update="formAgregar:display" listener="#{beanAgregarPersona.validarCedula}" />
+                                        </p:inputText>
+                                        <p:messages for="ideUsr"/>
+                                        
+                                        <p:outputLabel value="Nombre:" for="usrNombre" />
+                                        <p:inputText id="usrNombre" value="#{beanAgregarPersona.nombres}" title="Nombre" required="true" requiredMessage="Nombre Obligatorio" />
+                                        <p:message for="usrNombre"/>
+
+                                        <p:outputLabel value="Apellidos:" for="apeUsr" />
+                                        <p:inputText id="apeUsr" value="#{beanAgregarPersona.apellidos}" title="Apellido" required="true" requiredMessage="Apellido Obligatorio" />
+                                        <p:message for="apeUsr"/>
+
+                                        <p:outputLabel value="Fecha de nacimiento: " for="fenaUsr"/>
+                                        <p:calendar id="fenaUsr" value="#{beanAgregarPersona.personaSeleccionada.perFechaNacimiento}" placeholder="dd-mm-yyyy" 
+                                                    title="Fecha de nacimiento" required="true" requiredMessage="Fecha de nacimiento Obligatorio">
+                                        </p:calendar>
+                                        <p:message for="fenaUsr"/>
+
+                                    </h:panelGrid>
+                                </p:tab>
+                                <p:tab id="tabDir" title="Direcciones">
+                                    <h:panelGrid columns="3" cellpadding="10">
+
+                                        <p:outputLabel value="Ciudad:" for="ciuUsr"/>
+                                        <p:inputText id="ciuUsr" value="#{beanAgregarPersona.ciudad}" title="Ciudad" required="true" requiredMessage="Ciudad Obligatorio"/>
+                                        <p:message for="ciuUsr"/>
+
+                                        <p:outputLabel value="Sector:" for="secUsr"/>
+                                        <p:inputText id="secUsr" value="#{beanAgregarPersona.sector}"/>
+                                        <p:message for="secUsr"/>
+
+                                        <p:outputLabel value="Calle principal:" for="callUsr"/>
+                                        <p:inputText id="callUsr" value="#{beanAgregarPersona.calle}"/>
+                                        <p:message for="callUsr"/>
+
+                                        <p:outputLabel value="Numero de casa:" for="numcasaUsr"/>
+                                        <p:inputText id="numcasaUsr" value="#{beanAgregarPersona.numCasa}"/>
+                                        <p:message for="numcasaUsr"/>
+
+                                    </h:panelGrid>
+                                </p:tab>
+                                <p:tab id="tabInf" title="Informacion de Contacto">
+                                    <h:panelGrid columns="3" cellpadding="10">
+                                        <p:outputLabel value="Telefono:" for="telUsr"/>
+                                        <p:inputText id="telUsr" value="#{beanAgregarPersona.telefono}" title="Telefono" required="true" requiredMessage="Telefono Obligatorio"/>
+                                        <p:message for="telUsr"/>
+
+                                        <p:outputLabel value="Correo electronico:" for="emaUsr"/>
+                                        <p:inputText id="emaUsr" value="#{beanAgregarPersona.correo}" title="Correo" required="true" requiredMessage="Correo Obligatorio"/>
+                                        <p:message for="emaUsr"/>
+                                    </h:panelGrid>
+                                </p:tab>
+                            </p:tabView>
+                        </h:panelGroup>
+                    </div>
+
+                </h:form>
+            </div>
+            
+            <div class="ui-g-12 ui-lg-12">
+                <div class="border-material">
+                    <p:panel header="Personas Agregadas Recientemente" style="min-height:100px">
+                        <h:form id="form">
+                            <p:dataTable var="persona" id="dt-entidad" reflow="true"
+                                         value="#{beanAgregarPersona.listaPersonas}" scrollRows="20" scrollable="true"
+                                         selectionMode="single" selection="#{beanAgregarPersona.personaSeleccionada}" rowKey="#{persona.idPersona}"
+                                         liveScroll="true" scrollHeight="375" emptyMessage="No se han creado personas recientemente">
+
+                                <p:ajax event="rowSelect" listener="#{beanAgregarPersona.onRowSelect}" update="editButton eliminarButton" />
+                                <p:ajax event="rowUnselect" listener="#{beanAgregarPersona.onRowUnselect}" update="editButton eliminarButton" />
+
+                                <p:column headerText="Identificación" sortBy="#{persona.perIdentificacion}" filterBy="#{persona.perIdentificacion}"  filterMatchMode="contains">
+                                    <h:outputText value="#{persona.perIdentificacion}" />
+                                </p:column>
+
+                                <p:column headerText="Nombres" sortBy="#{persona.perNombres}">
+                                    <h:outputText value="#{persona.perNombres}" />
+                                </p:column>
+                                
+                                <p:column headerText="Apellidos" sortBy="#{persona.perApellidos}">
+                                    <h:outputText value="#{persona.perApellidos}" />
+                                </p:column>
+
+                                <p:column headerText="Direccion" sortBy="#{persona.perDireccion}">
+                                    <h:outputText value="#{persona.perDireccion}" />
+                                </p:column>
+                                
+                                <p:column headerText="Correo" sortBy="#{persona.perCorreo}">
+                                    <h:outputText value="#{persona.perCorreo}" />
+                                </p:column>
+                                
+                                <p:column headerText="Fecha de Nacimiento" sortBy="#{persona.perFechaNacimiento}">
+                                    <h:outputText value="#{estiloUtiles.toValueFechaFormato(persona.perFechaNacimiento, beanAgregarPersona.formatoFecha)}" />
+                                </p:column>
+                                
+                                <p:column headerText="Telefono" sortBy="#{persona.perTelefono}">
+                                    <h:outputText value="#{persona.perTelefono}" />
+                                </p:column>
+                                
+                                <p:column headerText="Foto" style="width:32px;text-align: center">
+                                    <p:commandButton update=":FotoForm" oncomplete="PF('wv-mostrar-foto').show()" icon="fa fa-image" title="View">
+                                        <f:setPropertyActionListener value="#{persona}" target="#{beanAgregarPersona.personaSeleccionada}" />
+                                    </p:commandButton>
+                                </p:column>
+
+                                <p:column headerText="Estatus" sortBy="#{persona.perEstatus}">
+                                    <h:outputText   class="ancho-columna #{estiloUtiles.toStylePersona(persona.perEstatus )}"
+                                                    value="#{estiloUtiles.toValuePersona(persona.perEstatus)}" />
+                                </p:column>
+
+                                <f:facet name="header" class="iconos-derecha">
+                                    
+                                    <p:commandButton id="editButton" value="Editar"  class="espacio-btn" rendered="false"
+                                                     icon="ui-icon-pencil"
+                                                     actionListener="#{beanAgregarPersona.preparaActualizar}"
+                                                     disabled="#{empty beanAgregarPersona.personaSeleccionada or fn:startsWith(beanAgregarPersona.personaSeleccionada.perEstatus,'SAD') or (beanAgregarPersona.listaPersonas.size() eq 1)}"
+                                                     />
+                                    
+                                    <p:commandButton id="eliminarButton" styleClass="red-light-btn espacio-btn" rendered="false"
+                                                     value="Eliminar" icon="fa fa-trash-o"
+                                                     actionListener="#{beanAgregarPersona.preparaEliminar}"
+                                                     disabled="#{empty beanAgregarPersona.personaSeleccionada or fn:startsWith(beanAgregarPersona.personaSeleccionada.perEstatus,'SAD') or (beanAgregarPersona.listaPersonas.size() eq 1)}"
+                                                     />
+
+                                </f:facet>
+                            </p:dataTable>
+                        </h:form>
+                    </p:panel>
+                </div>
+            </div>
+        </div>
+
+        <!--dialogs-->
+        
+        <p:dialog header="Foto" widgetVar="wv-mostrar-foto" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+            <h:form id="FotoForm" style="text-align:center;">
+                <p:panelGrid  columns="2" rendered="#{not empty beanAgregarPersona.personaSeleccionada}" columnClasses="label,value">
+                    <f:facet name="header">
+                        <!--<p:graphicImage name="demo/images/car/{beanAgregarPersona.personaSeleccionada.brand}-big.gif"/> -->
+                        <p:graphicImage name="images/login/secure.png" library="paradise-layout" />
+                    </f:facet>
+
+                    <h:outputText value="Id:" />
+                    <h:outputText value="#{beanAgregarPersona.personaSeleccionada.idPersona}" />
+
+                    <h:outputText value="Nombres:" />
+                    <h:outputText value="#{beanAgregarPersona.personaSeleccionada.perNombres}" />
+
+                    <h:outputText value="Correo" />
+                    <h:outputText value="#{beanAgregarPersona.personaSeleccionada.perCorreo}" />
+                </p:panelGrid>
+            </h:form>
+        </p:dialog>
+
+        <p:dialog header="Nueva Persona" widgetVar="wv-crear" modal="true" >
+
+            <h:form id="CreateForm">
+
+                <h:panelGroup id="display" style="border:0px none;background:none">
+                    <p:panelGrid columns="3" rendered="#{beanAgregarPersona.personaSeleccionada != null}" style="border:0px none;background:none" >
+                        <p:outputLabel value="Nombre" for="usrNombre" />
+                        <p:inputText id="usrNombre" value="#{beanAgregarPersona.personaSeleccionada.perNombres}" title="Nombre" required="true" requiredMessage="Nombre Obligatorio" />
+                        <p:message for="usrNombre"/>
+
+                        <p:outputLabel value="Identificación" for="usrIdentificacion" />
+                        <p:inputText id="usrIdentificacion" value="#{beanAgregarPersona.personaSeleccionada.perIdentificacion}" title="Identificación" required="true" requiredMessage="Identificacion Obligatorio">
+                            <p:ajax event="keyup" update="display" listener="#{beanAgregarPersona.validarCedula}" />
+                        </p:inputText>
+                        <p:messages for="usrIdentificacion"/>
+
+                        <p:outputLabel value="Correo" for="usrCorreo" />
+                        <p:inputText id="usrCorreo" value="#{beanAgregarPersona.personaSeleccionada.perCorreo}" title="Correo" required="true" requiredMessage="Correo Obligatorio"/>
+                        <p:message for="usrCorreo"/>
+                        
+                        <p:outputLabel value="Teléfono" for="usrTelefono" />
+                        <p:inputText id="usrTelefono" value="#{beanAgregarPersona.personaSeleccionada.perTelefono}" title="Teléfono" />
+                        <h:outputText value="" />
+                        
+                        <p:outputLabel value="Dirección" for="usrDireccion" />
+                        <p:inputText id="usrDireccion" value="#{beanAgregarPersona.personaSeleccionada.perDireccion}" title="Dirección" />
+                        <h:outputText value="" />
+                        
+                    </p:panelGrid>
+
+                </h:panelGroup>
+                <div class="ui-g-12 ui-fluid contact-form">
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <p:commandButton actionListener="#{beanAgregarPersona.agregarPersona}" value="Guardar" update=":form:dt-entidad :pg-notificacion display" validateClient="true"/>    
+                        </div>    
+                    </div>
+                </div>
+            </h:form>
+
+        </p:dialog>
+
+    </ui:define>
+
+</ui:composition>

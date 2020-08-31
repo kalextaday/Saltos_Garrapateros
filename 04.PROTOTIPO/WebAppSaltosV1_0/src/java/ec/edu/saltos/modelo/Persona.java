@@ -1,9 +1,10 @@
 package ec.edu.saltos.modelo;
-// Generated 21-ago-2020 20:56:19 by Hibernate Tools 4.3.1
+// Generated 31-ago-2020 17:42:00 by Hibernate Tools 4.3.1
 
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -12,7 +13,7 @@ import java.util.Set;
 public class Persona  implements java.io.Serializable {
 
 
-     private int idPersona;
+     private Integer idPersona;
      private String perNombres;
      private String perApellidos;
      private String perDireccion;
@@ -29,12 +30,7 @@ public class Persona  implements java.io.Serializable {
     public Persona() {
     }
 
-	
-    public Persona(int idPersona) {
-        this.idPersona = idPersona;
-    }
-    public Persona(int idPersona, String perNombres, String perApellidos, String perDireccion, String perIdentificacion, Date perFechaNacimiento, String perTelefono, String perCorreo, String perFoto, Date perFechaCreacion, Date perFechaMod, String perEstatus, Set<UsuarioAcceso> usuarioAccesos) {
-       this.idPersona = idPersona;
+    public Persona(String perNombres, String perApellidos, String perDireccion, String perIdentificacion, Date perFechaNacimiento, String perTelefono, String perCorreo, String perFoto, Date perFechaCreacion, Date perFechaMod, String perEstatus, Set<UsuarioAcceso> usuarioAccesos) {
        this.perNombres = perNombres;
        this.perApellidos = perApellidos;
        this.perDireccion = perDireccion;
@@ -49,11 +45,11 @@ public class Persona  implements java.io.Serializable {
        this.usuarioAccesos = usuarioAccesos;
     }
    
-    public int getIdPersona() {
+    public Integer getIdPersona() {
         return this.idPersona;
     }
     
-    public void setIdPersona(int idPersona) {
+    public void setIdPersona(Integer idPersona) {
         this.idPersona = idPersona;
     }
     public String getPerNombres() {
@@ -143,8 +139,8 @@ public class Persona  implements java.io.Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 83 * hash + this.idPersona;
+        int hash = 5;
+        hash = 13 * hash + Objects.hashCode(this.idPersona);
         return hash;
     }
 
@@ -160,7 +156,7 @@ public class Persona  implements java.io.Serializable {
             return false;
         }
         final Persona other = (Persona) obj;
-        if (this.idPersona != other.idPersona) {
+        if (!Objects.equals(this.idPersona, other.idPersona)) {
             return false;
         }
         return true;
