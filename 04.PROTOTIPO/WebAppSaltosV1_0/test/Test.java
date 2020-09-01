@@ -7,10 +7,12 @@
 
 import ec.edu.saltos.config.HibernateUtil;
 import ec.edu.saltos.modelo.AsignarPerfil;
+import ec.edu.saltos.modelo.Empresa;
 import ec.edu.saltos.modelo.Perfil;
 import ec.edu.saltos.modelo.Persona;
 import ec.edu.saltos.modelo.UsuarioAcceso;
 import ec.edu.saltos.persistencia.DAOAsignarPerfil;
+import ec.edu.saltos.persistencia.DAOEmpresa;
 import ec.edu.saltos.persistencia.DAOOpcionPerfil;
 import ec.edu.saltos.persistencia.DAOPersona;
 import ec.edu.saltos.validaciones.Cedula;
@@ -33,13 +35,14 @@ public class Test {
             System.out.println("no se eliminaron");
         }
         */
-        List<Persona> lista= new ArrayList<>();
-        DAOPersona daopersona=new DAOPersona();
+        List<Empresa> lista;
+        DAOEmpresa daopersona=new DAOEmpresa();
         
-        lista.add(daopersona.obtenerUltimoRegistro());
+        lista=daopersona.obtenerTodos();
         
-        for(Persona p:lista){
-            System.out.println("--> "+p.getPerNombres());
+        System.out.println("inicio");
+        for(Empresa p:lista){
+            System.out.println("--> "+p.getEmpRazonSocial());
         }
         
     }
