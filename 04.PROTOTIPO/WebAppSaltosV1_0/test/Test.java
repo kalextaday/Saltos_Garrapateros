@@ -27,14 +27,14 @@ import org.hibernate.Transaction;
  */
 public class Test {
     public static void main(String[] args){
-        /*
+        
         DAOOpcionPerfil dao=new DAOOpcionPerfil();
         if(dao.eliminarNOpcionesPerfil(2)){
             System.out.println("eliminados correctamente");
         }else{
             System.out.println("no se eliminaron");
         }
-        */
+        
         List<Empresa> lista;
         DAOEmpresa daopersona=new DAOEmpresa();
         
