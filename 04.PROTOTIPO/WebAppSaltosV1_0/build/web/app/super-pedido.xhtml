@@ -1,0 +1,425 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+
+
+    <ui:define name="title">Administración de Pedidos</ui:define>
+
+    <ui:define name="content">
+
+        <div class="ui-g ui-fluid">
+            <div class="ui-g-8 titulo-app">
+                <span>
+                    <i class="fa fa-star icono-tamano"></i> <h:outputText value="Administración de Pedidos" />
+                </span>
+
+            </div>
+            <div class="ui-g-4" style="text-align: right !important" >
+                <p:clock pattern="HH:mm:ss dd-MM-yyyy" />
+            </div>
+        </div>
+
+        <div class="ui-g dashboard">
+
+            <p:growl id="pg-notificacion" showDetail="true" life="3000" />
+
+            <div class="ui-g-12 ">
+                <h:form id="formAgregar">
+
+                    <div class="ui-lg-4 ui-fluid contact-form">
+                        <p:panel header="Acciónes" style="min-height:100px">
+                            <div class="ui-g">
+                                <div class="ui-g-12">
+                                    <p:commandButton actionListener="#{beanPedido.agregarPedido}"
+                                                     icon="fa fa fw fa-check-circle" update="pg-notificacion formAgregar:display :form:dt-entidad" 
+                                                     value="Guardar Pedido" validateClient="true"/>
+                                </div>
+
+                            </div>
+                        </p:panel>
+                    </div>
+
+                    <div class="ui-g-8">
+                        <h:panelGroup id="display">
+                            <p:tabView>
+                                <p:tab id="tabDat" title="Información Primordial">
+                                    <h:panelGrid columns="3" cellpadding="10">
+                                        
+                                        <p:outputLabel value="Salto:" for="objPersona" />    
+                                        <p:selectOneMenu id="objPersona" value="#{beanPedido.saltoSeleccionado}" title="Persona"
+                                                         effect="fade" panelStyle="width:175px" style="min-width: 85%;" 
+                                                         autoWidth="false" converter="saltoConverter"
+                                                         required="true" requiredMessage="Campo Obligatorio">
+                                            <f:selectItem noSelectionOption="true" itemLabel="Selecciona..." itemValue="#{null}"/>
+                                            <f:selectItems value="#{beanPedido.listaSaltos}"
+                                                           var="salto"
+                                                           itemLabel="#{salto.tipoSalto}"
+                                                           itemValue="#{salto}" />
+                                            <p:ajax event="change" listener="#{beanPedido.actualizarSalto()}" update="conSal"/>
+                                        </p:selectOneMenu> 
+                                        <p:message for="objPersona"/>
+                                        
+                                        
+                                        <p:outputLabel for="costo" value="Costo:" />
+                                        <p:inputNumber id="costo" value="#{beanPedido.pedidoSeleccionado.costoSalto}" title="Fecha" required="true" requiredMessage="Fecha Obligatorio"/>
+                                        <p:message for="costo"/>
+                                        
+                                        
+                                        <p:outputLabel for="time" value="Fecha a Realizarse:" />
+                                        <p:datePicker id="time" value="#{beanPedido.pedidoSeleccionado.fecaARealizarseSalto}" showTime="true" 
+                                                      title="Fecha" required="true" requiredMessage="Fecha Obligatorio"/>
+                                        <p:message for="time"/>
+
+                                    </h:panelGrid>
+                                </p:tab>
+                                <p:tab id="tabDir" title="Paracaidista">
+                                    <h:panelGrid columns="3" cellpadding="10">
+                                        
+                                        <p:outputLabel value="Nombre Paracaidista:" for="objPara" />    
+                                        <p:selectOneMenu id="objPara" value="#{beanPedido.paracaidistaSeleccionado}" title="Persona"
+                                                         effect="fade" panelStyle="width:175px" style="min-width: 85%;" 
+                                                         autoWidth="false" converter="paracaidistaConverter"
+                                                         required="true" requiredMessage="Campo Obligatorio">
+                                            <f:selectItem noSelectionOption="true" itemLabel="Selecciona..." itemValue="#{null}"/>
+                                            <f:selectItems value="#{beanPedido.listaParacaidistas}"
+                                                           var="paracaidista"
+                                                           itemLabel="#{paracaidista.usuarioAcceso.persona.perNombres} #{paracaidista.usuarioAcceso.persona.perApellidos}"
+                                                           itemValue="#{paracaidista}" />
+                                            <p:ajax event="change" listener="#{beanPedido.actualizarParacaidista()}" update="tipPar licPar efPar conFec conCos"/>
+                                        </p:selectOneMenu> 
+                                        <p:message for="objPara"/>
+                                        
+                                        <p:outputLabel value="Tipo de Paracaidista:" for="tipPar" />
+                                        <p:inputText id="tipPar" value="#{beanPedido.paracaidistaSeleccionado.tipoParacaidista}" title="Nombre" required="true" requiredMessage="Nombre de usuario Obligatorio" />
+                                        <p:message for="tipPar"/>
+                                        
+                                        <p:outputLabel value="Escuela de Formacion:" for="efPar" />
+                                        <p:inputText id="efPar" value="#{beanPedido.paracaidistaSeleccionado.escuelaFormacion}" title="Nombre" required="true" requiredMessage="Nombre de usuario Obligatorio" />
+                                        <p:message for="efPar"/>
+                                        
+                                        <p:outputLabel value="Licencia:" for="licPar" />
+                                        <p:inputSwitch id="licPar" value="#{beanPedido.paracaidistaSeleccionado.licencia}" required="true" requiredMessage="Contabilidad Obligatorio" 
+                                                       onLabel="SI" offLabel="NO"/>
+                                        <p:message for="licPar"/>
+                                        
+                                    </h:panelGrid>
+                                </p:tab>
+                                <p:tab id="tabInf" title="Descuentos">
+                                    <h:panelGrid columns="3" cellpadding="10">
+                                        
+                                        <p:outputLabel value="Descuento:" for="objDes" />    
+                                        <p:selectOneMenu id="objDes" value="#{beanPedido.descuentoSeleccionado}" title="Descuento"
+                                                         effect="fade" panelStyle="width:175px" style="min-width: 85%;" 
+                                                         autoWidth="false" converter="descuentoConverter"
+                                                         required="true" requiredMessage="Campo Obligatorio">
+                                            <f:selectItem noSelectionOption="true" itemLabel="Selecciona..." itemValue="#{null}"/>
+                                            <f:selectItems value="#{beanPedido.listaDescuentos}"
+                                                           var="descuento"
+                                                           itemLabel="#{descuento.desNombre}"
+                                                           itemValue="#{descuento}" />
+                                            <p:ajax event="change" listener="#{beanPedido.actualizarDescuento()}" update="descriDes valoDes"/>
+                                        </p:selectOneMenu> 
+                                        <p:message for="objDes"/>
+                                        
+                                        <p:outputLabel value="Descripcion Descuento:" for="descriDes" />
+                                        <p:inputText id="descriDes" value="#{beanPedido.descuentoSeleccionado.desDescripcion}" title="Nombre" required="true" requiredMessage="Nombre de usuario Obligatorio" />
+                                        <p:message for="descriDes"/>
+                                        
+                                        <p:outputLabel value="Valor Descuento:" for="valoDes" />
+                                        <p:inputText id="valoDes" value="#{beanPedido.descuentoSeleccionado.desValor}" title="Nombre" required="true" requiredMessage="Nombre de usuario Obligatorio" />
+                                        <p:message for="valoDes"/>
+                                        
+                                    </h:panelGrid>
+                                </p:tab>
+                                <p:tab id="tabVue" title="Vuelo">
+                                    <h:panelGrid columns="3" cellpadding="10">
+                                        
+                                        <p:outputLabel value="Vuelo:" for="objVue" />    
+                                        <p:selectOneMenu id="objVue" value="#{beanPedido.vueloSeleccionado}" title="Descuento"
+                                                         effect="fade" panelStyle="width:175px" style="min-width: 85%;" 
+                                                         autoWidth="false" converter="vueloConverter"
+                                                         required="true" requiredMessage="Campo Obligatorio">
+                                            <f:selectItem noSelectionOption="true" itemLabel="Selecciona..." itemValue="#{null}"/>
+                                            <f:selectItems value="#{beanPedido.listaVuelos}"
+                                                           var="vuelo"
+                                                           itemLabel="#{vuelo.idVuelo}"
+                                                           itemValue="#{vuelo}" />
+                                            <p:ajax event="change" listener="#{beanPedido.actualizarVuelo()}" update="aer piloto"/>
+                                        </p:selectOneMenu> 
+                                        <p:message for="objVue"/>
+                                        
+                                        <p:outputLabel value="Aeronave:" for="aer" />
+                                        <p:inputText id="aer" value="#{beanPedido.vueloSeleccionado.aeronave.aerNombre}" title="Nombre" required="true" requiredMessage="Nombre de usuario Obligatorio" />
+                                        <p:message for="aer"/>
+                                        
+                                        <p:outputLabel value="Piloto:" for="piloto" />
+                                        <p:inputText id="piloto" value="#{beanPedido.vueloSeleccionado.usuarioAcceso.persona.perNombres}" title="Nombre" required="true" requiredMessage="Nombre de usuario Obligatorio" />
+                                        <p:message for="piloto"/>
+                                        
+                                    </h:panelGrid>
+                                </p:tab>
+                                <p:tab id="tabConf" title="Confirmacion">
+                                    <h:panelGrid columns="2" cellpadding="10">
+                                        
+                                        <p:outputLabel value="Salto: " for="conSal" />     
+                                        <h:outputText id="conSal" value="#{beanPedido.pedidoSeleccionado.salto.tipoSalto}"/>
+                                        
+                                        <p:outputLabel value="Fecha a realizarse" for="conFec" />
+                                        <h:outputText id="conFec" value="#{beanPedido.pedidoSeleccionado.fecaARealizarseSalto}"/>
+                                        
+                                        <p:outputLabel value="Costo Total:" for="conCos" />
+                                        <h:outputText id="conCos" value="#{beanPedido.pedidoSeleccionado.costoTotalPedido}"/>
+                                        
+                                    </h:panelGrid>
+                                </p:tab>
+                            </p:tabView>
+                        </h:panelGroup>
+                    </div>
+
+                </h:form>
+            </div>
+            
+            
+            <div class="ui-g-12 ui-lg-12">
+                <div class="border-material">
+                    <p:panel header="Pedidos" style="min-height:100px">
+                        <h:form id="form">
+                            <p:dataTable var="pedido" id="dt-entidad" reflow="true"
+                                         value="#{beanPedido.listaPedidos}" scrollRows="20" scrollable="true"
+                                         selectionMode="single" selection="#{beanPedido.pedidoSeleccionado}" rowKey="#{pedido.idPedido}"
+                                         liveScroll="true" scrollHeight="375">
+
+                                <p:ajax event="rowSelect" listener="#{beanPedido.onRowSelect}" update="editButton asociarButton eliminarButton" />
+                                <p:ajax event="rowUnselect" listener="#{beanPedido.onRowUnselect}" update="editButton asociarButton eliminarButton" />
+
+                                <p:column headerText="Id de Pedido" sortBy="#{pedido.idPedido}" filterBy="#{pedido.idPedido}"  filterMatchMode="contains">
+                                    <h:outputText value="#{pedido.idPedido}" />
+                                </p:column>
+                                
+                                <p:column headerText="Fecha a Realizarse" sortBy="#{pedido.fecaARealizarseSalto}">
+                                    <h:outputText value="#{estiloUtiles.toValueFechaFormato(pedido.fecaARealizarseSalto, beanPedido.formatoFecha)}" />
+                                </p:column>
+                                
+                                <p:column headerText="Hora a Realizarse" sortBy="#{pedido.fecaARealizarseSalto}">
+                                    <h:outputText value="#{estiloUtiles.toValueHoraFormato(pedido.fecaARealizarseSalto, beanPedido.formatoHora)}" />
+                                </p:column>
+                                
+                                <p:column headerText="Costo Total" sortBy="#{pedido.costoTotalPedido}">
+                                    <h:outputText value="#{estiloUtiles.toValueNumero(pedido.costoTotalPedido)}"/>
+                                </p:column>
+                                
+
+                                <f:facet name="header" class="iconos-derecha">
+                                    <p:commandButton id="createButton" value="Crear" class="espacio-btn"
+                                                     icon="ui-icon-plus" actionListener="#{beanPedido.preparaCrear}"
+                                                     update=":CreateForm"/>
+
+                                    <p:commandButton id="editButton" value="Editar"  class="espacio-btn"
+                                                     icon="ui-icon-pencil"
+                                                     actionListener="#{beanPedido.preparaActualizar}"
+                                                     disabled="#{empty beanPedido.pedidoSeleccionado}"
+                                                     update=":EditForm"/>
+
+                                    <p:commandButton id="asociarButton" styleClass="red-light-btn espacio-btn" rendered="false"
+                                                     value="Archivar" icon="fa fa-trash-o"
+                                                     actionListener="#{beanPedido.preparaArchivar}"
+                                                     disabled="#{empty beanPedido.pedidoSeleccionado}"
+                                                     update=":ArchivarForm"/>
+                                    
+                                    <p:commandButton id="eliminarButton" styleClass="red-light-btn espacio-btn"
+                                                     value="Eliminar" icon="fa fa-trash-o"
+                                                     actionListener="#{beanPedido.preparaEliminar}"
+                                                     disabled="#{empty beanPedido.pedidoSeleccionado}"
+                                                     update=":EliminarForm"/>
+
+                                </f:facet>
+                            </p:dataTable>
+                        </h:form>
+                    </p:panel>
+                </div>
+            </div>
+        </div>
+
+        <!--dialogs-->
+        
+        <p:dialog header="Foto" widgetVar="wv-mostrar-foto" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+            <h:form id="FotoForm" style="text-align:center;">
+                <p:panelGrid  columns="2" rendered="#{not empty beanPedido.pedidoSeleccionado}" columnClasses="label,value">
+                    <f:facet name="header">
+                        <!--<p:graphicImage name="demo/images/car/{beanPedido.pedidoSeleccionado.brand}-big.gif"/> -->
+                        <p:graphicImage name="images/login/secure.png" library="paradise-layout" />
+                    </f:facet>
+
+                    <h:outputText value="Id:" />
+                    <h:outputText value="#{beanPedido.pedidoSeleccionado.idPedido}" />
+
+                    <h:outputText value="Costo total" />
+                    <h:outputText value="#{beanPedido.pedidoSeleccionado.costoTotalPedido}" />
+                </p:panelGrid>
+            </h:form>
+        </p:dialog>
+
+        <p:dialog header="Nueva Factura" widgetVar="wv-crear" modal="true" >
+
+            <h:form id="CreateForm">
+
+                <h:panelGroup id="display" style="border:0px none;background:none">
+                    <p:panelGrid columns="3" rendered="#{beanPedido.facturaSeleccionada != null}" style="border:0px none;background:none" >
+                        
+                        <p:outputLabel value="Datos de la Empresa:" for="objPersona" />    
+                        <p:selectOneMenu id="objPersona" value="#{beanPedido.empresaSeleccionada}" title="Empresa"
+                                         effect="fade" panelStyle="width:175px" style="min-width: 85%;" 
+                                         autoWidth="false" converter="empresaConverter"
+                                         required="true" requiredMessage="Campo Obligatorio">
+                            <f:selectItem noSelectionOption="true" itemLabel="Selecciona..." itemValue="#{null}"/>
+                            <f:selectItems value="#{beanPedido.listaEmpresas}"
+                                           var="empresa"
+                                           itemLabel="#{empresa.empRazonSocial}"
+                                           itemValue="#{empresa}" />
+                            <p:ajax event="change" listener="#{beanPedido.actualizarEmpresa()}" />
+                        </p:selectOneMenu> 
+                        <p:message for="objPersona"/>
+                        
+                        
+                        <p:outputLabel value="Datos del Cliente:" for="objCli" />    
+                        <p:selectOneMenu id="objCli" value="#{beanPedido.usuarioClienteSeleccionado}" title="Cliente"
+                                         effect="fade" panelStyle="width:175px" style="min-width: 85%;" 
+                                         autoWidth="false" converter="usuarioConverter"
+                                         required="true" requiredMessage="Campo Obligatorio">
+                            <f:selectItem noSelectionOption="true" itemLabel="Selecciona..." itemValue="#{null}"/>
+                            <f:selectItems value="#{beanPedido.listaUsuariosClientes}"
+                                           var="usuario"
+                                           itemLabel="#{usuario.persona.perNombres} #{usuario.persona.perApellidos}"
+                                           itemValue="#{usuario}" />
+                            <p:ajax event="change" listener="#{beanPedido.actualizarCliente()}" />
+                        </p:selectOneMenu> 
+                        <p:message for="objCli"/>
+                        
+                        
+                        <p:outputLabel value="Forma de Pago:" for="objPag" />    
+                        <p:selectOneMenu id="objPag" value="#{beanPedido.formaPagoSeleccionada}" title="Formas de pago"
+                                         effect="fade" panelStyle="width:175px" style="min-width: 85%;" 
+                                         autoWidth="false" converter="formaPagoConverter"
+                                         required="true" requiredMessage="Campo Obligatorio">
+                            <f:selectItem noSelectionOption="true" itemLabel="Selecciona..." itemValue="#{null}"/>
+                            <f:selectItems value="#{beanPedido.listaFormasPago}"
+                                           var="formaPago"
+                                           itemLabel="#{formaPago.pagoNombre}"
+                                           itemValue="#{formaPago}" />
+                            <p:ajax event="change" listener="#{beanPedido.actualizarFormaPago()}" />
+                        </p:selectOneMenu> 
+                        <p:message for="objPag"/>
+                        
+                    </p:panelGrid>
+
+                </h:panelGroup>
+                <div class="ui-g-12 ui-fluid contact-form">
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <p:commandButton actionListener="#{beanPedido.agregarFactura}" value="Guardar" update=":form:dt-entidad :pg-notificacion display" validateClient="true"/>    
+                        </div>    
+                    </div>
+                </div>
+            </h:form>
+
+        </p:dialog>
+
+        <p:dialog header="Actualizar Factura" widgetVar="wv-actualizar" modal="true" >
+
+            <h:form id="EditForm">
+                <h:panelGroup id="display" style="border:0px none;background:none">
+
+                    <p:panelGrid columns="2" rendered="#{beanPedido.facturaSeleccionada != null}" style="border:0px none;background:none" >
+                        
+                        <p:outputLabel value="Datos de la Empresa:" for="objPersona" />    
+                        <p:selectOneMenu id="objPersona" value="#{beanPedido.empresaSeleccionada}" title="Empresa"
+                                         effect="fade" panelStyle="width:175px" style="min-width: 85%;" 
+                                         autoWidth="false" converter="empresaConverter"
+                                         required="true" requiredMessage="Campo Obligatorio">
+                            <f:selectItems value="#{beanPedido.listaEmpresas}"
+                                           var="empresa"
+                                           itemLabel="#{empresa.empRazonSocial}"
+                                           itemValue="#{empresa}" />
+                            <p:ajax event="change" listener="#{beanPedido.actualizarEmpresa()}" />
+                        </p:selectOneMenu> 
+
+                        
+                        
+                        <p:outputLabel value="Datos del Cliente:" for="objCli" />    
+                        <p:selectOneMenu id="objCli" value="#{beanPedido.usuarioClienteSeleccionado}" title="Cliente"
+                                         effect="fade" panelStyle="width:175px" style="min-width: 85%;" 
+                                         autoWidth="false" converter="usuarioConverter"
+                                         required="true" requiredMessage="Campo Obligatorio">
+                            <f:selectItems value="#{beanPedido.listaUsuariosClientes}"
+                                           var="usuario"
+                                           itemLabel="#{usuario.persona.perNombres} #{usuario.persona.perApellidos}"
+                                           itemValue="#{usuario}" />
+                            <p:ajax event="change" listener="#{beanPedido.actualizarCliente()}" />
+                        </p:selectOneMenu> 
+
+                        
+                        
+                        <p:outputLabel value="Forma de Pago:" for="objPag" />    
+                        <p:selectOneMenu id="objPag" value="#{beanPedido.formaPagoSeleccionada}" title="Formas de pago"
+                                         effect="fade" panelStyle="width:175px" style="min-width: 85%;" 
+                                         autoWidth="false" converter="formaPagoConverter"
+                                         required="true" requiredMessage="Campo Obligatorio">
+                            <f:selectItems value="#{beanPedido.listaFormasPago}"
+                                           var="formaPago"
+                                           itemLabel="#{formaPago.pagoNombre}"
+                                           itemValue="#{formaPago}" />
+                            <p:ajax event="change" listener="#{beanPedido.actualizarFormaPago()}" />
+                        </p:selectOneMenu> 
+
+                    </p:panelGrid>
+
+                </h:panelGroup>
+                <div class="ui-g-12 ui-fluid contact-form">
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <p:commandButton actionListener="#{beanPedido.modificarFactura}" 
+                                             rendered="#{beanPedido.facturaSeleccionada != null}"
+                                             value="Actualizar" style="min-width:300px" update=":form:dt-entidad :pg-notificacion" />
+                        </div>    
+                    </div>
+                </div>
+
+            </h:form>
+
+        </p:dialog>
+        
+        
+            <p:dialog id="d-archivar" header="Archivar Persona" widgetVar="wv-archivar" modal="true" 
+                      showEffect="slide" width="450" hideEffect="slide">
+                <h:form id="ArchivarForm">
+                    <div class="ui-g-12 textAlCenter">
+                        <h:outputText value="Está seguro de archivar a la factura numero: #{beanPedido.facturaSeleccionada.facNumero}" />
+                    </div>
+                    <div class="ui-g-12 textAlCenter">
+                        <p:commandButton actionListener="#{beanPedido.modificarFactura}" value="Archivar ahora!" update=":form:dt-entidad :pg-notificacion" />
+                    </div>
+                </h:form>
+            </p:dialog>
+        
+        
+        <p:dialog id="d-eliminar" header="Eliminar Persona" widgetVar="wv-eliminar" modal="true" 
+                  showEffect="slide" width="450" hideEffect="slide">
+            <h:form id="EliminarForm">
+                <div class="ui-g-12 textAlCenter">
+                    <h:outputText value="Está seguro de eliminar a la factura numero: #{beanPedido.facturaSeleccionada.facNumero }" />
+                </div>
+                <div class="ui-g-12 textAlCenter">
+                    <p:commandButton actionListener="#{beanPedido.eliminarFactura}" value="Eliminar ahora!" update=":form:dt-entidad :pg-notificacion" />
+                </div>
+            </h:form>
+        </p:dialog>
+
+    </ui:define>
+
+</ui:composition>

@@ -77,6 +77,7 @@ public enum EstadosConfig {
     DESCUENTO__LIBRE_2T_1P("2 TANDEM - 1 SALTO LIBRE","",40),
     DESCUENTO__LIBRE_1T_3P("1 TANDEM - 3 SALTOS LIBRES","",50),
     DESCUENTO__LIBRE_5P("5 SALTOS LIBRES","",60),
+    NUM_FACTURA_INICIAL("Numero de factura inicial","2001001020",0),
     //Versionamiento
     VERSION_APP("Versión del Aplicativo", "1.5.0", 0),
     TIEMPO_SESION("", "", 1201_000),

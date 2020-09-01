@@ -1,0 +1,281 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+
+
+    <ui:define name="title">Administración de Facturas</ui:define>
+
+    <ui:define name="content">
+
+        <div class="ui-g ui-fluid">
+            <div class="ui-g-8 titulo-app">
+                <span>
+                    <i class="fa fa-star icono-tamano"></i> <h:outputText value="Administración de Facturas" />
+                </span>
+
+            </div>
+            <div class="ui-g-4" style="text-align: right !important" >
+                <p:clock pattern="HH:mm:ss dd-MM-yyyy" />
+            </div>
+        </div>
+
+        <div class="ui-g dashboard">
+
+            <p:growl id="pg-notificacion" showDetail="true" life="3000" />
+
+            <div class="ui-g-12 ui-lg-12">
+                <div class="border-material">
+                    <p:panel header="Facturas" style="min-height:100px">
+                        <h:form id="form">
+                            <p:dataTable var="factura" id="dt-entidad" reflow="true"
+                                         value="#{beanFacturas.listaFacturas}" scrollRows="20" scrollable="true"
+                                         selectionMode="single" selection="#{beanFacturas.facturaSeleccionada}" rowKey="#{factura.idFactura}"
+                                         liveScroll="true" scrollHeight="375">
+
+                                <p:ajax event="rowSelect" listener="#{beanFacturas.onRowSelect}" update="editButton asociarButton eliminarButton" />
+                                <p:ajax event="rowUnselect" listener="#{beanFacturas.onRowUnselect}" update="editButton asociarButton eliminarButton" />
+
+                                <p:column headerText="Numero de Factura" sortBy="#{factura.facNumero}" filterBy="#{factura.facNumero}"  filterMatchMode="contains">
+                                    <h:outputText value="#{factura.facNumero}" />
+                                </p:column>
+                                
+                                <p:column headerText="Fecha de Emisión" sortBy="#{factura.facFechaEmision}">
+                                    <h:outputText value="#{estiloUtiles.toValueFechaFormato(factura.facFechaEmision, beanFacturas.formatoFecha)}" />
+                                </p:column>
+
+                                <p:column headerText="Nombre del Cliente" sortBy="#{factura.usuarioAccesoByIdUsuarioCliente.persona.perNombres}">
+                                    <h:outputText value="#{factura.usuarioAccesoByIdUsuarioCliente.persona.perNombres} #{factura.usuarioAccesoByIdUsuarioCliente.persona.perApellidos}" />
+                                </p:column>
+                                
+                                <p:column headerText="Total" sortBy="#{factura.facValorTotal}">
+                                    <h:outputText value="#{factura.facValorTotal}" />
+                                </p:column>
+
+                                <p:column headerText="Forma de Pago" sortBy="#{factura.formaPago.pagoNombre}">
+                                    <h:outputText value="#{factura.formaPago.pagoNombre}" />
+                                </p:column>
+                                
+                                <p:column headerText="Usuario Generador" sortBy="#{factura.usuarioAccesoByIdUsuarioGeneradorFac.persona.perNombres}">
+                                    <h:outputText value="#{factura.usuarioAccesoByIdUsuarioGeneradorFac.persona.perNombres} #{factura.usuarioAccesoByIdUsuarioGeneradorFac.persona.perApellidos}" />
+                                </p:column>
+                                
+                                <p:column headerText="Detalle" style="width:32px;text-align: center">
+                                    <p:commandButton update=":FotoForm" oncomplete="PF('wv-mostrar-foto').show()" icon="fa fa-image" title="View">
+                                        <f:setPropertyActionListener value="#{factura}" target="#{beanFacturas.facturaSeleccionada}" />
+                                    </p:commandButton>
+                                </p:column>
+
+                                <f:facet name="header" class="iconos-derecha">
+                                    <p:commandButton id="createButton" value="Crear" class="espacio-btn"
+                                                     icon="ui-icon-plus" actionListener="#{beanFacturas.preparaCrear}"
+                                                     update=":CreateForm"/>
+
+                                    <p:commandButton id="editButton" value="Editar"  class="espacio-btn"
+                                                     icon="ui-icon-pencil"
+                                                     actionListener="#{beanFacturas.preparaActualizar}"
+                                                     disabled="#{empty beanFacturas.facturaSeleccionada}"
+                                                     update=":EditForm"/>
+
+                                    <p:commandButton id="asociarButton" styleClass="red-light-btn espacio-btn" rendered="false"
+                                                     value="Archivar" icon="fa fa-trash-o"
+                                                     actionListener="#{beanFacturas.preparaArchivar}"
+                                                     disabled="#{empty beanFacturas.facturaSeleccionada}"
+                                                     update=":ArchivarForm"/>
+                                    
+                                    <p:commandButton id="eliminarButton" styleClass="red-light-btn espacio-btn"
+                                                     value="Eliminar" icon="fa fa-trash-o"
+                                                     actionListener="#{beanFacturas.preparaEliminar}"
+                                                     disabled="#{empty beanFacturas.facturaSeleccionada}"
+                                                     update=":EliminarForm"/>
+
+                                </f:facet>
+                            </p:dataTable>
+                        </h:form>
+                    </p:panel>
+                </div>
+            </div>
+        </div>
+
+        <!--dialogs-->
+        
+        <p:dialog header="Foto" widgetVar="wv-mostrar-foto" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+            <h:form id="FotoForm" style="text-align:center;">
+                <p:panelGrid  columns="2" rendered="#{not empty beanFacturas.facturaSeleccionada}" columnClasses="label,value">
+                    <f:facet name="header">
+                        <!--<p:graphicImage name="demo/images/car/{beanFacturas.facturaSeleccionada.brand}-big.gif"/> -->
+                        <p:graphicImage name="images/login/secure.png" library="paradise-layout" />
+                    </f:facet>
+
+                    <h:outputText value="Id:" />
+                    <h:outputText value="#{beanFacturas.facturaSeleccionada.idFactura}" />
+
+                    <h:outputText value="Numero de Factura" />
+                    <h:outputText value="#{beanFacturas.facturaSeleccionada.facNumero}" />
+                </p:panelGrid>
+            </h:form>
+        </p:dialog>
+
+        <p:dialog header="Nueva Factura" widgetVar="wv-crear" modal="true" >
+
+            <h:form id="CreateForm">
+
+                <h:panelGroup id="display" style="border:0px none;background:none">
+                    <p:panelGrid columns="3" rendered="#{beanFacturas.facturaSeleccionada != null}" style="border:0px none;background:none" >
+                        
+                        <p:outputLabel value="Datos de la Empresa:" for="objPersona" />    
+                        <p:selectOneMenu id="objPersona" value="#{beanFacturas.empresaSeleccionada}" title="Empresa"
+                                         effect="fade" panelStyle="width:175px" style="min-width: 85%;" 
+                                         autoWidth="false" converter="empresaConverter"
+                                         required="true" requiredMessage="Campo Obligatorio">
+                            <f:selectItem noSelectionOption="true" itemLabel="Selecciona..." itemValue="#{null}"/>
+                            <f:selectItems value="#{beanFacturas.listaEmpresas}"
+                                           var="empresa"
+                                           itemLabel="#{empresa.empRazonSocial}"
+                                           itemValue="#{empresa}" />
+                            <p:ajax event="change" listener="#{beanFacturas.actualizarEmpresa()}" />
+                        </p:selectOneMenu> 
+                        <p:message for="objPersona"/>
+                        
+                        
+                        <p:outputLabel value="Datos del Cliente:" for="objCli" />    
+                        <p:selectOneMenu id="objCli" value="#{beanFacturas.usuarioClienteSeleccionado}" title="Cliente"
+                                         effect="fade" panelStyle="width:175px" style="min-width: 85%;" 
+                                         autoWidth="false" converter="usuarioConverter"
+                                         required="true" requiredMessage="Campo Obligatorio">
+                            <f:selectItem noSelectionOption="true" itemLabel="Selecciona..." itemValue="#{null}"/>
+                            <f:selectItems value="#{beanFacturas.listaUsuariosClientes}"
+                                           var="usuario"
+                                           itemLabel="#{usuario.persona.perNombres} #{usuario.persona.perApellidos}"
+                                           itemValue="#{usuario}" />
+                            <p:ajax event="change" listener="#{beanFacturas.actualizarCliente()}" />
+                        </p:selectOneMenu> 
+                        <p:message for="objCli"/>
+                        
+                        
+                        <p:outputLabel value="Forma de Pago:" for="objPag" />    
+                        <p:selectOneMenu id="objPag" value="#{beanFacturas.formaPagoSeleccionada}" title="Formas de pago"
+                                         effect="fade" panelStyle="width:175px" style="min-width: 85%;" 
+                                         autoWidth="false" converter="formaPagoConverter"
+                                         required="true" requiredMessage="Campo Obligatorio">
+                            <f:selectItem noSelectionOption="true" itemLabel="Selecciona..." itemValue="#{null}"/>
+                            <f:selectItems value="#{beanFacturas.listaFormasPago}"
+                                           var="formaPago"
+                                           itemLabel="#{formaPago.pagoNombre}"
+                                           itemValue="#{formaPago}" />
+                            <p:ajax event="change" listener="#{beanFacturas.actualizarFormaPago()}" />
+                        </p:selectOneMenu> 
+                        <p:message for="objPag"/>
+                        
+                    </p:panelGrid>
+
+                </h:panelGroup>
+                <div class="ui-g-12 ui-fluid contact-form">
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <p:commandButton actionListener="#{beanFacturas.agregarFactura}" value="Guardar" update=":form:dt-entidad :pg-notificacion display" validateClient="true"/>    
+                        </div>    
+                    </div>
+                </div>
+            </h:form>
+
+        </p:dialog>
+
+        <p:dialog header="Actualizar Factura" widgetVar="wv-actualizar" modal="true" >
+
+            <h:form id="EditForm">
+                <h:panelGroup id="display" style="border:0px none;background:none">
+
+                    <p:panelGrid columns="2" rendered="#{beanFacturas.facturaSeleccionada != null}" style="border:0px none;background:none" >
+                        
+                        <p:outputLabel value="Datos de la Empresa:" for="objPersona" />    
+                        <p:selectOneMenu id="objPersona" value="#{beanFacturas.empresaSeleccionada}" title="Empresa"
+                                         effect="fade" panelStyle="width:175px" style="min-width: 85%;" 
+                                         autoWidth="false" converter="empresaConverter"
+                                         required="true" requiredMessage="Campo Obligatorio">
+                            <f:selectItems value="#{beanFacturas.listaEmpresas}"
+                                           var="empresa"
+                                           itemLabel="#{empresa.empRazonSocial}"
+                                           itemValue="#{empresa}" />
+                            <p:ajax event="change" listener="#{beanFacturas.actualizarEmpresa()}" />
+                        </p:selectOneMenu> 
+
+                        
+                        
+                        <p:outputLabel value="Datos del Cliente:" for="objCli" />    
+                        <p:selectOneMenu id="objCli" value="#{beanFacturas.usuarioClienteSeleccionado}" title="Cliente"
+                                         effect="fade" panelStyle="width:175px" style="min-width: 85%;" 
+                                         autoWidth="false" converter="usuarioConverter"
+                                         required="true" requiredMessage="Campo Obligatorio">
+                            <f:selectItems value="#{beanFacturas.listaUsuariosClientes}"
+                                           var="usuario"
+                                           itemLabel="#{usuario.persona.perNombres} #{usuario.persona.perApellidos}"
+                                           itemValue="#{usuario}" />
+                            <p:ajax event="change" listener="#{beanFacturas.actualizarCliente()}" />
+                        </p:selectOneMenu> 
+
+                        
+                        
+                        <p:outputLabel value="Forma de Pago:" for="objPag" />    
+                        <p:selectOneMenu id="objPag" value="#{beanFacturas.formaPagoSeleccionada}" title="Formas de pago"
+                                         effect="fade" panelStyle="width:175px" style="min-width: 85%;" 
+                                         autoWidth="false" converter="formaPagoConverter"
+                                         required="true" requiredMessage="Campo Obligatorio">
+                            <f:selectItems value="#{beanFacturas.listaFormasPago}"
+                                           var="formaPago"
+                                           itemLabel="#{formaPago.pagoNombre}"
+                                           itemValue="#{formaPago}" />
+                            <p:ajax event="change" listener="#{beanFacturas.actualizarFormaPago()}" />
+                        </p:selectOneMenu> 
+
+                    </p:panelGrid>
+
+                </h:panelGroup>
+                <div class="ui-g-12 ui-fluid contact-form">
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <p:commandButton actionListener="#{beanFacturas.modificarFactura}" 
+                                             rendered="#{beanFacturas.facturaSeleccionada != null}"
+                                             value="Actualizar" style="min-width:300px" update=":form:dt-entidad :pg-notificacion" />
+                        </div>    
+                    </div>
+                </div>
+
+            </h:form>
+
+        </p:dialog>
+        
+        
+            <p:dialog id="d-archivar" header="Archivar Persona" widgetVar="wv-archivar" modal="true" 
+                      showEffect="slide" width="450" hideEffect="slide">
+                <h:form id="ArchivarForm">
+                    <div class="ui-g-12 textAlCenter">
+                        <h:outputText value="Está seguro de archivar a la factura numero: #{beanFacturas.facturaSeleccionada.facNumero}" />
+                    </div>
+                    <div class="ui-g-12 textAlCenter">
+                        <p:commandButton actionListener="#{beanFacturas.modificarFactura}" value="Archivar ahora!" update=":form:dt-entidad :pg-notificacion" />
+                    </div>
+                </h:form>
+            </p:dialog>
+        
+        
+        <p:dialog id="d-eliminar" header="Eliminar Persona" widgetVar="wv-eliminar" modal="true" 
+                  showEffect="slide" width="450" hideEffect="slide">
+            <h:form id="EliminarForm">
+                <div class="ui-g-12 textAlCenter">
+                    <h:outputText value="Está seguro de eliminar a la factura numero: #{beanFacturas.facturaSeleccionada.facNumero }" />
+                </div>
+                <div class="ui-g-12 textAlCenter">
+                    <p:commandButton actionListener="#{beanFacturas.eliminarFactura}" value="Eliminar ahora!" update=":form:dt-entidad :pg-notificacion" />
+                </div>
+            </h:form>
+        </p:dialog>
+
+    </ui:define>
+
+</ui:composition>

@@ -155,7 +155,7 @@
                                                      disabled="#{empty beanEmpresa.empresaSeleccionada}"
                                                      update=":EditForm"/>
 
-                                    <p:commandButton id="asociarButton" styleClass="red-light-btn espacio-btn"
+                                    <p:commandButton id="asociarButton" styleClass="red-light-btn espacio-btn" rendered="false"
                                                      value="Archivar" icon="fa fa-trash-o"
                                                      actionListener="#{beanEmpresa.preparaArchivar}"
                                                      disabled="#{empty beanEmpresa.empresaSeleccionada}"

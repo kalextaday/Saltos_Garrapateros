@@ -9,7 +9,7 @@
 
 
 
-    <ui:define name="title">Administración de Personas</ui:define>
+    <ui:define name="title">Administración de Formas de Pago</ui:define>
 
     <ui:define name="content">
 
@@ -28,98 +28,42 @@
         <div class="ui-g dashboard">
 
             <p:growl id="pg-notificacion" showDetail="true" life="3000" />
-            <!--<div class="ui-g-12 ui-lg-4 ui-fluid contact-form">
-                <h:form id="f-asignar-usuario">
-                    <p:panel header="Asignar perfil a un usuario" style="min-height:100px">
-                        <div class="ui-g">
-                            <div class="ui-g-12">
-                                <ul>
-                                    <li>Primero seleccionar la Entidad </li>
-                                    <li>Seleccionar el perfil para asignar</li>
-                                    <li>Seleccionar un usuario de la Entidad </li>
-                                    <li>Presionar <b>Asignar Perfil</b></li>
-                                </ul>
-
-                            </div>
-                        </div>
-                    </p:panel>
-
-
-                </h:form>
-            </div>-->
 
             <div class="ui-g-12 ui-lg-12">
                 <div class="border-material">
                     <p:panel header="Personas" style="min-height:100px">
                         <h:form id="form">
-                            <p:dataTable var="persona" id="dt-entidad" reflow="true"
-                                         value="#{beanFormaPago.listaPersonas}" scrollRows="20" scrollable="true"
-                                         selectionMode="single" selection="#{beanFormaPago.personaSeleccionada}" rowKey="#{persona.idPersona}"
+                            <p:dataTable var="pagos" id="dt-entidad" reflow="true"
+                                         value="#{beanFormaPago.listaFormasPago}" scrollRows="20" scrollable="true"
+                                         selectionMode="single" selection="#{beanFormaPago.formPagoSeleccionada}" rowKey="#{pagos.idFormaPago}"
                                          liveScroll="true" scrollHeight="375">
 
-                                <p:ajax event="rowSelect" listener="#{beanFormaPago.onRowSelect}" update="editButton asociarButton eliminarButton" />
-                                <p:ajax event="rowUnselect" listener="#{beanFormaPago.onRowUnselect}" update="editButton asociarButton eliminarButton" />
+                                <p:ajax event="rowSelect" listener="#{beanFormaPago.onRowSelect}" update="editButton  eliminarButton" />
+                                <p:ajax event="rowUnselect" listener="#{beanFormaPago.onRowUnselect}" update="editButton  eliminarButton" />
 
-                                <p:column headerText="Identificación" sortBy="#{persona.perIdentificacion}" filterBy="#{persona.perIdentificacion}"  filterMatchMode="contains">
-                                    <h:outputText value="#{persona.perIdentificacion}" />
-                                </p:column>
-
-                                <p:column headerText="Nombres" sortBy="#{persona.perNombres}">
-                                    <h:outputText value="#{persona.perNombres}" />
-                                </p:column>
-                                
-                                <p:column headerText="Apellidos" sortBy="#{persona.perApellidos}">
-                                    <h:outputText value="#{persona.perApellidos}" />
+                                <p:column headerText="Nombre" sortBy="#{pagos.pagoNombre}" filterBy="#{pagos.pagoNombre}"  filterMatchMode="contains">
+                                    <h:outputText value="#{pagos.pagoNombre}" />
                                 </p:column>
 
-                                <p:column headerText="Direccion" sortBy="#{persona.perDireccion}">
-                                    <h:outputText value="#{persona.perDireccion}" />
-                                </p:column>
-                                
-                                <p:column headerText="Correo" sortBy="#{persona.perCorreo}">
-                                    <h:outputText value="#{persona.perCorreo}" />
-                                </p:column>
-                                
-                                <p:column headerText="Fecha de Nacimiento" sortBy="#{persona.perFechaNacimiento}">
-                                    <h:outputText value="#{estiloUtiles.toValueFechaFormato(persona.perFechaNacimiento, beanFormaPago.formatoFecha)}" />
-                                </p:column>
-                                
-                                <p:column headerText="Telefono" sortBy="#{persona.perTelefono}">
-                                    <h:outputText value="#{persona.perTelefono}" />
-                                </p:column>
-                                
-                                <p:column headerText="Foto" style="width:32px;text-align: center">
-                                    <p:commandButton update=":FotoForm" oncomplete="PF('wv-mostrar-foto').show()" icon="fa fa-image" title="View">
-                                        <f:setPropertyActionListener value="#{persona}" target="#{beanFormaPago.personaSeleccionada}" />
-                                    </p:commandButton>
-                                </p:column>
-
-                                <p:column headerText="Estatus" sortBy="#{persona.perEstatus}">
-                                    <h:outputText   class="ancho-columna #{estiloUtiles.toStylePersona(persona.perEstatus )}"
-                                                    value="#{estiloUtiles.toValuePersona(persona.perEstatus)}" />
+                                <p:column headerText="Descripcion" sortBy="#{pagos.pagoDescripcion}">
+                                    <h:outputText value="#{pagos.pagoDescripcion}" />
                                 </p:column>
 
                                 <f:facet name="header" class="iconos-derecha">
-                                    <p:commandButton id="createButton" value="Crear" class="espacio-btn" rendered="false"
+                                    <p:commandButton id="createButton" value="Crear" class="espacio-btn"
                                                      icon="ui-icon-plus" actionListener="#{beanFormaPago.preparaCrear}"
                                                      update=":CreateForm"/>
 
                                     <p:commandButton id="editButton" value="Editar"  class="espacio-btn"
                                                      icon="ui-icon-pencil"
                                                      actionListener="#{beanFormaPago.preparaActualizar}"
-                                                     disabled="#{empty beanFormaPago.personaSeleccionada or fn:startsWith(beanFormaPago.personaSeleccionada.perEstatus,'SAD') or (beanFormaPago.listaPersonas.size() eq 1)}"
+                                                     disabled="#{empty beanFormaPago.formPagoSeleccionada or (beanFormaPago.listaFormasPago.size() eq 1)}"
                                                      update=":EditForm"/>
-
-                                    <p:commandButton id="asociarButton" styleClass="red-light-btn espacio-btn"
-                                                     value="Archivar" icon="fa fa-trash-o"
-                                                     actionListener="#{beanFormaPago.preparaArchivar}"
-                                                     disabled="#{empty beanFormaPago.personaSeleccionada or fn:startsWith(beanFormaPago.personaSeleccionada.perEstatus,'SAD') or (beanFormaPago.listaPersonas.size() eq 1)}"
-                                                     update=":ArchivarForm"/>
                                     
                                     <p:commandButton id="eliminarButton" styleClass="red-light-btn espacio-btn"
                                                      value="Eliminar" icon="fa fa-trash-o"
                                                      actionListener="#{beanFormaPago.preparaEliminar}"
-                                                     disabled="#{empty beanFormaPago.personaSeleccionada or fn:startsWith(beanFormaPago.personaSeleccionada.perEstatus,'SAD') or (beanFormaPago.listaPersonas.size() eq 1)}"
+                                                     disabled="#{empty beanFormaPago.formPagoSeleccionada  or (beanFormaPago.listaFormasPago.size() eq 1)}"
                                                      update=":EliminarForm"/>
 
                                 </f:facet>
@@ -131,54 +75,20 @@
         </div>
 
         <!--dialogs-->
-        
-        <p:dialog header="Foto" widgetVar="wv-mostrar-foto" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
-            <h:form id="FotoForm" style="text-align:center;">
-                <p:panelGrid  columns="2" rendered="#{not empty beanFormaPago.personaSeleccionada}" columnClasses="label,value">
-                    <f:facet name="header">
-                        <!--<p:graphicImage name="demo/images/car/{beanFormaPago.personaSeleccionada.brand}-big.gif"/> -->
-                        <p:graphicImage name="images/login/secure.png" library="paradise-layout" />
-                    </f:facet>
 
-                    <h:outputText value="Id:" />
-                    <h:outputText value="#{beanFormaPago.personaSeleccionada.idPersona}" />
-
-                    <h:outputText value="Nombres:" />
-                    <h:outputText value="#{beanFormaPago.personaSeleccionada.perNombres}" />
-
-                    <h:outputText value="Correo" />
-                    <h:outputText value="#{beanFormaPago.personaSeleccionada.perCorreo}" />
-                </p:panelGrid>
-            </h:form>
-        </p:dialog>
-
-        <p:dialog header="Nueva Persona" widgetVar="wv-crear" modal="true" >
+        <p:dialog header="Nueva Forma de Pago" widgetVar="wv-crear" modal="true" >
 
             <h:form id="CreateForm">
 
                 <h:panelGroup id="display" style="border:0px none;background:none">
-                    <p:panelGrid columns="3" rendered="#{beanFormaPago.personaSeleccionada != null}" style="border:0px none;background:none" >
-                        <p:outputLabel value="Nombre" for="usrNombre" />
-                        <p:inputText id="usrNombre" value="#{beanFormaPago.personaSeleccionada.perNombres}" title="Nombre" required="true" requiredMessage="Nombre Obligatorio" />
+                    <p:panelGrid columns="3" rendered="#{beanFormaPago.formPagoSeleccionada != null}" style="border:0px none;background:none" >
+                        <p:outputLabel value="Nombre:" for="usrNombre" />
+                        <p:inputText id="usrNombre" value="#{beanFormaPago.formPagoSeleccionada.pagoNombre}" title="Nombre" required="true" requiredMessage="Nombre Obligatorio" />
                         <p:message for="usrNombre"/>
 
-                        <p:outputLabel value="Identificación" for="usrIdentificacion" />
-                        <p:inputText id="usrIdentificacion" value="#{beanFormaPago.personaSeleccionada.perIdentificacion}" title="Identificación" required="true" requiredMessage="Identificacion Obligatorio">
-                            <p:ajax event="keyup" update="display" listener="#{beanFormaPago.validarCedula}" />
-                        </p:inputText>
-                        <p:messages for="usrIdentificacion"/>
-
-                        <p:outputLabel value="Correo" for="usrCorreo" />
-                        <p:inputText id="usrCorreo" value="#{beanFormaPago.personaSeleccionada.perCorreo}" title="Correo" required="true" requiredMessage="Correo Obligatorio"/>
+                        <p:outputLabel value="Descripcion:" for="usrCorreo" />
+                        <p:inputText id="usrCorreo" value="#{beanFormaPago.formPagoSeleccionada.pagoDescripcion}" title="Correo"/>
                         <p:message for="usrCorreo"/>
-                        
-                        <p:outputLabel value="Teléfono" for="usrTelefono" />
-                        <p:inputText id="usrTelefono" value="#{beanFormaPago.personaSeleccionada.perTelefono}" title="Teléfono" />
-                        <h:outputText value="" />
-                        
-                        <p:outputLabel value="Dirección" for="usrDireccion" />
-                        <p:inputText id="usrDireccion" value="#{beanFormaPago.personaSeleccionada.perDireccion}" title="Dirección" />
-                        <h:outputText value="" />
                         
                     </p:panelGrid>
 
@@ -186,7 +96,7 @@
                 <div class="ui-g-12 ui-fluid contact-form">
                     <div class="ui-g">
                         <div class="ui-g-12">
-                            <p:commandButton actionListener="#{beanFormaPago.agregarPersona}" value="Guardar" update=":form:dt-entidad :pg-notificacion display" validateClient="true"/>    
+                            <p:commandButton actionListener="#{beanFormaPago.agregarFormaPago}" value="Guardar" update=":form:dt-entidad :pg-notificacion display" validateClient="true"/>    
                         </div>    
                     </div>
                 </div>
@@ -194,35 +104,25 @@
 
         </p:dialog>
 
-        <p:dialog header="Actualizar Persona" widgetVar="wv-actualizar" modal="true" >
+        <p:dialog header="Actualizar Forma de Pago" widgetVar="wv-actualizar" modal="true" >
 
             <h:form id="EditForm">
                 <h:panelGroup id="display" style="border:0px none;background:none">
 
-                    <p:panelGrid columns="2" rendered="#{beanFormaPago.personaSeleccionada != null}" style="border:0px none;background:none" >
+                    <p:panelGrid columns="2" rendered="#{beanFormaPago.formPagoSeleccionada != null}" style="border:0px none;background:none" >
                         <p:outputLabel value="Nombre" for="usrNombre" />
-                        <p:inputText id="usrNombre" value="#{beanFormaPago.personaSeleccionada.perNombres}" title="Nombre" required="true" requiredMessage="Campo Obligatorio"/>
+                        <p:inputText id="usrNombre" value="#{beanFormaPago.formPagoSeleccionada.pagoNombre}" title="Nombre" required="true" requiredMessage="Campo Obligatorio"/>
 
-                        <p:outputLabel value="Identificación" for="usrIdentificacion" />
-                        <p:inputText id="usrIdentificacion" value="#{beanFormaPago.personaSeleccionada.perIdentificacion}" title="Identificación" required="true" requiredMessage="Campo Obligatorio"/>
-
-                        <p:outputLabel value="Correo" for="usrCorreo" />
-                        <p:inputText id="usrCorreo" value="#{beanFormaPago.personaSeleccionada.perCorreo}" title="Correo" required="true" requiredMessage="Campo Obligatorio"/>
-
-                        <p:outputLabel value="Teléfono" for="usrTelefono" />
-                        <p:inputText id="usrTelefono" value="#{beanFormaPago.personaSeleccionada.perTelefono}" title="Teléfono" />
-
-                        <p:outputLabel value="Dirección" for="usrDireccion" />
-                        <p:inputText id="usrDireccion" value="#{beanFormaPago.personaSeleccionada.perDireccion}" title="Dirección" />
-
+                        <p:outputLabel value="Descripcion" for="usrIdentificacion" />
+                        <p:inputText id="usrIdentificacion" value="#{beanFormaPago.formPagoSeleccionada.pagoDescripcion}" title="Descripcion" required="true" requiredMessage="Campo Obligatorio"/>
                     </p:panelGrid>
 
                 </h:panelGroup>
                 <div class="ui-g-12 ui-fluid contact-form">
                     <div class="ui-g">
                         <div class="ui-g-12">
-                            <p:commandButton actionListener="#{beanFormaPago.modificarPersona}" 
-                                             rendered="#{beanFormaPago.personaSeleccionada != null}"
+                            <p:commandButton actionListener="#{beanFormaPago.modificarFormaPago}" 
+                                             rendered="#{beanFormaPago.formPagoSeleccionada != null}"
                                              value="Actualizar" style="min-width:300px" update=":form:dt-entidad :pg-notificacion" />
                         </div>    
                     </div>
@@ -232,28 +132,14 @@
 
         </p:dialog>
         
-        
-            <p:dialog id="d-archivar" header="Archivar Persona" widgetVar="wv-archivar" modal="true" 
-                      showEffect="slide" width="450" hideEffect="slide">
-                <h:form id="ArchivarForm">
-                    <div class="ui-g-12 textAlCenter">
-                        <h:outputText value="Está seguro de archivar a: #{beanFormaPago.personaSeleccionada.perNombres}" />
-                    </div>
-                    <div class="ui-g-12 textAlCenter">
-                        <p:commandButton actionListener="#{beanFormaPago.archivarPersona}" value="Archivar ahora!" update=":form:dt-entidad :pg-notificacion" />
-                    </div>
-                </h:form>
-            </p:dialog>
-        
-        
-        <p:dialog id="d-eliminar" header="Eliminar Persona" widgetVar="wv-eliminar" modal="true" 
+        <p:dialog id="d-eliminar" header="Eliminar Forma de Pago" widgetVar="wv-eliminar" modal="true" 
                   showEffect="slide" width="450" hideEffect="slide">
             <h:form id="EliminarForm">
                 <div class="ui-g-12 textAlCenter">
-                    <h:outputText value="Está seguro de eliminar a: #{beanFormaPago.personaSeleccionada.perNombres }" />
+                    <h:outputText value="Está seguro de eliminar a: #{beanFormaPago.formPagoSeleccionada.pagoNombre }" />
                 </div>
                 <div class="ui-g-12 textAlCenter">
-                    <p:commandButton actionListener="#{beanFormaPago.eliminarPersona}" value="Eliminar ahora!" update=":form:dt-entidad :pg-notificacion" />
+                    <p:commandButton actionListener="#{beanFormaPago.eliminarFormaPago}" value="Eliminar ahora!" update=":form:dt-entidad :pg-notificacion" />
                 </div>
             </h:form>
         </p:dialog>

@@ -27,7 +27,7 @@ import org.hibernate.Transaction;
  */
 public class Test {
     public static void main(String[] args){
-        
+        /*
         DAOOpcionPerfil dao=new DAOOpcionPerfil();
         if(dao.eliminarNOpcionesPerfil(2)){
             System.out.println("eliminados correctamente");
@@ -44,6 +44,12 @@ public class Test {
         for(Empresa p:lista){
             System.out.println("--> "+p.getEmpRazonSocial());
         }
+        */
+        String nombre="kevin";
+        char num=nombre.charAt(0);
+        String ssss="hola_";
+        ssss=ssss+num;
+        System.out.println("--> "+ssss);
         
     }
     

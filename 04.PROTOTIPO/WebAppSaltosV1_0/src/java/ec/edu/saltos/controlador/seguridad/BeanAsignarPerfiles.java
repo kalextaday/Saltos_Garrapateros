@@ -226,6 +226,9 @@ public class BeanAsignarPerfiles extends FiltroAcceso implements Serializable{
                         PrimeUtiles.mostrarMensaje(FacesMessage.SEVERITY_ERROR, "Error:", "Al usuario: <b>"
                                 +u.getUsrAccesoNombre()+"</b> se le retiro correctamente el perfil.");
                     }
+                }else{
+                    PrimeUtiles.mostrarMensaje(FacesMessage.SEVERITY_INFO, "Info:", "El usuario: <b>"
+                                +u.getUsrAccesoNombre()+"</b> no tenia este perfil.");
                 }
             }
         }catch(Exception e){

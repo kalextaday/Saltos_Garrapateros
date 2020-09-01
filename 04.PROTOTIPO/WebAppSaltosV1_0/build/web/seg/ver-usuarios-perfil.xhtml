@@ -57,7 +57,7 @@
                             <p:dataTable var="usuarioPerfil" id="dt-entidad" reflow="true"
                                          value="#{beanVerUsuariosPorPerfil.listaAsignacionesPerfil}" scrollRows="20" scrollable="true"
                                          selectionMode="single" selection="#{beanVerUsuariosPorPerfil.usuarioPerfilSeleccionado}" rowKey="#{usuarioPerfil.idAsignarPerfil}"
-                                         liveScroll="true" scrollHeight="375">
+                                         liveScroll="true" scrollHeight="375" emptyMessage="No existen registros">
 
                                 <p:ajax event="rowSelect" listener="#{beanVerUsuariosPorPerfil.onRowSelect}" update=" " />
                                 <p:ajax event="rowUnselect" listener="#{beanVerUsuariosPorPerfil.onRowUnselect}" update=" " />

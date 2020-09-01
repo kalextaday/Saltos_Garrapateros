@@ -103,6 +103,12 @@
                                         <p:outputLabel value="Correo electronico:" for="emaUsr"/>
                                         <p:inputText id="emaUsr" value="#{beanAgregarPersona.correo}" title="Correo" required="true" requiredMessage="Correo Obligatorio"/>
                                         <p:message for="emaUsr"/>
+                                        
+                                        
+                                        <p:outputLabel value="Foto de Perfil:" />
+                                        <p:commandButton oncomplete="PF('wv-actualizarLogo').show()"
+                                                             value="Subir Foto"/>
+                                        
                                     </h:panelGrid>
                                 </p:tab>
                             </p:tabView>
@@ -187,12 +193,46 @@
 
         <!--dialogs-->
         
+        <p:dialog header="Actualizar Logo" widgetVar="wv-actualizarLogo" modal="true"
+                  showEffect="slide" hideEffect="slide">
+
+            <h:form id="f-actualizar-logo" enctype="multipart/form-data;charset=UTF-8">
+                <h:panelGroup id="p-display-clave" style="border:0px none;background:none">
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <p><b>Reglas Recomendadas para la Carga de la Foto</b></p>
+                            <ul>
+                                <li>Tipo de imagen PNG</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="ui-g-12">
+
+                        <p:fileUpload id="pf-entidadLogo" listener="#{beanAgregarPersona.cargarLogo}"
+                                      auto="true"
+                                      skinSimple="true"
+                                      mode="advanced" dragDropSupport="true"
+                                      label="Cargar Logo"
+                                      fileLimit="1"
+                                      fileLimitMessage="Se ha superado el número máximo de logos."
+                                      sizeLimit="1500000000"
+                                      invalidFileMessage="Sólo se permite imágenes"
+                                      allowTypes="/(\.|\/)(png)$/"
+                                      disabled="{beanAdminEntidad.permiteLogo}"
+                                      style="width:100%" />
+
+                    </div>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+        
         <p:dialog header="Foto" widgetVar="wv-mostrar-foto" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
             <h:form id="FotoForm" style="text-align:center;">
                 <p:panelGrid  columns="2" rendered="#{not empty beanAgregarPersona.personaSeleccionada}" columnClasses="label,value">
                     <f:facet name="header">
                         <!--<p:graphicImage name="demo/images/car/{beanAgregarPersona.personaSeleccionada.brand}-big.gif"/> -->
-                        <p:graphicImage name="images/login/secure.png" library="paradise-layout" />
+                        <p:graphicImage name="images/avatar.png" library="paradise-layout" />
+                        <!--<p:graphicImage name="{beanAgregarPersona.pathFoto}"/>-->
                     </f:facet>
 
                     <h:outputText value="Id:" />

@@ -1,6 +1,7 @@
 package ec.edu.saltos.util;
 
 import ec.edu.saltos.config.EstadosConfig;
+import java.math.BigDecimal;
 import java.util.Date;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -28,6 +29,9 @@ public class EstiloUtiles {
             case "PEE":
                 result = "text-naranja";
                 break;
+            case "SAD":
+                result = "text-green";
+                break;
             default:
                 result = "text-plomo-raton";
         }
@@ -48,6 +52,9 @@ public class EstiloUtiles {
                 break;
             case "PEE":
                 result = EstadosConfig.PERSONA_EST_ESPERA.getDescripcion();
+                break;
+            case "SAD":
+                result = EstadosConfig.PERSONA_EST_ACTIVADO.getDescripcion();
                 break;
             default:
                 result = "DESCONOCIDO";
@@ -215,6 +222,17 @@ public class EstiloUtiles {
             default:
                 result = "DESCONOCIDO";
         }
+        return result;
+    }
+    
+    public String toValueNumero(BigDecimal _costoTotalPedido) {
+        String result;
+        if(_costoTotalPedido!=null){
+            result=_costoTotalPedido.toString();
+        }else{
+            result="";
+        }
+        
         return result;
     }
     

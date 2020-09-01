@@ -2,6 +2,11 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/D:/Documentos/DOCS/LOCAL/8%20SEMESTRE/APLICACIONES%20DISTRIBUIDAS/PARCIAL%203/PROYECTO/distri/distribuidas_2p_proyecto_saltos/04.PROTOTIPO/WebAppSaltosV1_0/web/app/super-empresa.xhtml</file>
+            <file>file:/D:/Documentos/DOCS/LOCAL/8%20SEMESTRE/APLICACIONES%20DISTRIBUIDAS/PARCIAL%203/PROYECTO/distri/distribuidas_2p_proyecto_saltos/04.PROTOTIPO/WebAppSaltosV1_0/web/app/super-pedido.xhtml</file>
+            <file>file:/D:/Documentos/DOCS/LOCAL/8%20SEMESTRE/APLICACIONES%20DISTRIBUIDAS/PARCIAL%203/PROYECTO/distri/distribuidas_2p_proyecto_saltos/04.PROTOTIPO/WebAppSaltosV1_0/web/seg/agregar-usuario.xhtml</file>
+            <file>file:/D:/Documentos/DOCS/LOCAL/8%20SEMESTRE/APLICACIONES%20DISTRIBUIDAS/PARCIAL%203/PROYECTO/distri/distribuidas_2p_proyecto_saltos/04.PROTOTIPO/WebAppSaltosV1_0/src/java/ec/edu/saltos/controlador/app/BeanPedido.java</file>
+        </group>
     </open-files>
 </project-private>

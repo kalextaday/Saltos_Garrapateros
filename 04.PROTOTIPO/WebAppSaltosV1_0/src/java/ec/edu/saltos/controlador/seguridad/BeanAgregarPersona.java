@@ -6,13 +6,17 @@
 package ec.edu.saltos.controlador.seguridad;
 
 
+import ec.edu.saltos.config.DirectorioConfig;
 import ec.edu.saltos.config.EstadosConfig;
 import ec.edu.saltos.controlador.FiltroAcceso;
 import ec.edu.saltos.modelo.Persona;
 import ec.edu.saltos.persistencia.DAOPersona;
 import ec.edu.saltos.util.FechaUtil;
 import ec.edu.saltos.util.PrimeUtiles;
+import ec.edu.saltos.util.TxtUtiles;
 import ec.edu.saltos.validaciones.Cedula;
+import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,8 +27,11 @@ import javax.faces.bean.ViewScoped;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import org.apache.commons.io.FilenameUtils;
+import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
+import org.primefaces.model.file.UploadedFile;
 
 /**
  *
@@ -51,8 +58,10 @@ public class BeanAgregarPersona extends FiltroAcceso implements Serializable{
     private String numCasa;
     private String correo;
     private String telefono;
-    
+    private String pathFoto;
+    private String directorioBase;
     private boolean estatus;
+    private boolean cedulaValidada;
     
     /**
      * Creates a new instance of BeanPersona
@@ -64,6 +73,11 @@ public class BeanAgregarPersona extends FiltroAcceso implements Serializable{
     @PostConstruct
     public void init(){
         formatoFecha="si";
+        directorioBase=DirectorioConfig.RUTA_BASE.getUrl();
+        pathFoto="";
+        nombres="";
+        apellidos="";
+        identificacion="";
         listaPersonas=new ArrayList<>();
         personaSeleccionada = new Persona();
         initCampos();
@@ -87,28 +101,81 @@ public class BeanAgregarPersona extends FiltroAcceso implements Serializable{
     
     public void agregarPersona() {
         DAOPersona daopersona=new DAOPersona();
-        personaSeleccionada.setPerIdentificacion(identificacion);
-        personaSeleccionada.setPerNombres(nombres);
-        personaSeleccionada.setPerApellidos(apellidos);
-        personaSeleccionada.setPerDireccion(ciudad+","+sector+","+calle+","+numCasa);
-        personaSeleccionada.setPerTelefono(telefono);
-        personaSeleccionada.setPerCorreo(correo);
-        personaSeleccionada.setPerFoto("imagenes/app/personas/fotos/");
-        personaSeleccionada.setPerFechaCreacion(FechaUtil.ahoraSinFormato());
-        personaSeleccionada.setPerFechaMod(FechaUtil.ahoraSinFormato());
-        personaSeleccionada.setPerEstatus(EstadosConfig.PERSONA_EST_ACTIVADO.getCodigo());
-        try{
-            if(daopersona.guardar(personaSeleccionada)){
-                listaPersonas.add(daopersona.obtenerUltimoRegistro());
-                PrimeUtiles.mostrarMensaje(FacesMessage.SEVERITY_INFO, "Info:", "Se registro correctamente.");
-                limpiarPersona();
-            }else{
-                PrimeUtiles.mostrarMensaje(FacesMessage.SEVERITY_ERROR, "Error: ","Hubo un error al registrar");
+        if(cedulaValidada){
+            personaSeleccionada.setPerIdentificacion(identificacion);
+            personaSeleccionada.setPerNombres(nombres);
+            personaSeleccionada.setPerApellidos(apellidos);
+            personaSeleccionada.setPerDireccion(ciudad+","+sector+","+calle+","+numCasa);
+            personaSeleccionada.setPerTelefono(telefono);
+            personaSeleccionada.setPerCorreo(correo);
+            personaSeleccionada.setPerFoto(pathFoto);
+            personaSeleccionada.setPerFechaCreacion(FechaUtil.ahoraSinFormato());
+            personaSeleccionada.setPerFechaMod(FechaUtil.ahoraSinFormato());
+            personaSeleccionada.setPerEstatus(EstadosConfig.PERSONA_EST_ACTIVADO.getCodigo());
+            try{
+                if(daopersona.guardar(personaSeleccionada)){
+                    listaPersonas.add(daopersona.obtenerUltimoRegistro());
+                    PrimeUtiles.mostrarMensaje(FacesMessage.SEVERITY_INFO, "Info:", "Se registro correctamente.");
+                    limpiarPersona();
+                }else{
+                    PrimeUtiles.mostrarMensaje(FacesMessage.SEVERITY_ERROR, "Error: ","Hubo un error al registrar");
+                }
+            }catch(Exception e){
+                LOG.log(Level.INFO, "Excepcion al agregar: {0}",e);
+            }finally{
+                PrimeUtiles.primeExecute("PF('wv-crear').hide();");
             }
-        }catch(Exception e){
-            LOG.log(Level.INFO, "Excepcion al agregar: {0}",e);
-        }finally{
-            PrimeUtiles.primeExecute("PF('wv-crear').hide();");
+        }else{
+            PrimeUtiles.mostrarMensaje(FacesMessage.SEVERITY_ERROR, "Error:", "Ingrese una cédula valida.");
+        }
+    }
+    
+    public void actualizarLogo() {
+        System.out.println("actualizando logo...");
+        PrimeUtiles.primeExecute("PF('wv-actualizarLogo').show();");
+    }
+
+    public void cargarLogo(FileUploadEvent event) {
+        char initNombre=nombres.charAt(0);
+        char initApellido=apellidos.charAt(0);
+        pathFoto="fotos/"+identificacion+initNombre+initApellido+"/";
+        
+        System.out.println("Inicia Carga de foto..." + event.getFile().getFileName());
+
+        StringBuilder directorio = new StringBuilder();
+        directorio.append(DirectorioConfig.DIRECTORIO_FOTOS_PERFIL.getUrl())
+                .append(identificacion+initNombre+initApellido)
+                .append("/");
+
+        File archivoAntigo = new File(directorio.toString());
+
+        if (archivoAntigo.delete()) {
+            LOG.info("El fichero temporal ha sido borrado satisfactoriamente");
+        } else {
+            LOG.info("El fichero temporal no existe, se procede a crear directorio.");
+            System.out.println("El fichero temporal no existe, se procede a crear directorio.");
+            archivoAntigo.mkdirs();
+        }
+
+        try {
+
+            UploadedFile archivo = event.getFile();
+            String archivoInfo = archivo.getFileName();
+            String _extension = FilenameUtils.getExtension(archivoInfo);
+            pathFoto=pathFoto+"fotoPerfil."+_extension;
+            directorio.append("fotoPerfil").append('.').append(_extension);
+            if (TxtUtiles.subirFichero(archivo, directorio.toString())) {
+                System.out.println("ruta: " + directorio.toString());
+                PrimeUtiles.mostrarMensaje(FacesMessage.SEVERITY_INFO, "Foto cargado correctamente.");
+                PrimeUtiles.primeExecute("PF('wv-actualizarLogo').hide();");
+            } else {
+                PrimeUtiles.mostrarMensaje(FacesMessage.SEVERITY_INFO, "El archivo no se ha logrado cargar. Por favor revise que sea una estructura válida.");
+                LOG.log(Level.SEVERE, null, "Carga de archivo fallida");
+            }
+            pathFoto="";
+        } catch (IOException ex) {
+
+            LOG.log(Level.SEVERE, null, ex);
         }
     }
 
@@ -171,6 +238,10 @@ public class BeanAgregarPersona extends FiltroAcceso implements Serializable{
 
     public Persona onRowSelect(SelectEvent event) {
         setPersonaSeleccionada((Persona) event.getObject());
+        
+        pathFoto=directorioBase;
+        pathFoto=pathFoto+personaSeleccionada.getPerFoto();
+        
         LOG.log(Level.INFO, "Persona {0} listo para usar a: ", personaSeleccionada.getPerNombres());
         return personaSeleccionada;
     }
@@ -210,8 +281,10 @@ public class BeanAgregarPersona extends FiltroAcceso implements Serializable{
         FacesContext context = FacesContext.getCurrentInstance();
 
         if(Cedula.validarCedulaEcuatoriana(identificacion)){
+            cedulaValidada=true;
             context.addMessage("ideUsr", new FacesMessage(FacesMessage.SEVERITY_INFO,"Cedula Correcta",""));
         }else{
+            cedulaValidada=false;
             context.addMessage("ideUsr", new FacesMessage(FacesMessage.SEVERITY_ERROR,"Cedula Incorrecta",""));
         }
         
@@ -325,6 +398,30 @@ public class BeanAgregarPersona extends FiltroAcceso implements Serializable{
 
     public void setTelefono(String telefono) {
         this.telefono = telefono;
+    }
+
+    public String getPathFoto() {
+        return pathFoto;
+    }
+
+    public void setPathFoto(String pathFoto) {
+        this.pathFoto = pathFoto;
+    }
+
+    public String getDirectorioBase() {
+        return directorioBase;
+    }
+
+    public void setDirectorioBase(String directorioBase) {
+        this.directorioBase = directorioBase;
+    }
+
+    public boolean isCedulaValidada() {
+        return cedulaValidada;
+    }
+
+    public void setCedulaValidada(boolean cedulaValidada) {
+        this.cedulaValidada = cedulaValidada;
     }
 
     
